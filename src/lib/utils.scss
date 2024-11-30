@@ -1,0 +1,14 @@
+$background-repeating-gradient: repeating-linear-gradient(
+	#e4e4e4,
+	#e4e4e4 5px,
+	#f1f1f1 5px,
+	#f1f1f1 7px
+);
+
+$color-highlight-blue: #50c6f1;
+$color-gray: #b5b5b5;
+$color-gray-dark: #9b9b9b;
+
+@function highlight-border($size: 0.25rem) {
+	@return $size solid $color-highlight-blue;
+}

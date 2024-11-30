@@ -1,0 +1,31 @@
+*,
+::after,
+::before {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: FOT-RodinNTLG;
+	line-height: 1;
+	background: linear-gradient(to bottom, #cdcfd7, #f0f0f0, #cdcfd7);
+	min-height: 100vh;
+}
+
+button {
+	background: none;
+	border: none;
+	font-family: inherit;
+	line-height: inherit;
+}
+
+@font-face {
+	font-family: 'FOT-RodinNTLG';
+	src: url('./src/lib/fonts/FOT-RodinNTLG.otf');
+}
+
+@font-face {
+	font-family: 'DSEG7';
+	src: url('./src/lib/fonts/DSEG7Classic-Bold.ttf');
+}
