@@ -1,17 +1,19 @@
 <script lang="ts">
+	import { ButtonSoundType, playSound } from '$lib/sounds/sound_types';
 	import type { Snippet } from 'svelte';
-	import sound from '$lib/sounds/button_click.wav';
 
 	const {
 		children,
 		disabled = false,
 		onclick: _click,
-		noBorder = false
+		noBorder = false,
+		clickSound = ButtonSoundType.DEFAULT
 	}: {
 		children: Snippet;
 		disabled?: boolean;
 		onclick?: () => void;
 		noBorder?: boolean;
+		clickSound?: ButtonSoundType;
 	} = $props();
 
 	let clicked = $state(false);
@@ -22,7 +24,7 @@
 		if (disabled || clicked) return;
 
 		clicked = true;
-		new Audio(sound).play();
+		playSound(clickSound);
 		_click?.();
 		btn.addEventListener(
 			'animationend',
@@ -32,9 +34,22 @@
 			{ once: true }
 		);
 	}
+
+	function hover() {
+		if (disabled || clicked) return;
+		playSound(ButtonSoundType.HOVER);
+	}
 </script>
 
-<button bind:this={btn} {disabled} onmousedown={onclick} class:clicked>
+<button
+	bind:this={btn}
+	{disabled}
+	onmousedown={onclick}
+	onmouseover={hover}
+	onfocus={hover}
+	class:clicked
+	class:no-border={noBorder}
+>
 	{@render children()}
 </button>
 
@@ -46,13 +61,16 @@
 		color: #464646;
 		background: #e3e8ef;
 		box-shadow: inset 0 0 1rem 0.5rem #bcc8d8;
-		border: #50c6f1 0.25rem solid;
 		position: relative;
 		isolation: isolate;
 		cursor: pointer;
 		transition:
 			all 0.15s,
 			filter 0.15s;
+
+		&:not(.no-border) {
+			border: utils.$color-highlight-blue 0.25rem solid;
+		}
 
 		&::before {
 			content: '';
@@ -91,23 +109,23 @@
 
 		&.clicked {
 			animation: clicked 1s forwards;
-		}
 
-		@keyframes clicked {
-			5% {
-				transform: scale(1);
-			}
-			20% {
-				transform: scale(1.1);
-				filter: brightness(1.2);
-			}
-			30% {
-				transform: scale(1);
-				filter: brightness(1.2);
-			}
-			100% {
-				transform: scale(1);
-				filter: brightness(1);
+			@keyframes clicked {
+				5% {
+					transform: scale(1);
+				}
+				20% {
+					transform: scale(1.1);
+					filter: brightness(1.2);
+				}
+				30% {
+					transform: scale(1);
+					filter: brightness(1.2);
+				}
+				100% {
+					transform: scale(1);
+					filter: brightness(1);
+				}
 			}
 		}
 

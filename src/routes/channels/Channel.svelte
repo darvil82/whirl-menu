@@ -5,7 +5,6 @@
 <style lang="scss">
 	.channel {
 		background: utils.$color-gray;
-		height: 10rem;
 		mask: url('./channel_mask.png');
 		mask-size: 100% 100%;
 		position: relative;

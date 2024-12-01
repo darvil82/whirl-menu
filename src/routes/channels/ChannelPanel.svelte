@@ -1,13 +1,12 @@
 <script lang="ts">
-	import MenuButton from '$lib/components/MenuButton.svelte';
 	import { onMount } from 'svelte';
 	import Channel from './Channel.svelte';
 
-	let currentTime: string = $state(getTime());
+	let currentTime: string[] = $state(getTime());
 
-	function getTime(): string {
+	function getTime(): string[] {
 		const date = new Date();
-		return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');
+		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
 	}
 
 	onMount(() => {
@@ -21,14 +20,22 @@
 
 <div class="channel-panel">
 	<div class="channels">
-		<div class="channel-grid">
-			{#each new Array(12) as _, i}
-				<Channel></Channel>
-			{/each}
+		<div class="wrapper">
+			<div class="channel-grid">
+				{#each new Array(12) as _, i}
+					<Channel></Channel>
+				{/each}
+			</div>
+			<div class="channel-grid">
+				{#each new Array(12) as _, i}
+					<Channel></Channel>
+				{/each}
+			</div>
 		</div>
 	</div>
 	<div class="time">
-		{currentTime}
+		{currentTime[0]} <span class="colon">:</span>
+		{currentTime[1]}
 	</div>
 </div>
 
@@ -41,22 +48,31 @@
 	}
 
 	.channels {
-		width: 100%;
 		display: flex;
-		justify-content: center;
+		align-self: stretch;
+		justify-content: start;
 		background: utils.$background-repeating-gradient;
 		outline: utils.highlight-border();
+	}
+
+	.wrapper {
+		display: flex;
+		padding: 5rem;
+		padding-inline: min(10vw, 20rem);
+		padding-bottom: 2rem;
+		gap: 1rem;
+		width: 100%;
+		flex-grow: 0;
 	}
 
 	.channel-grid {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(3, 1fr);
-		max-width: 80rem;
+		gap: 1rem;
+		height: 60vh;
 		width: 100%;
-		grid-gap: 1rem;
-		padding: 3rem;
-		padding-bottom: 1rem;
+		flex-shrink: 0;
 	}
 
 	.time {
@@ -64,21 +80,22 @@
 		justify-content: center;
 		align-items: center;
 
-		font-size: 4rem;
+		font-size: 7vh;
 		color: utils.$color-gray-dark;
 		font-family: 'DSEG7';
 		letter-spacing: 0.5rem;
 		line-height: 1;
+		user-select: none;
 
-		min-width: 20rem;
+		min-width: 30rem;
 		position: relative;
 		isolation: isolate;
 		padding-block: 0.5rem 1.25rem;
 		background: utils.$background-repeating-gradient;
-		$test: 3px;
-		filter: drop-shadow($test 0px 0px utils.$color-highlight-blue)
-			drop-shadow(0px $test 0px utils.$color-highlight-blue)
-			drop-shadow(0px - $test 0px utils.$color-highlight-blue);
+		$border-thickness: 0.25rem;
+		filter: drop-shadow($border-thickness 0rem 0rem utils.$color-highlight-blue)
+			drop-shadow(0rem $border-thickness 0rem utils.$color-highlight-blue)
+			drop-shadow(0rem - $border-thickness 0rem utils.$color-highlight-blue);
 
 		&::before,
 		&::after {
@@ -90,14 +107,34 @@
 		}
 
 		&::before {
-			left: -100%;
-			right: 100%;
+			left: -120%;
+			right: 99%; // to fix weird artifact
 		}
 
 		&::after {
-			left: 100%;
-			right: -100%;
+			left: 99%; // to fix weird artifact
+			right: -120%;
 			transform: scaleX(-1);
+		}
+
+		.colon {
+			animation: blink 1s infinite alternate;
+			font-size: 8vh;
+
+			@keyframes blink {
+				0% {
+					opacity: 0;
+				}
+				45% {
+					opacity: 0;
+				}
+				55% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
 		}
 	}
 </style>
