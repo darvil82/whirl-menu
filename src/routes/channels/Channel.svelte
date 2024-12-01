@@ -1,5 +1,18 @@
-<div class="channel">
-	<div class="content"></div>
+<script lang="ts">
+	import type { Component } from 'svelte';
+	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
+
+	const { thumbnail: Thumbnail }: { thumbnail?: Component } = $props();
+</script>
+
+<div class="channel" class:active={Thumbnail}>
+	<div class="content">
+		{#if Thumbnail}
+			<Thumbnail />
+		{:else}
+			<DefaultThumbnail />
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -8,6 +21,7 @@
 		mask: url('./channel_mask.png');
 		mask-size: 100% 100%;
 		position: relative;
+		overflow: hidden;
 
 		.content {
 			position: absolute;
@@ -15,6 +29,10 @@
 			background: white;
 			mask: url('./channel_mask.png');
 			mask-size: 100% 100%;
+		}
+
+		&.active {
+			cursor: pointer;
 		}
 	}
 </style>

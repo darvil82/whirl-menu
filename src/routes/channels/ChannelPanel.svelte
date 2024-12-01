@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Channel from './Channel.svelte';
+	import CHANNELS from './channels_def/channels_def';
 
 	let currentTime: string[] = $state(getTime());
 
@@ -22,13 +23,16 @@
 	<div class="channels">
 		<div class="wrapper">
 			<div class="channel-grid">
-				{#each new Array(12) as _, i}
-					<Channel></Channel>
+				{#each CHANNELS as channel}
+					<Channel thumbnail={channel.thumbnail} />
+				{/each}
+				{#each new Array(12 - CHANNELS.length) as _, i}
+					<Channel />
 				{/each}
 			</div>
 			<div class="channel-grid">
 				{#each new Array(12) as _, i}
-					<Channel></Channel>
+					<Channel />
 				{/each}
 			</div>
 		</div>
@@ -63,6 +67,7 @@
 		gap: 1rem;
 		width: 100%;
 		flex-grow: 0;
+		overflow: hidden;
 	}
 
 	.channel-grid {
@@ -85,7 +90,6 @@
 		font-family: 'DSEG7';
 		letter-spacing: 0.5rem;
 		line-height: 1;
-		user-select: none;
 
 		min-width: 30rem;
 		position: relative;
