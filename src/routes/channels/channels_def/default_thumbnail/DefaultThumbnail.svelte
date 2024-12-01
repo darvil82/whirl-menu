@@ -40,7 +40,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			mask: url('./mask.png');
+			mask: url('./noise_mask.png');
 			mask-mode: luminance;
 			background: rgba(44, 44, 44, 0.4);
 			scale: 2;

@@ -5,10 +5,12 @@ import DefaultThumbnail from './default_thumbnail/DefaultThumbnail.svelte';
 export interface Channel {
 	thumbnail: Component;
 	banner: Component;
+	name: string;
 }
 
 const CHANNELS: Channel[] = [
 	{
+		name: 'Test',
 		thumbnail: Test,
 		banner: Test
 	}
