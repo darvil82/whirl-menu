@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ButtonSoundType, playSound } from '$lib/sounds/sound_types';
+	import SOUNDS, { playSound, type Sound } from '$lib/sounds/sounds';
 	import type { Snippet } from 'svelte';
 
 	const {
@@ -7,13 +7,13 @@
 		disabled = false,
 		onclick: _click,
 		noBorder = false,
-		clickSound = ButtonSoundType.DEFAULT
+		clickSound = SOUNDS.BUTTON.button_click_default
 	}: {
 		children: Snippet;
 		disabled?: boolean;
 		onclick?: () => void;
 		noBorder?: boolean;
-		clickSound?: ButtonSoundType;
+		clickSound?: Sound;
 	} = $props();
 
 	let clicked = $state(false);
@@ -37,7 +37,7 @@
 
 	function hover() {
 		if (disabled || clicked) return;
-		playSound(ButtonSoundType.HOVER);
+		playSound(SOUNDS.BUTTON.button_hover);
 	}
 </script>
 

@@ -15,7 +15,6 @@
 			font-size: 3rem;
 
 			@keyframes dance {
-				0%,
 				100% {
 					transform: rotate(0deg);
 				}

@@ -4,10 +4,17 @@
 	import CHANNELS from './channels_def/channels_def';
 
 	let currentTime: string[] = $state(getTime());
+	let dragger: EventTarget | undefined;
 
 	function getTime(): string[] {
 		const date = new Date();
 		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
+	}
+
+	function getChannelPosition(i: number): 'left' | 'right' | 'center' {
+		if (i % 4 == 0) return 'left';
+		if (i % 3 == 0) return 'right';
+		return 'center';
 	}
 
 	onMount(() => {
@@ -23,8 +30,8 @@
 	<div class="channels">
 		<div class="wrapper">
 			<div class="channel-grid">
-				{#each CHANNELS as channel}
-					<Channel thumbnail={channel.thumbnail} />
+				{#each CHANNELS as channel, i}
+					<Channel {channel} titlePosition={getChannelPosition(i)} />
 				{/each}
 				{#each new Array(12 - CHANNELS.length) as _, i}
 					<Channel />
@@ -63,7 +70,7 @@
 		display: flex;
 		padding: 5rem;
 		padding-inline: min(10vw, 20rem);
-		padding-bottom: 2rem;
+		padding-bottom: 1.5vh;
 		gap: 1rem;
 		width: 100%;
 		flex-grow: 0;
@@ -85,7 +92,7 @@
 		justify-content: center;
 		align-items: center;
 
-		font-size: 7vh;
+		font-size: 6vh;
 		color: utils.$color-gray-dark;
 		font-family: 'DSEG7';
 		letter-spacing: 0.5rem;
@@ -94,7 +101,7 @@
 		min-width: 30rem;
 		position: relative;
 		isolation: isolate;
-		padding-block: 0.5rem 1.25rem;
+		padding-bottom: 1.5vh;
 		background: utils.$background-repeating-gradient;
 		$border-thickness: 0.25rem;
 		filter: drop-shadow($border-thickness 0rem 0rem utils.$color-highlight-blue)

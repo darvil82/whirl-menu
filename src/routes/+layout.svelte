@@ -2,6 +2,8 @@
 	import './app.scss';
 
 	const { children } = $props();
+
+	export const prerender = true;
 </script>
 
 <main>

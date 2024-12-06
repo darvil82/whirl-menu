@@ -1,6 +1,5 @@
-import type { Component, SvelteComponent } from 'svelte';
+import type { Component } from 'svelte';
 import Test from './Test.svelte';
-import DefaultThumbnail from './default_thumbnail/DefaultThumbnail.svelte';
 
 export interface Channel {
 	thumbnail: Component;
@@ -10,7 +9,22 @@ export interface Channel {
 
 const CHANNELS: Channel[] = [
 	{
-		name: 'Test',
+		name: 'Test channel',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'A little longer name',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Bla bla bla',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Okay now this one is getting a bit ridiculous',
 		thumbnail: Test,
 		banner: Test
 	}
