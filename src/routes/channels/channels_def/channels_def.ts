@@ -27,6 +27,36 @@ const CHANNELS: Channel[] = [
 		name: 'Okay now this one is getting a bit ridiculous',
 		thumbnail: Test,
 		banner: Test
+	},
+	{
+		name: 'A little longer name',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Bla bla bla',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Okay now this one is getting a bit ridiculous',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'A little longer name',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Bla bla bla',
+		thumbnail: Test,
+		banner: Test
+	},
+	{
+		name: 'Okay now this one is getting a bit ridiculous',
+		thumbnail: Test,
+		banner: Test
 	}
 ];
 

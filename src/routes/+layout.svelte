@@ -9,3 +9,9 @@
 <main>
 	{@render children()}
 </main>
+
+<style lang="scss">
+	main {
+		overflow: hidden;
+	}
+</style>

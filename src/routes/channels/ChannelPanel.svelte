@@ -4,7 +4,6 @@
 	import CHANNELS from './channels_def/channels_def';
 
 	let currentTime: string[] = $state(getTime());
-	let dragger: EventTarget | undefined;
 
 	function getTime(): string[] {
 		const date = new Date();
@@ -13,7 +12,7 @@
 
 	function getChannelPosition(i: number): 'left' | 'right' | 'center' {
 		if (i % 4 == 0) return 'left';
-		if (i % 3 == 0) return 'right';
+		if (i % 4 == 3) return 'right';
 		return 'center';
 	}
 
@@ -74,7 +73,6 @@
 		gap: 1rem;
 		width: 100%;
 		flex-grow: 0;
-		overflow: hidden;
 	}
 
 	.channel-grid {
