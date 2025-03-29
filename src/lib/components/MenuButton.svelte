@@ -69,7 +69,7 @@
 			filter 0.15s;
 
 		&:not(.no-border) {
-			border: utils.$color-highlight-blue 0.25rem solid;
+			border: $color-highlight-blue 0.25rem solid;
 		}
 
 		&::before {

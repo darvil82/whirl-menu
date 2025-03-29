@@ -2,8 +2,6 @@
 	import './app.scss';
 
 	const { children } = $props();
-
-	export const prerender = true;
 </script>
 
 <main>
@@ -13,5 +11,6 @@
 <style lang="scss">
 	main {
 		overflow: hidden;
+		height: 100vh;
 	}
 </style>

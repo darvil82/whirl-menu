@@ -61,8 +61,8 @@
 		display: flex;
 		align-self: stretch;
 		justify-content: start;
-		background: utils.$background-repeating-gradient;
-		outline: utils.highlight-border();
+		background: $background-repeating-gradient;
+		outline: highlight-border();
 	}
 
 	.wrapper {
@@ -91,7 +91,7 @@
 		align-items: center;
 
 		font-size: 6vh;
-		color: utils.$color-gray-dark;
+		color: $color-gray-dark;
 		font-family: 'DSEG7';
 		letter-spacing: 0.5rem;
 		line-height: 1;
@@ -100,18 +100,18 @@
 		position: relative;
 		isolation: isolate;
 		padding-bottom: 1.5vh;
-		background: utils.$background-repeating-gradient;
+		background: $background-repeating-gradient;
 		$border-thickness: 0.25rem;
-		filter: drop-shadow($border-thickness 0rem 0rem utils.$color-highlight-blue)
-			drop-shadow(0rem $border-thickness 0rem utils.$color-highlight-blue)
-			drop-shadow(0rem - $border-thickness 0rem utils.$color-highlight-blue);
+		filter: drop-shadow($border-thickness 0rem 0rem $color-highlight-blue)
+			drop-shadow(0rem $border-thickness 0rem $color-highlight-blue)
+			drop-shadow(0rem - $border-thickness 0rem $color-highlight-blue);
 
 		&::before,
 		&::after {
 			content: '';
 			position: absolute;
 			inset-block: 0;
-			background: utils.$background-repeating-gradient;
+			background: $background-repeating-gradient;
 			clip-path: url('./channel_panel_mask.svg#mask');
 		}
 

@@ -22,7 +22,7 @@
 			position: absolute;
 			inset: 0;
 			top: -100%;
-			background: utils.lines-repeating-gradient(transparent, $bg-2);
+			background: lines-repeating-gradient(transparent, $bg-2);
 			animation: scroll 30s linear infinite;
 			z-index: -1;
 

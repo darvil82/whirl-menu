@@ -83,7 +83,7 @@
 	}
 
 	.channel {
-		background: utils.$color-gray;
+		background: $color-gray;
 		mask: url('./channel_mask.png');
 		mask-size: 100% 100%;
 		position: absolute;
@@ -104,7 +104,7 @@
 		top: calc(100% + 0.4rem);
 		border-radius: 5rem;
 		background: white;
-		border: 3px solid utils.$color-gray;
+		border: 3px solid $color-gray;
 		padding: 1rem 2rem;
 		font-size: 3.5vh;
 		min-width: 35vh;
