@@ -1,7 +1,8 @@
-<script lang="ts">
+<script lang="typescript">
 	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import type { Channel } from './channels_def/channels_def';
+	import { ellipsize } from '$lib/utils';
 
 	const {
 		channel,
@@ -48,7 +49,9 @@
 			{/if}
 		</div>
 	</div>
-	<div class="hover-tag {titlePosition}" class:visible={showTitle}>{channel?.name}</div>
+	<div class="hover-tag {titlePosition}" class:visible={showTitle}>
+		{ellipsize(channel?.name ?? '', 25)}
+	</div>
 </button>
 
 <style lang="scss">

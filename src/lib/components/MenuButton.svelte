@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import SOUNDS, { playSound, type Sound } from '$lib/sounds/sounds';
 	import type { Snippet } from 'svelte';
 

@@ -1,9 +1,16 @@
-<script lang="ts">
+<script lang="typescript">
 	import { onMount } from 'svelte';
 	import Channel from './Channel.svelte';
 	import CHANNELS from './channels_def/channels_def';
+	import SOUNDS, { playSound } from '$lib/sounds/sounds';
+
+	const MAX_PAGES = 4;
 
 	let currentTime: string[] = $state(getTime());
+	let appsOffset: string = $state('0px');
+	let currentPage: number = $state(0);
+
+	let disableScroll = false;
 
 	function getTime(): string[] {
 		const date = new Date();
@@ -14,6 +21,22 @@
 		if (i % 4 == 0) return 'left';
 		if (i % 4 == 3) return 'right';
 		return 'center';
+	}
+
+	function scroll(direction: 'left' | 'right') {
+		if (disableScroll) return;
+
+		const newPage = currentPage + (direction == 'right' ? 1 : -1);
+		if (newPage < 0 || newPage >= MAX_PAGES) return;
+
+		disableScroll = true;
+		appsOffset = -100 * newPage + '%';
+		playSound(SOUNDS.CHANNEL.move_page);
+		currentPage = newPage;
+
+		setTimeout(() => {
+			disableScroll = false;
+		}, 500);
 	}
 
 	onMount(() => {
@@ -27,7 +50,8 @@
 
 <div class="channel-panel">
 	<div class="channels">
-		<div class="wrapper">
+		<button class="arrow left" onclick={() => scroll('left')}>&lt;</button>
+		<div class="wrapper" style:--grid-translate={appsOffset}>
 			<div class="channel-grid">
 				{#each CHANNELS as channel, i}
 					<Channel {channel} titlePosition={getChannelPosition(i)} />
@@ -37,11 +61,12 @@
 				{/each}
 			</div>
 			<div class="channel-grid">
-				{#each new Array(12) as _, i}
+				{#each new Array(12)}
 					<Channel />
 				{/each}
 			</div>
 		</div>
+		<button class="arrow right" onclick={() => scroll('right')}>&gt;</button>
 	</div>
 	<div class="time">
 		{currentTime[0]} <span class="colon">:</span>
@@ -63,6 +88,21 @@
 		justify-content: start;
 		background: $background-repeating-gradient;
 		outline: highlight-border();
+
+		.arrow {
+			position: absolute;
+			top: 50%;
+			scale: 2;
+			z-index: 2;
+
+			&.right {
+				right: 1rem;
+			}
+
+			&.left {
+				left: 1rem;
+			}
+		}
 	}
 
 	.wrapper {
@@ -70,7 +110,6 @@
 		padding: 5rem;
 		padding-inline: min(10vw, 20rem);
 		padding-bottom: 1.5vh;
-		gap: 1rem;
 		width: 100%;
 		flex-grow: 0;
 	}
@@ -82,7 +121,11 @@
 		gap: 1rem;
 		height: 60vh;
 		width: 100%;
+		padding-inline: 0.5rem;
+		z-index: 1;
 		flex-shrink: 0;
+		translate: var(--grid-translate);
+		transition: translate 0.5s;
 	}
 
 	.time {

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="typescript">
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS from '$lib/sounds/sounds';
 	import { onMount } from 'svelte';

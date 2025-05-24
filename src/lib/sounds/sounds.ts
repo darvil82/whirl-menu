@@ -1,3 +1,5 @@
+const VOLUME_MULTIPLIER = 0.25;
+
 export interface Sound {
 	fileName: string;
 	volume?: number;
@@ -10,7 +12,8 @@ export const SOUNDS = {
 		button_hover: { fileName: 'button_hover.wav', volume: 0.25 }
 	},
 	CHANNEL: {
-		hover_title: { fileName: 'hover_title.wav', volume: 0.25 }
+		hover_title: { fileName: 'hover_title.wav', volume: 0.25 },
+		move_page: { fileName: 'move-page.wav', volume: 1 }
 	}
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
 
@@ -18,7 +21,7 @@ export function playSound(sound: Sound, volumeOverride?: number) {
 	const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
 
 	const audio = new Audio(`./src/lib/sounds/${soundProps.fileName}`);
-	audio.volume = soundProps.volume;
+	audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
 
 	audio.play();
 }
