@@ -1,62 +1,49 @@
 import type { Component } from 'svelte';
 import Test from './Test.svelte';
 
-export interface Channel {
+export interface ChannelDef {
 	thumbnail: Component;
 	banner: Component;
 	name: string;
+	position: [number, number];
 }
 
-const CHANNELS: Channel[] = [
+const CHANNELS: ChannelDef[] = [
 	{
 		name: 'Test channel',
 		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [0, 0]
 	},
 	{
 		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test
-	},
-	{
-		name: 'Bla bla bla',
-		thumbnail: Test,
-		banner: Test
-	},
-	{
-		name: 'Okay now this one is getting a bit ridiculous',
-		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [4, 2]
 	},
 	{
 		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test
-	},
-	{
-		name: 'Bla bla bla',
-		thumbnail: Test,
-		banner: Test
-	},
-	{
-		name: 'Okay now this one is getting a bit ridiculous',
-		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [4, 0]
 	},
 	{
 		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [5, 1]
 	},
 	{
-		name: 'Bla bla bla',
+		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [2, 1]
 	},
 	{
-		name: 'Okay now this one is getting a bit ridiculous',
+		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test
+		banner: Test,
+		position: [14, 2]
 	}
 ];
 

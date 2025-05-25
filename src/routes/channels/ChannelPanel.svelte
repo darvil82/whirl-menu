@@ -1,42 +1,57 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
-	import Channel from './Channel.svelte';
-	import CHANNELS from './channels_def/channels_def';
+	import CHANNELS, { type ChannelDef } from './channels_def/channels_def';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
+	import ChannelGrid from './ChannelGrid.svelte';
 
-	const MAX_PAGES = 2;
+	const MAX_PAGES = 4;
 
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
 	let currentPage: number = $state(0);
+	let lastMoveDir: undefined | 'left' | 'right' = $state();
 
-	let disableScroll = false;
+	let moving = $state(false);
 
 	function getTime(): string[] {
 		const date = new Date();
 		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
 	}
 
-	function getChannelPosition(i: number): 'left' | 'right' | 'center' {
-		if (i % 4 == 0) return 'left';
-		if (i % 4 == 3) return 'right';
-		return 'center';
-	}
-
 	function scroll(direction: 'left' | 'right') {
-		if (disableScroll) return;
+		if (moving) return;
 
 		const newPage = currentPage + (direction == 'right' ? 1 : -1);
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
-		disableScroll = true;
+		lastMoveDir = direction;
+		moving = true;
 		appsOffset = -100 * newPage + '%';
 		playSound(SOUNDS.CHANNEL.move_page);
-		currentPage = newPage;
 
 		setTimeout(() => {
-			disableScroll = false;
+			moving = false;
+			currentPage = newPage;
 		}, 500);
+	}
+
+	function getHideGridValue(at: number): 'all' | 'left' | 'right' | undefined {
+		if (at == currentPage) return undefined;
+
+		if (lastMoveDir == 'right' && moving) {
+			if (at == currentPage + 1) return undefined;
+			if (at == currentPage + 2) return 'right';
+		}
+
+		if (lastMoveDir == 'left' && moving) {
+			if (at == currentPage - 1) return undefined;
+			if (at == currentPage - 2) return 'left';
+		}
+
+		if (at == currentPage + 1) return 'right';
+		if (at == currentPage - 1) return 'left';
+
+		return 'all';
 	}
 
 	onMount(() => {
@@ -48,7 +63,7 @@
 	});
 </script>
 
-<div class="channel-panel">
+<div class="channel-panel" style:--grid-translate={appsOffset}>
 	<div class="channels">
 		<button
 			class="arrow left"
@@ -56,20 +71,10 @@
 			aria-label="move left"
 			onclick={() => scroll('left')}
 		></button>
-		<div class="wrapper" style:--grid-translate={appsOffset}>
-			<div class="channel-grid">
-				{#each CHANNELS as channel, i}
-					<Channel {channel} titlePosition={getChannelPosition(i)} />
-				{/each}
-				{#each new Array(12 - CHANNELS.length) as _, i}
-					<Channel />
-				{/each}
-			</div>
-			<div class="channel-grid">
-				{#each new Array(12)}
-					<Channel />
-				{/each}
-			</div>
+		<div class="channels-wrapper">
+			{#each new Array(MAX_PAGES) as _, page}
+				<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
+			{/each}
 		</div>
 		<button
 			class="arrow right"
@@ -78,9 +83,20 @@
 			onclick={() => scroll('right')}
 		></button>
 	</div>
-	<div class="time">
-		{currentTime[0]} <span class="colon">:</span>
-		{currentTime[1]}
+
+	<div
+		class="time-wrapper"
+		class:right={moving && lastMoveDir == 'right'}
+		class:left={moving && lastMoveDir == 'left'}
+	>
+		<div class="time">
+			{currentTime[0]} <span class="colon">:</span>
+			{currentTime[1]}
+		</div>
+		<div class="time">
+			{currentTime[0]} <span class="colon">:</span>
+			{currentTime[1]}
+		</div>
 	</div>
 </div>
 
@@ -88,7 +104,6 @@
 	.channel-panel {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		filter: drop-shadow(0px 0px 3rem rgba(0, 0, 0, 0.5));
 	}
 
@@ -163,7 +178,7 @@
 		}
 	}
 
-	.wrapper {
+	.channels-wrapper {
 		display: flex;
 		padding: 5rem;
 		padding-inline: min(10vw, 20rem);
@@ -172,21 +187,33 @@
 		flex-grow: 0;
 	}
 
-	.channel-grid {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		grid-template-rows: repeat(3, 1fr);
-		gap: 1rem;
-		height: 60vh;
-		width: 100%;
-		padding-inline: 0.5rem;
-		z-index: 1;
-		flex-shrink: 0;
-		translate: var(--grid-translate);
-		transition: translate 0.5s;
+	.time-wrapper {
+		display: flex;
+
+		&.right {
+			animation: move-right 0.5s;
+		}
+
+		&.left {
+			translate: -100%;
+			animation: move-left 0.5s;
+		}
+
+		@keyframes move-right {
+			to {
+				translate: -100%;
+			}
+		}
+
+		@keyframes move-left {
+			to {
+				translate: 0;
+			}
+		}
 	}
 
 	.time {
+		flex-shrink: 0;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -197,7 +224,8 @@
 		letter-spacing: 0.5rem;
 		line-height: 1;
 
-		min-width: 30rem;
+		width: 30rem;
+		margin-inline: calc(50% - 30rem / 2);
 		position: relative;
 		isolation: isolate;
 		padding-bottom: 1.5vh;

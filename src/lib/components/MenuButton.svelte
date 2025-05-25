@@ -25,7 +25,7 @@
 		if (clicked) return;
 
 		if (disabled) {
-			playSoundTimes(SOUNDS.BUTTON.error, 2, 100);
+			playSoundTimes(SOUNDS.BUTTON.error, 2, 75);
 			return;
 		}
 

@@ -15,13 +15,20 @@ export const SOUNDS = {
 	CHANNEL: {
 		hover_title: { fileName: 'hover_title.wav', volume: 0.25 },
 		move_page: { fileName: 'move_page.wav' }
+	},
+	MUSIC: {
+		main: { fileName: 'music.wav' }
 	}
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
+
+export function getSoundPath(sound: Sound): string {
+	return `./src/lib/sounds/${sound.fileName}`;
+}
 
 export function playSound(sound: Sound, volumeOverride?: number) {
 	const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
 
-	const audio = new Audio(`./src/lib/sounds/${soundProps.fileName}`);
+	const audio = new Audio(getSoundPath(sound));
 	audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
 
 	console.log('playing ', soundProps);

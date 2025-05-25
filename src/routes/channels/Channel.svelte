@@ -1,13 +1,20 @@
 <script lang="typescript">
 	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import type { Channel } from './channels_def/channels_def';
+	import type { ChannelDef } from './channels_def/channels_def';
 	import { ellipsize } from '$lib/utils';
 
 	const {
 		channel,
-		titlePosition
-	}: { channel?: Channel; titlePosition?: 'left' | 'right' | 'center' } = $props();
+		titlePosition,
+		position,
+		hide
+	}: {
+		channel?: ChannelDef;
+		titlePosition?: 'left' | 'right' | 'center';
+		position?: [number, number];
+		hide?: boolean;
+	} = $props();
 
 	let hoverTimeout: number;
 	let focused = false;
@@ -39,8 +46,10 @@
 	onmouseleave={stopHover}
 	onfocus={hover}
 	onfocusout={stopHover}
+	style:visibility={hide ? 'hidden' : undefined}
 >
 	<div class="channel">
+		<!-- <span class="debug-pos">{position}</span> -->
 		<div class="content">
 			{#if channel}
 				<channel.thumbnail />
@@ -55,6 +64,13 @@
 </button>
 
 <style lang="scss">
+	.debug-pos {
+		position: absolute;
+		top: 1rem;
+		left: 1rem;
+		z-index: 1;
+	}
+
 	.wrapper {
 		position: relative;
 
