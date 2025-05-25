@@ -1,5 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { playSound, type Sound } from '$lib/sounds/sounds';
+	import { playSoundTimes } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
 	const {
@@ -7,7 +8,7 @@
 		disabled = false,
 		onclick: _click,
 		noBorder = false,
-		clickSound = SOUNDS.BUTTON.button_click_default
+		clickSound = SOUNDS.BUTTON.click_default
 	}: {
 		children: Snippet;
 		disabled?: boolean;
@@ -21,7 +22,12 @@
 
 	function onclick(event: MouseEvent) {
 		if (event.button !== 0) return;
-		if (disabled || clicked) return;
+		if (clicked) return;
+
+		if (disabled) {
+			playSoundTimes(SOUNDS.BUTTON.error, 2, 100);
+			return;
+		}
 
 		clicked = true;
 		playSound(clickSound);
@@ -37,18 +43,18 @@
 
 	function hover() {
 		if (disabled || clicked) return;
-		playSound(SOUNDS.BUTTON.button_hover);
+		playSound(SOUNDS.BUTTON.hover);
 	}
 </script>
 
 <button
 	bind:this={btn}
-	{disabled}
 	onmousedown={onclick}
 	onmouseover={hover}
 	onfocus={hover}
 	class:clicked
 	class:no-border={noBorder}
+	class:disabled
 >
 	{@render children()}
 </button>
@@ -102,9 +108,8 @@
 			z-index: -1;
 		}
 
-		&:disabled {
+		&.disabled {
 			filter: grayscale(1) brightness(1.1) contrast(0.5);
-			cursor: unset;
 		}
 
 		&.clicked {
@@ -129,7 +134,7 @@
 			}
 		}
 
-		&:not(:disabled):not(.clicked) {
+		&:not(.disabled):not(.clicked) {
 			&:hover {
 				scale: 1.1;
 			}

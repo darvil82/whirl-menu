@@ -4,7 +4,7 @@
 	import CHANNELS from './channels_def/channels_def';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 
-	const MAX_PAGES = 4;
+	const MAX_PAGES = 2;
 
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
@@ -50,7 +50,12 @@
 
 <div class="channel-panel">
 	<div class="channels">
-		<button class="arrow left" onclick={() => scroll('left')}>&lt;</button>
+		<button
+			class="arrow left"
+			class:show={currentPage > 0}
+			aria-label="move left"
+			onclick={() => scroll('left')}
+		></button>
 		<div class="wrapper" style:--grid-translate={appsOffset}>
 			<div class="channel-grid">
 				{#each CHANNELS as channel, i}
@@ -66,7 +71,12 @@
 				{/each}
 			</div>
 		</div>
-		<button class="arrow right" onclick={() => scroll('right')}>&gt;</button>
+		<button
+			class="arrow right"
+			class:show={currentPage < MAX_PAGES - 1}
+			aria-label="move right"
+			onclick={() => scroll('right')}
+		></button>
 	</div>
 	<div class="time">
 		{currentTime[0]} <span class="colon">:</span>
@@ -92,15 +102,63 @@
 		.arrow {
 			position: absolute;
 			top: 50%;
-			scale: 2;
 			z-index: 2;
+			translate: 0 -50%;
+			transition:
+				transform 0.5s,
+				visibility 0.5s;
+
+			width: 3rem;
+			height: 6rem;
+			clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
+			background-color: #1646a3;
+			cursor: pointer;
+			--pos: 2rem;
+			--pos-2: 2.5rem;
+
+			&::before {
+				content: '';
+				inset: 0;
+				scale: 0.85;
+				position: absolute;
+				background:
+					radial-gradient(at -50% 50%, #cff7ff 30%, transparent 60%),
+					linear-gradient(to bottom, #4cd3fe 35%, #adf2ff 50%, #4cd3fe 65%);
+				clip-path: inherit;
+			}
 
 			&.right {
-				right: 1rem;
+				right: var(--pos);
+				animation: arrow-anim-right 0.6s infinite alternate;
+
+				&:not(.show) {
+					transform: translateX(10rem);
+					visibility: hidden;
+				}
+
+				@keyframes arrow-anim-right {
+					to {
+						right: var(--pos-2);
+					}
+				}
 			}
 
 			&.left {
-				left: 1rem;
+				left: var(--pos);
+				transform: scaleX(-1);
+
+				&:not(.show) {
+					transform: scaleX(-1) translateX(10rem);
+					visibility: hidden;
+				}
+
+				animation: arrow-anim-left 0.6s infinite alternate;
+
+				@keyframes arrow-anim-left {
+					to {
+						left: var(--pos-2);
+					}
+				}
 			}
 		}
 	}

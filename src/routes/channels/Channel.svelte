@@ -16,7 +16,7 @@
 	function hover() {
 		if (!channel || focused) return;
 
-		playSound(SOUNDS.BUTTON.button_hover);
+		playSound(SOUNDS.BUTTON.hover);
 		focused = true;
 
 		hoverTimeout = setTimeout(() => {
