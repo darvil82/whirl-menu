@@ -66,6 +66,15 @@
 				}
 			}
 
+			@keyframes arrow-retract {
+				50% {
+					scale: 1 0.5;
+				}
+				100% {
+					scale: 1 1;
+				}
+			}
+
 			&::before {
 				content: '';
 				inset: 0;
@@ -127,15 +136,6 @@
 
 			.arrow {
 				animation: arrow-retract 0.15s;
-
-				@keyframes arrow-retract {
-					50% {
-						scale: 1 0.5;
-					}
-					100% {
-						scale: 1 1;
-					}
-				}
 			}
 		}
 	}

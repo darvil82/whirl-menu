@@ -91,7 +91,7 @@
 
 			&:hover::after {
 				opacity: 1;
-				scale: 1 1.075;
+				scale: 1 1.06;
 				transition: 0.05s;
 			}
 		}
@@ -124,8 +124,8 @@
 		border-radius: 5rem;
 		background: white;
 		border: 3px solid $color-gray;
-		padding: 1rem 2rem;
-		font-size: 3.5vh;
+		padding: 0.75em 1.5em;
+		font-size: 1.5em;
 		min-width: 35vh;
 		box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.15);
 		text-wrap: nowrap;
