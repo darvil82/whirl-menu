@@ -56,7 +56,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(3, 1fr);
 		gap: 1rem;
-		height: 60vh;
+		height: 65vh;
 		width: 100%;
 		padding-inline: 0.5rem;
 		z-index: 1;

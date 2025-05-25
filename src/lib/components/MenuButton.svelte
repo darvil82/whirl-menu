@@ -25,7 +25,7 @@
 		if (clicked) return;
 
 		if (disabled) {
-			playSoundTimes(SOUNDS.BUTTON.error, 2, 75);
+			playSoundTimes(SOUNDS.BUTTON.error, 2, 90);
 			return;
 		}
 
@@ -61,8 +61,8 @@
 
 <style lang="scss">
 	button {
-		font-size: 3rem;
-		padding: 1.5rem 3.5rem;
+		font-size: 1em;
+		padding: 0.8em 2.15em;
 		border-radius: 50rem;
 		color: #464646;
 		background: #e3e8ef;
@@ -81,9 +81,9 @@
 		&::before {
 			content: '';
 			position: absolute;
-			top: 0.4rem;
-			inset-inline: 2rem;
-			height: 2rem;
+			top: 0.2em;
+			inset-inline: 1em;
+			height: 0.82em;
 			background: #fff;
 			border-radius: 50rem;
 			z-index: -1;
@@ -93,12 +93,12 @@
 			$circle-size: 45%;
 			content: '';
 			position: absolute;
-			top: 0.4rem;
-			left: 0.5rem;
-			height: 5rem;
+			top: 0.2em;
+			left: 0.3em;
+			height: 2em;
 			aspect-ratio: 1;
 			background: radial-gradient(
-				circle at 2.7rem 4.3rem,
+				circle at 1.1em 1.75em,
 				transparent,
 				transparent $circle-size,
 				#fff $circle-size

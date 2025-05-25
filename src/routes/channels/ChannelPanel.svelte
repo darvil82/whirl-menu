@@ -180,7 +180,7 @@
 
 	.channels-wrapper {
 		display: flex;
-		padding: 5rem;
+		padding: min(8vh, 4rem);
 		padding-inline: min(10vw, 20rem);
 		padding-bottom: 1.5vh;
 		width: 100%;
@@ -224,8 +224,8 @@
 		letter-spacing: 0.5rem;
 		line-height: 1;
 
-		width: 30rem;
-		margin-inline: calc(50% - 30rem / 2);
+		width: 25vw;
+		margin-inline: calc(50% - 25vw / 2);
 		position: relative;
 		isolation: isolate;
 		padding-bottom: 1.5vh;
