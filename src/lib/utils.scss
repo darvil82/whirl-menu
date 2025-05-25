@@ -6,8 +6,10 @@
 	@return repeating-linear-gradient($direction, $color1, $color1 6px, $color2 6px, $color2 8px);
 }
 
-$background-repeating-gradient: lines-repeating-gradient(#e4e4e4, #f1f1f1);
-
 $color-highlight-blue: #50c6f1;
+$color-light: #f1f1f1;
+$color-light-dark: #e4e4e4;
 $color-gray: #b5b5b5;
 $color-gray-dark: #9b9b9b;
+
+$background-repeating-gradient: lines-repeating-gradient($color-light-dark, $color-light);

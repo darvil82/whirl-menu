@@ -1,5 +1,5 @@
 <div class="c">
-	<h1>Test channel</h1>
+	<h2>Test channel</h2>
 </div>
 
 <style lang="scss">
@@ -10,9 +10,8 @@
 		place-items: center;
 		background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
 
-		h1 {
+		h2 {
 			animation: dance 3s infinite;
-			font-size: 3rem;
 
 			@keyframes dance {
 				100% {

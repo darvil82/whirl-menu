@@ -3,6 +3,7 @@
 	import CHANNELS, { type ChannelDef } from './channels_def/channels_def';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
+	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
 
 	const MAX_PAGES = 4;
 
@@ -65,23 +66,22 @@
 
 <div class="channel-panel" style:--grid-translate={appsOffset}>
 	<div class="channels">
-		<button
-			class="arrow left"
-			class:show={currentPage > 0}
-			aria-label="move left"
-			onclick={() => scroll('left')}
-		></button>
+		<ChannelPanelArrow
+			position={'left'}
+			show={currentPage > 0}
+			onmousedown={() => scroll('left')}
+		/>
 		<div class="channels-wrapper">
 			{#each new Array(MAX_PAGES) as _, page}
 				<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
 			{/each}
 		</div>
-		<button
-			class="arrow right"
-			class:show={currentPage < MAX_PAGES - 1}
-			aria-label="move right"
-			onclick={() => scroll('right')}
-		></button>
+
+		<ChannelPanelArrow
+			position={'right'}
+			show={currentPage < MAX_PAGES - 1}
+			onmousedown={() => scroll('right')}
+		/>
 	</div>
 
 	<div
@@ -113,69 +113,6 @@
 		justify-content: start;
 		background: $background-repeating-gradient;
 		outline: highlight-border();
-
-		.arrow {
-			position: absolute;
-			top: 50%;
-			z-index: 2;
-			translate: 0 -50%;
-			transition:
-				transform 0.5s,
-				visibility 0.5s;
-
-			width: 3rem;
-			height: 6rem;
-			clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
-			background-color: #1646a3;
-			cursor: pointer;
-			--pos: 2rem;
-			--pos-2: 2.5rem;
-
-			&::before {
-				content: '';
-				inset: 0;
-				scale: 0.85;
-				position: absolute;
-				background:
-					radial-gradient(at -50% 50%, #cff7ff 30%, transparent 60%),
-					linear-gradient(to bottom, #4cd3fe 35%, #adf2ff 50%, #4cd3fe 65%);
-				clip-path: inherit;
-			}
-
-			&.right {
-				right: var(--pos);
-				animation: arrow-anim-right 0.6s infinite alternate;
-
-				&:not(.show) {
-					transform: translateX(10rem);
-					visibility: hidden;
-				}
-
-				@keyframes arrow-anim-right {
-					to {
-						right: var(--pos-2);
-					}
-				}
-			}
-
-			&.left {
-				left: var(--pos);
-				transform: scaleX(-1);
-
-				&:not(.show) {
-					transform: scaleX(-1) translateX(10rem);
-					visibility: hidden;
-				}
-
-				animation: arrow-anim-left 0.6s infinite alternate;
-
-				@keyframes arrow-anim-left {
-					to {
-						left: var(--pos-2);
-					}
-				}
-			}
-		}
 	}
 
 	.channels-wrapper {
