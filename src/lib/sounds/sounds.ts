@@ -14,7 +14,7 @@ export const SOUNDS = {
 	},
 	CHANNEL: {
 		hover_title: { fileName: 'hover_title.wav', volume: 0.25 },
-		move_page: { fileName: 'move-page.wav' }
+		move_page: { fileName: 'move_page.wav' }
 	}
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
 
