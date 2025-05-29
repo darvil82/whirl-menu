@@ -1,6 +1,7 @@
 <script lang="typescript">
 	import type { Snippet } from 'svelte';
 	import { PAGE_SCROLL_DELAY } from './channels_def';
+	import { movingChannel } from './channels_status.svelte';
 
 	const {
 		show,
@@ -9,26 +10,49 @@
 		children
 	}: {
 		show: boolean;
-		onclick: (e: MouseEvent) => void;
+		onclick: (e: MouseEvent | undefined) => void;
 		position: 'left' | 'right';
 		children?: Snippet;
 	} = $props();
 
 	let clicked = $state(false);
+	let isHovering = $state(false);
+	let hoverInterval: number | undefined;
 
-	function onclick(event: MouseEvent) {
-		if (event.button !== 0) return;
+	function onclick(event: MouseEvent | undefined) {
+		if (event && event.button !== 0) return;
 		if (clicked) return;
 
 		clicked = true;
 		_onclick?.(event);
 		setTimeout(() => (clicked = false), PAGE_SCROLL_DELAY);
 	}
+
+	function hoverAutoClick() {
+		if (isHovering && movingChannel.isMoving) {
+			onclick(undefined);
+		}
+	}
+
+	function onmouseover() {
+		if (isHovering) return;
+
+		isHovering = true;
+		hoverInterval = setInterval(hoverAutoClick, PAGE_SCROLL_DELAY + 25); // 25ms to ensure it doesn't trigger too early
+	}
+
+	function onmouseleave() {
+		isHovering = false;
+		clearInterval(hoverInterval);
+	}
 </script>
 
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	class={`arrow-wrapper ${position}`}
 	onmousedown={onclick}
+	{onmouseover}
+	{onmouseleave}
 	class:show
 	class:clicked
 	aria-label={`move ${position}`}
@@ -46,8 +70,7 @@
 		position: absolute;
 		top: 50%;
 		translate: 0 -50%;
-		cursor: pointer;
-		z-index: 5;
+		z-index: 1000;
 		transition:
 			transform 0.25s,
 			visibility 0.5s;
@@ -78,7 +101,7 @@
 
 			span {
 				font-size: 17vh;
-				line-height: 0.7;
+				line-height: 0.65;
 			}
 		}
 

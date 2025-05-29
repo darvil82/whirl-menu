@@ -1,9 +1,11 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import ChannelGrid from './ChannelGrid.svelte';
-	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from './channels_def';
+	import ChannelGrid from '../channels/ChannelGrid.svelte';
+	import ChannelPanelArrow from '../channels/ChannelPanelArrow.svelte';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '../channels/channels_def';
+	import { movingChannel } from '../channels/channels_status.svelte';
+	import { getMousePosition } from '$lib/utils.svelte';
 
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
@@ -58,20 +60,38 @@
 		else if (e.key == '-') scrollChannels('left');
 	}
 
+	function onMouseUp(e: MouseEvent) {
+		if (movingChannel.isMoving) {
+			console.log('dragged outside!');
+			movingChannel.invokeOriginalCallback();
+			movingChannel.set(undefined);
+			playSound(SOUNDS.BUTTON.error);
+		}
+	}
+
 	onMount(() => {
 		const timer = setInterval(() => {
 			currentTime = getTime();
 		}, 1000 * 5);
 
 		document.addEventListener('keydown', onScrollHotkeys);
+		document.addEventListener('mouseup', onMouseUp);
 
 		return () => {
 			clearInterval(timer);
 			document.removeEventListener('keydown', onScrollHotkeys);
+			document.removeEventListener('mouseup', onMouseUp);
 		};
 	});
 </script>
 
+{#if movingChannel.isMoving}
+	<div
+		class="moving-channel-indicator"
+		style:left={getMousePosition()?.[0] + 'px'}
+		style:top={getMousePosition()?.[1] + 'px'}
+	></div>
+{/if}
 <div class="channel-panel" style:--grid-translate={appsOffset}>
 	<div class="channels">
 		<ChannelPanelArrow
@@ -219,6 +239,35 @@
 					opacity: 1;
 				}
 			}
+		}
+	}
+
+	.moving-channel-indicator {
+		background: linear-gradient(
+			to bottom,
+			white,
+			$color-highlight-blue 30%,
+			$color-highlight-blue 70%,
+			white
+		);
+		mask: url('../channels/channel_mask.png');
+		mask-size: 100% 100%;
+		translate: -50% -50%;
+		width: 20vw;
+		height: 20vh;
+		position: absolute;
+		z-index: 900;
+		pointer-events: none;
+		scale: 0.7;
+		opacity: 0.75;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			mask: url('../channels/channel_hover_mask.png');
+			mask-size: 100% 100%;
+			background: white;
 		}
 	}
 </style>

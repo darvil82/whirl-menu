@@ -38,6 +38,7 @@
 <div class="channel-grid" class:hide>
 	{#each new Array(PAGE_NUM_CHANNELS) as _, i}
 		<Channel
+			position={getAbsPos(i)}
 			channel={getChannelDef(i)}
 			titlePosition={getChannelPosition(i)}
 			hide={!getChannelVisibility(i)}

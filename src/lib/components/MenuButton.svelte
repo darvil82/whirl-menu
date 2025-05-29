@@ -1,6 +1,5 @@
 <script lang="typescript">
 	import SOUNDS, { playSound, type Sound } from '$lib/sounds/sounds';
-	import { playSoundTimes } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
 	const {
@@ -25,7 +24,7 @@
 		if (clicked) return;
 
 		if (disabled) {
-			playSoundTimes(SOUNDS.BUTTON.error, 2, 90);
+			playSound(SOUNDS.BUTTON.error);
 			return;
 		}
 
@@ -47,11 +46,11 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={btn}
 	onmousedown={onclick}
 	onmouseover={hover}
-	onfocus={hover}
 	class:clicked
 	class:no-border={noBorder}
 	class:disabled
@@ -61,7 +60,7 @@
 
 <style lang="scss">
 	button {
-		font-size: 1em;
+		font-size: 1.1em;
 		padding: 0.8em 2.15em;
 		border-radius: 50rem;
 		color: #464646;
@@ -69,7 +68,6 @@
 		box-shadow: inset 0 0 1rem 0.5rem #bcc8d8;
 		position: relative;
 		isolation: isolate;
-		cursor: pointer;
 		transition:
 			all 0.15s,
 			filter 0.15s;
