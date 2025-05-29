@@ -1,24 +1,24 @@
 <script lang="typescript">
 	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import type { ChannelDef } from './channels_def/channels_def';
+	import type { ChannelDef } from './channels_def';
 	import { ellipsize } from '$lib/utils';
+	import { movingChannel } from './channels_status.svelte';
 
-	const {
+	let {
 		channel,
 		titlePosition,
-		position,
 		hide
 	}: {
 		channel?: ChannelDef;
 		titlePosition?: 'left' | 'right' | 'center';
-		position?: [number, number];
 		hide?: boolean;
 	} = $props();
 
 	let hoverTimeout: number;
 	let focused = false;
 	let showTitle = $state(false);
+	let moving = $state(false);
 
 	function hover() {
 		if (!channel || focused) return;
@@ -37,6 +37,22 @@
 		showTitle = false;
 		focused = false;
 	}
+
+	function onclick(e: MouseEvent) {
+		if (e.buttons == 3 && !moving) {
+			moving = true;
+			movingChannel.channel = channel;
+			channel = undefined;
+		}
+	}
+
+	function onstopclick(e: MouseEvent) {
+		if (movingChannel.channel) {
+			channel = movingChannel.channel;
+			movingChannel.channel = undefined;
+			moving = false;
+		}
+	}
 </script>
 
 <button
@@ -44,6 +60,8 @@
 	class:active={channel}
 	onmouseover={hover}
 	onmouseleave={stopHover}
+	onmousedown={onclick}
+	onmouseup={onstopclick}
 	onfocus={hover}
 	onfocusout={stopHover}
 	style:visibility={hide ? 'hidden' : undefined}
@@ -51,16 +69,18 @@
 	<div class="channel">
 		<!-- <span class="debug-pos">{position}</span> -->
 		<div class="content">
-			{#if channel}
+			{#if channel && !moving}
 				<channel.thumbnail />
 			{:else}
 				<DefaultThumbnail />
 			{/if}
 		</div>
 	</div>
-	<div class="hover-tag {titlePosition}" class:visible={showTitle}>
-		{ellipsize(channel?.name ?? '', 25)}
-	</div>
+	{#if !moving}
+		<div class="hover-tag {titlePosition}" class:visible={showTitle}>
+			{ellipsize(channel?.name ?? '', 25)}
+		</div>
+	{/if}
 </button>
 
 <style lang="scss">
@@ -124,8 +144,9 @@
 		border-radius: 5rem;
 		background: white;
 		border: 3px solid $color-gray;
-		padding: 0.75em 1.5em;
-		font-size: 1.5em;
+		padding: 0.5em 1.25em;
+		font-size: 3em;
+		color: #555;
 		min-width: 35vh;
 		box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.15);
 		text-wrap: nowrap;

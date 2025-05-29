@@ -6,6 +6,10 @@
 	margin: 0;
 }
 
+*:focus {
+	outline: none;
+}
+
 body {
 	font-family: FOT-RodinNTLG;
 	line-height: 1;

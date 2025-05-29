@@ -1,19 +1,44 @@
 <script lang="typescript">
+	import type { Snippet } from 'svelte';
+	import { PAGE_SCROLL_DELAY } from './channels_def';
+
 	const {
 		show,
-		onmousedown,
-		position
-	}: { show: boolean; onmousedown: () => void; position: 'left' | 'right' } = $props();
+		onclick: _onclick,
+		position,
+		children
+	}: {
+		show: boolean;
+		onclick: (e: MouseEvent) => void;
+		position: 'left' | 'right';
+		children?: Snippet;
+	} = $props();
+
+	let clicked = $state(false);
+
+	function onclick(event: MouseEvent) {
+		if (event.button !== 0) return;
+		if (clicked) return;
+
+		clicked = true;
+		_onclick?.(event);
+		setTimeout(() => (clicked = false), PAGE_SCROLL_DELAY);
+	}
 </script>
 
 <button
 	class={`arrow-wrapper ${position}`}
-	{onmousedown}
+	onmousedown={onclick}
 	class:show
+	class:clicked
 	aria-label={`move ${position}`}
 >
 	<div class="arrow"></div>
-	<div class="move-indicator"></div>
+	<div class="move-indicator">
+		{#if children}
+			<span>{@render children()}</span>
+		{/if}
+	</div>
 </button>
 
 <style lang="scss">
@@ -27,31 +52,39 @@
 			transform 0.25s,
 			visibility 0.5s;
 
-		--pos: 2rem;
-		--pos-2: 2.5rem;
+		--pos: 3vw;
+		--pos-2: 3.5vw;
 
 		.move-indicator {
 			position: absolute;
-			right: 1.8em;
-			top: -1.25em;
-			width: 8.5em;
-			height: 8.5em;
+			line-height: 0.8;
+			color: #777;
+			font-weight: bold;
+			right: 3vh;
+			top: -3vh;
+			width: 17vh;
+			height: 17vh;
 			background:
 				radial-gradient(at var(--highlight-pos, 25%) 25%, white 20%, transparent 45%),
 				radial-gradient(at 50% 50%, $color-light 40%, $color-gray);
 			border-radius: 50%;
-			border: highlight-border();
+			border: highlight-border(0.4rem);
 			visibility: hidden;
 			transform-origin: right center;
 			scale: 0.4;
 			transition:
 				scale 0.05s linear,
 				visibility 0.05s linear;
+
+			span {
+				font-size: 17vh;
+				line-height: 0.7;
+			}
 		}
 
 		.arrow {
-			width: 3em;
-			height: 6em;
+			width: 5vh;
+			height: 11vh;
 			clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
 			background-color: #1646a3;
 			transform-origin: right;
@@ -89,10 +122,10 @@
 
 		&.right {
 			right: var(--pos);
-			animation: arrow-anim-right 0.6s infinite alternate;
+			animation: arrow-anim-right 0.5s infinite alternate;
 
 			&:not(.show) {
-				transform: translateX(10rem);
+				transform: translateX(20rem);
 				visibility: hidden;
 			}
 
@@ -112,11 +145,11 @@
 			}
 
 			&:not(.show) {
-				transform: scaleX(-1) translateX(10rem);
+				transform: scaleX(-1) translateX(20rem);
 				visibility: hidden;
 			}
 
-			animation: arrow-anim-left 0.6s infinite alternate;
+			animation: arrow-anim-left 0.5s infinite alternate;
 
 			@keyframes arrow-anim-left {
 				to {
@@ -125,7 +158,8 @@
 			}
 		}
 
-		&.show:hover {
+		&.show:hover,
+		&.show.clicked {
 			.move-indicator {
 				scale: 1;
 				visibility: visible;
@@ -136,6 +170,22 @@
 
 			.arrow {
 				animation: arrow-retract 0.15s;
+			}
+		}
+
+		&.clicked .move-indicator {
+			animation: clicked 0.5s forwards;
+
+			@keyframes clicked {
+				20% {
+					filter: brightness(2.25);
+				}
+				30% {
+					filter: brightness(2.1);
+				}
+				100% {
+					filter: brightness(1);
+				}
 			}
 		}
 	}

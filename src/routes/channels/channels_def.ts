@@ -1,5 +1,11 @@
 import type { Component } from 'svelte';
-import Test from './Test.svelte';
+import Test from './channels_def/Test.svelte';
+
+export const MAX_PAGES = 4;
+export const PAGE_SCROLL_DELAY = 500;
+export const PAGE_NUM_ROWS = 3;
+export const PAGE_NUM_COLUMNS = 4;
+export const PAGE_NUM_CHANNELS = PAGE_NUM_COLUMNS * PAGE_NUM_ROWS;
 
 export interface ChannelDef {
 	thumbnail: Component;

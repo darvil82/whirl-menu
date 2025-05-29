@@ -1,50 +1,48 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
-	import CHANNELS, { type ChannelDef } from './channels_def/channels_def';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
 	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
-
-	const MAX_PAGES = 4;
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from './channels_def';
 
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
 	let currentPage: number = $state(0);
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
 
-	let moving = $state(false);
+	let scrollingPage = $state(false);
 
 	function getTime(): string[] {
 		const date = new Date();
 		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
 	}
 
-	function scroll(direction: 'left' | 'right') {
-		if (moving) return;
+	function scrollChannels(direction: 'left' | 'right') {
+		if (scrollingPage) return;
 
 		const newPage = currentPage + (direction == 'right' ? 1 : -1);
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
 		lastMoveDir = direction;
-		moving = true;
+		scrollingPage = true;
 		appsOffset = -100 * newPage + '%';
 		playSound(SOUNDS.CHANNEL.move_page);
 
 		setTimeout(() => {
-			moving = false;
+			scrollingPage = false;
 			currentPage = newPage;
-		}, 500);
+		}, PAGE_SCROLL_DELAY);
 	}
 
 	function getHideGridValue(at: number): 'all' | 'left' | 'right' | undefined {
 		if (at == currentPage) return undefined;
 
-		if (lastMoveDir == 'right' && moving) {
+		if (lastMoveDir == 'right' && scrollingPage) {
 			if (at == currentPage + 1) return undefined;
 			if (at == currentPage + 2) return 'right';
 		}
 
-		if (lastMoveDir == 'left' && moving) {
+		if (lastMoveDir == 'left' && scrollingPage) {
 			if (at == currentPage - 1) return undefined;
 			if (at == currentPage - 2) return 'left';
 		}
@@ -55,12 +53,22 @@
 		return 'all';
 	}
 
+	function onScrollHotkeys(e: KeyboardEvent) {
+		if (e.key == '+') scrollChannels('right');
+		else if (e.key == '-') scrollChannels('left');
+	}
+
 	onMount(() => {
 		const timer = setInterval(() => {
 			currentTime = getTime();
 		}, 1000 * 5);
 
-		return () => clearInterval(timer);
+		document.addEventListener('keydown', onScrollHotkeys);
+
+		return () => {
+			clearInterval(timer);
+			document.removeEventListener('keydown', onScrollHotkeys);
+		};
 	});
 </script>
 
@@ -69,8 +77,8 @@
 		<ChannelPanelArrow
 			position={'left'}
 			show={currentPage > 0}
-			onmousedown={() => scroll('left')}
-		/>
+			onclick={() => scrollChannels('left')}>-</ChannelPanelArrow
+		>
 		<div class="channels-wrapper">
 			{#each new Array(MAX_PAGES) as _, page}
 				<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
@@ -80,14 +88,14 @@
 		<ChannelPanelArrow
 			position={'right'}
 			show={currentPage < MAX_PAGES - 1}
-			onmousedown={() => scroll('right')}
-		/>
+			onclick={() => scrollChannels('right')}>+</ChannelPanelArrow
+		>
 	</div>
 
 	<div
 		class="time-wrapper"
-		class:right={moving && lastMoveDir == 'right'}
-		class:left={moving && lastMoveDir == 'left'}
+		class:right={scrollingPage && lastMoveDir == 'right'}
+		class:left={scrollingPage && lastMoveDir == 'left'}
 	>
 		<div class="time">
 			{currentTime[0]} <span class="colon">:</span>
@@ -108,6 +116,7 @@
 	}
 
 	.channels {
+		position: relative;
 		display: flex;
 		align-self: stretch;
 		justify-content: start;
@@ -117,7 +126,7 @@
 
 	.channels-wrapper {
 		display: flex;
-		padding: min(8vh, 4rem);
+		padding: min(8vh, 10rem);
 		padding-inline: min(10vw, 20rem);
 		padding-bottom: 1.5vh;
 		width: 100%;
@@ -155,7 +164,7 @@
 		justify-content: center;
 		align-items: center;
 
-		font-size: 6vh;
+		font-size: 7vh;
 		color: $color-gray-dark;
 		font-family: 'DSEG7';
 		letter-spacing: 0.5rem;
@@ -182,13 +191,13 @@
 		}
 
 		&::before {
-			left: -120%;
+			left: -90%;
 			right: 99%; // to fix weird artifact
 		}
 
 		&::after {
 			left: 99%; // to fix weird artifact
-			right: -120%;
+			right: -90%;
 			transform: scaleX(-1);
 		}
 

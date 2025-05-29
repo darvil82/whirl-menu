@@ -6,13 +6,13 @@
 	const {
 		children,
 		disabled = false,
-		onclick: _click,
+		onclick: _onclick,
 		noBorder = false,
 		clickSound = SOUNDS.BUTTON.click_default
 	}: {
 		children: Snippet;
 		disabled?: boolean;
-		onclick?: () => void;
+		onclick?: (e: MouseEvent) => void;
 		noBorder?: boolean;
 		clickSound?: Sound;
 	} = $props();
@@ -31,7 +31,7 @@
 
 		clicked = true;
 		playSound(clickSound);
-		_click?.();
+		_onclick?.(event);
 		btn.addEventListener(
 			'animationend',
 			() => {
