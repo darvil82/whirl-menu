@@ -13,24 +13,24 @@
 		document.oncontextmenu = () => false;
 		document.addEventListener('mousemove', (e) => setMousePosition([e.clientX, e.clientY]));
 
-		// musicAudioCtx = new AudioContext();
-		// musicGainNode = musicAudioCtx.createGain();
-		// musicGainNode.gain.value = 0.25;
+		musicAudioCtx = new AudioContext();
+		musicGainNode = musicAudioCtx.createGain();
+		musicGainNode.gain.value = 0.25;
 
-		// fetch(getSoundPath(SOUNDS.MUSIC.main))
-		// 	.then((response) => response.arrayBuffer())
-		// 	.then((data) => musicAudioCtx.decodeAudioData(data))
-		// 	.then((buffer) => {
-		// 		const source = musicAudioCtx.createBufferSource();
-		// 		source.buffer = buffer;
-		// 		source.loop = true;
-		// 		source.loopStart = 27.716;
-		// 		source.loopEnd = 34.968 + 1 * 60;
-		// 		source.connect(musicGainNode).connect(musicAudioCtx.destination);
-		// 		source.start(0);
-		// 	});
+		fetch(getSoundPath(SOUNDS.MUSIC.main))
+			.then((response) => response.arrayBuffer())
+			.then((data) => musicAudioCtx.decodeAudioData(data))
+			.then((buffer) => {
+				const source = musicAudioCtx.createBufferSource();
+				source.buffer = buffer;
+				source.loop = true;
+				source.loopStart = 27.716;
+				source.loopEnd = 34.968 + 1 * 60;
+				source.connect(musicGainNode).connect(musicAudioCtx.destination);
+				source.start(0);
+			});
 
-		// return () => musicAudioCtx.close();
+		return () => musicAudioCtx.close();
 	});
 </script>
 

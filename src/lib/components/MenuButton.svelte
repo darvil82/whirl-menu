@@ -60,7 +60,7 @@
 
 <style lang="scss">
 	button {
-		font-size: 1.1em;
+		font-size: 1.4em;
 		padding: 0.8em 2.15em;
 		border-radius: 50rem;
 		color: #464646;

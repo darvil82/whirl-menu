@@ -145,7 +145,8 @@
 			filter: brightness(0.5) contrast(0.75);
 		}
 
-		* {
+		*,
+		&::after {
 			pointer-events: none;
 		}
 	}

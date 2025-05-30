@@ -23,6 +23,7 @@
 		width: 8vh;
 		height: 8vh;
 		translate: -35% -5%;
+		filter: drop-shadow(0.4vh 0.4vh 0 rgba(0, 0, 0, 0.25));
 
 		&.fist {
 			translate: -50% -50%;
