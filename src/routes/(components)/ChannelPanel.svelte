@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from '../channels/ChannelGrid.svelte';
-	import ChannelPanelArrow from '../channels/ChannelPanelArrow.svelte';
+	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '../channels/channels_def';
 	import { movingChannel } from '../channels/channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
@@ -255,7 +255,7 @@
 		translate: -50% -50%;
 		width: 20vw;
 		height: 20vh;
-		position: absolute;
+		position: fixed;
 		z-index: 900;
 		pointer-events: none;
 		scale: 0.7;

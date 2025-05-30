@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import type { Snippet } from 'svelte';
-	import { PAGE_SCROLL_DELAY } from './channels_def';
-	import { movingChannel } from './channels_status.svelte';
+	import { PAGE_SCROLL_DELAY } from '../channels/channels_def';
+	import { movingChannel } from '../channels/channels_status.svelte';
 
 	const {
 		show,
