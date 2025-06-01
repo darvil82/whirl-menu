@@ -2,13 +2,16 @@
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS, { getSoundPath, playSound } from '$lib/sounds/sounds';
 	import { onMount } from 'svelte';
-	import ChannelPanel from './channels/ChannelPanel.svelte';
+	import ChannelPanel from './(components)/ChannelPanel.svelte';
+	import { setMousePosition } from '$lib/utils.svelte';
+	import Cursor from './(components)/Cursor.svelte';
 
 	let musicAudioCtx: AudioContext;
 	let musicGainNode: GainNode;
 
 	onMount(() => {
 		document.oncontextmenu = () => false;
+		document.addEventListener('mousemove', (e) => setMousePosition([e.clientX, e.clientY]));
 
 		musicAudioCtx = new AudioContext();
 		musicGainNode = musicAudioCtx.createGain();
@@ -31,12 +34,8 @@
 	});
 </script>
 
+<Cursor></Cursor>
 <div class="menu">
 	<ChannelPanel></ChannelPanel>
-</div>
-<br />
-<div style="display: flex; justify-content: center; gap: 5rem">
-	<MenuButton clickSound={SOUNDS.BUTTON.click_back}>Menú de Wii</MenuButton>
-	<MenuButton noBorder>Comenzar</MenuButton>
-	<MenuButton disabled>Disabled</MenuButton>
+	<MenuButton disabled>testing</MenuButton>
 </div>

@@ -1,11 +1,7 @@
 <script lang="typescript">
 	import Channel from './Channel.svelte';
-	import type { ChannelDef } from './channels_def/channels_def';
-	import CHANNELS from './channels_def/channels_def';
-
-	const NUM_ROWS = 3;
-	const NUM_COLUMNS = 4;
-	const NUM_ELEMENTS = NUM_COLUMNS * NUM_ROWS;
+	import type { ChannelDef } from './channels_def';
+	import CHANNELS, { PAGE_NUM_CHANNELS, PAGE_NUM_COLUMNS } from './channels_def';
 
 	const {
 		page,
@@ -16,20 +12,20 @@
 	} = $props();
 
 	function getChannelPosition(i: number): 'left' | 'right' | 'center' {
-		if (i % NUM_COLUMNS == 0) return 'left';
-		if (i % NUM_COLUMNS == 3) return 'right';
+		if (i % PAGE_NUM_COLUMNS == 0) return 'left';
+		if (i % PAGE_NUM_COLUMNS == 3) return 'right';
 		return 'center';
 	}
 
 	function getChannelVisibility(i: number): boolean {
-		if (hide == 'left') return i % NUM_COLUMNS == 3;
-		if (hide == 'right') return i % NUM_COLUMNS == 0;
+		if (hide == 'left') return i % PAGE_NUM_COLUMNS == 3;
+		if (hide == 'right') return i % PAGE_NUM_COLUMNS == 0;
 		if (hide == 'all') return false;
 		return true;
 	}
 
 	function getAbsPos(i: number): [number, number] {
-		return [(i % NUM_COLUMNS) + page * NUM_COLUMNS, Math.floor(i / NUM_COLUMNS)];
+		return [(i % PAGE_NUM_COLUMNS) + page * PAGE_NUM_COLUMNS, Math.floor(i / PAGE_NUM_COLUMNS)];
 	}
 
 	function getChannelDef(i: number): ChannelDef | undefined {
@@ -40,7 +36,7 @@
 </script>
 
 <div class="channel-grid" class:hide>
-	{#each new Array(NUM_ELEMENTS) as _, i}
+	{#each new Array(PAGE_NUM_CHANNELS) as _, i}
 		<Channel
 			position={getAbsPos(i)}
 			channel={getChannelDef(i)}
@@ -56,7 +52,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(3, 1fr);
 		gap: 1rem;
-		height: 65vh;
+		height: 61vh;
 		width: 100%;
 		padding-inline: 0.5rem;
 		z-index: 1;
