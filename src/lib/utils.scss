@@ -3,7 +3,13 @@
 }
 
 @function lines-repeating-gradient($color1, $color2, $direction: to bottom) {
-	@return repeating-linear-gradient($direction, $color1, $color1 6px, $color2 6px, $color2 8px);
+	@return repeating-linear-gradient(
+		$direction,
+		$color2,
+		$color2 0.25vh,
+		$color1 0.25vh,
+		$color1 0.8vh
+	);
 }
 
 $color-highlight-blue: #50c6f1;
