@@ -2,7 +2,7 @@
 	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import type { ChannelDef } from './channels_def';
-	import { ellipsize } from '$lib/utils.svelte';
+	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel } from './channels_status.svelte';
 
 	let {
@@ -18,15 +18,19 @@
 	} = $props();
 
 	let hoverTimeout: number;
-	let focused = false;
 	let showTitle = $state(false);
 	let moving = $state(false);
+	let crtAnimation = $state(false);
 
 	function hover() {
-		if (!channel || focused) return;
+		if (movingChannel.isMoving) {
+			playSound(SOUNDS.BUTTON.hover);
+			return;
+		}
+
+		if (!channel) return;
 
 		playSound(SOUNDS.BUTTON.hover);
-		focused = true;
 
 		hoverTimeout = setTimeout(() => {
 			showTitle = true;
@@ -37,26 +41,48 @@
 	function stopHover() {
 		clearTimeout(hoverTimeout);
 		showTitle = false;
-		focused = false;
 	}
 
-	function onclick(e: MouseEvent) {
-		if (e.buttons == 3 && !moving && channel) {
+	const onclick = debounce((e: MouseEvent) => {
+		if (moving || !channel || crtAnimation) return;
+
+		if (e.buttons == 3) {
 			moving = true;
+			stopHover(); // stop hover to prevent title from inmediately popping up if dropping on same place
 			movingChannel.set({ channel, originalCallback: receiveChannelData });
+			playSound(SOUNDS.CHANNEL.interact);
 			channel = undefined;
+		} else if (e.buttons == 1) {
+			playSound(SOUNDS.CHANNEL.click);
 		}
-	}
+	}, 50);
 
-	function receiveChannelData(c: ChannelDef) {
+	function receiveChannelData(c: ChannelDef, animate: boolean = false) {
+		if (!animate) {
+			channel = c;
+			moving = false;
+			c.position = position;
+			return;
+		}
+
+		crtAnimation = true;
+		playSound(SOUNDS.CHANNEL.switch, 0.5);
+
+		setTimeout(() => {
+			channel = c;
+		}, 500);
+
+		setTimeout(() => {
+			crtAnimation = false;
+		}, 1000);
+
 		moving = false;
-		channel = c;
 		c.position = position;
 	}
 
 	function onStopClick(e: MouseEvent) {
 		if (movingChannel.isMoving && !channel) {
-			receiveChannelData(movingChannel.channel!);
+			receiveChannelData(movingChannel.channel!, true);
 
 			movingChannel.unset();
 			e.stopPropagation();
@@ -77,7 +103,7 @@
 >
 	<div class="channel">
 		<!-- <span class="debug">pos: {position}</span> -->
-		<div class="content">
+		<div class="content" class:crt-animation={crtAnimation}>
 			{#if channel && !moving}
 				<channel.thumbnail />
 			{:else}
@@ -115,6 +141,46 @@
 			mask: url('./channel_mask.png');
 			mask-size: 100% 100%;
 			transition: filter 0.25s;
+
+			// crt animation effect
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background-color: white;
+				z-index: 1;
+				visibility: hidden;
+
+				@keyframes crt {
+					0% {
+						visibility: visible;
+						scale: 0.1 0.1;
+						opacity: 0;
+					}
+					15% {
+						scale: 0.1 0.8;
+						opacity: 1;
+					}
+					30% {
+						scale: 1 0.1;
+						opacity: 1;
+					}
+					45% {
+						scale: 1 1;
+						opacity: 1;
+					}
+					75% {
+						opacity: 1;
+					}
+					100% {
+						opacity: 0;
+					}
+				}
+			}
+
+			&.crt-animation::before {
+				animation: crt 0.75s forwards;
+			}
 		}
 	}
 
@@ -127,7 +193,7 @@
 			inset: 0;
 			mask: url('./channel_hover_mask.png');
 			mask-size: 100% 100%;
-			background: #2ebff0a6;
+			background: $color-highlight-blue;
 			opacity: 0;
 			scale: 0.9;
 			transition: 0.5s ease-in;
@@ -135,8 +201,8 @@
 
 		&.active {
 			&:hover::after {
-				opacity: 1;
-				scale: 1 1.06;
+				opacity: 0.6;
+				scale: 1 1.08;
 				transition: 0.05s;
 			}
 		}

@@ -14,7 +14,10 @@ export const SOUNDS = {
 	},
 	CHANNEL: {
 		hover_title: { fileName: 'hover_title.wav', volume: 0.25 },
-		move_page: { fileName: 'move_page.wav' }
+		move_page: { fileName: 'move_page.wav' },
+		interact: { fileName: 'channel_interact.wav' },
+		click: { fileName: 'channel_click.wav' },
+		switch: { fileName: 'channel_switch.wav' }
 	},
 	MUSIC: {
 		main: { fileName: 'music.wav' }

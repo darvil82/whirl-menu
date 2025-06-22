@@ -56,13 +56,13 @@
 	}
 
 	function onScrollHotkeys(e: KeyboardEvent) {
+		if (movingChannel.isMoving) return;
 		if (e.key == '+') scrollChannels('right');
 		else if (e.key == '-') scrollChannels('left');
 	}
 
-	function onMouseUp(e: MouseEvent) {
+	function onMouseUp() {
 		if (movingChannel.isMoving) {
-			console.log('dragged outside!');
 			movingChannel.invokeOriginalCallback();
 			movingChannel.set(undefined);
 			playSound(SOUNDS.BUTTON.error);
@@ -245,10 +245,10 @@
 	.moving-channel-indicator {
 		background: linear-gradient(
 			to bottom,
-			white,
+			white -20%,
 			$color-highlight-blue 30%,
 			$color-highlight-blue 70%,
-			white
+			white 120%
 		);
 		mask: url('../channels/channel_mask.png');
 		mask-size: 100% 100%;
@@ -259,12 +259,12 @@
 		z-index: 900;
 		pointer-events: none;
 		scale: 0.7;
-		opacity: 0.75;
+		opacity: 0.9;
 
 		&::after {
 			content: '';
 			position: absolute;
-			inset: 0;
+			inset: -0.2rem;
 			mask: url('../channels/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: white;

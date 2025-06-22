@@ -13,3 +13,17 @@ export function getMousePosition() {
 export function setMousePosition(m: typeof mousePos) {
 	mousePos = m;
 }
+
+export function debounce<P extends any[]>(
+	func: (...args: P) => void,
+	delay: number
+): (...args: P) => void {
+	let timer: number;
+
+	return (...args: P) => {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			func(...args);
+		}, delay);
+	};
+}
