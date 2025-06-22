@@ -1,5 +1,5 @@
 import type { Component } from 'svelte';
-import Test from './channels_def/Test.svelte';
+import Test from '$lib/channels_def/Test.svelte';
 
 export const MAX_PAGES = 4;
 export const PAGE_SCROLL_DELAY = 500;

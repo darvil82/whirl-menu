@@ -1,7 +1,7 @@
 <script lang="typescript">
-	import DefaultThumbnail from './channels_def/default_thumbnail/DefaultThumbnail.svelte';
+	import DefaultThumbnail from '../../lib/channels_def/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import type { ChannelDef } from './channels_def';
+	import type { ChannelDef } from '../../lib/channels_def/channels_def';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel } from './channels_status.svelte';
 
@@ -74,7 +74,7 @@
 
 		setTimeout(() => {
 			crtAnimation = false;
-		}, 1000);
+		}, 750);
 
 		moving = false;
 		c.position = position;
@@ -128,7 +128,7 @@
 
 	.channel {
 		background: $color-gray;
-		mask: url('./channel_mask.png');
+		mask: url('assets/channel_mask.png');
 		mask-size: 100% 100%;
 		position: absolute;
 		inset: 0;
@@ -138,7 +138,7 @@
 			position: absolute;
 			inset: 0.25rem;
 			background: white;
-			mask: url('./channel_mask.png');
+			mask: url('assets/channel_mask.png');
 			mask-size: 100% 100%;
 			transition: filter 0.25s;
 
@@ -191,7 +191,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			mask: url('./channel_hover_mask.png');
+			mask: url('assets/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: $color-highlight-blue;
 			opacity: 0;

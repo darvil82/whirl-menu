@@ -1,10 +1,10 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import ChannelGrid from '../channels/ChannelGrid.svelte';
+	import ChannelGrid from './ChannelGrid.svelte';
 	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '../channels/channels_def';
-	import { movingChannel } from '../channels/channels_status.svelte';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
+	import { movingChannel } from './channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
 	let currentTime: string[] = $state(getTime());
@@ -63,6 +63,7 @@
 
 	function onMouseUp() {
 		if (movingChannel.isMoving) {
+			// if this was called, a channel did not capture it. so it fell outside
 			movingChannel.invokeOriginalCallback();
 			movingChannel.set(undefined);
 			playSound(SOUNDS.BUTTON.error);
@@ -94,22 +95,11 @@
 {/if}
 <div class="channel-panel" style:--grid-translate={appsOffset}>
 	<div class="channels">
-		<ChannelPanelArrow
-			position={'left'}
-			show={currentPage > 0}
-			onclick={() => scrollChannels('left')}>-</ChannelPanelArrow
-		>
 		<div class="channels-wrapper">
 			{#each new Array(MAX_PAGES) as _, page}
 				<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
 			{/each}
 		</div>
-
-		<ChannelPanelArrow
-			position={'right'}
-			show={currentPage < MAX_PAGES - 1}
-			onclick={() => scrollChannels('right')}>+</ChannelPanelArrow
-		>
 	</div>
 
 	<div
@@ -127,6 +117,15 @@
 		</div>
 	</div>
 </div>
+
+<ChannelPanelArrow position={'left'} show={currentPage > 0} onclick={() => scrollChannels('left')}
+	>-</ChannelPanelArrow
+>
+<ChannelPanelArrow
+	position={'right'}
+	show={currentPage < MAX_PAGES - 1}
+	onclick={() => scrollChannels('right')}>+</ChannelPanelArrow
+>
 
 <style lang="scss">
 	.channel-panel {
@@ -207,7 +206,7 @@
 			position: absolute;
 			inset-block: 0;
 			background: $background-repeating-gradient;
-			clip-path: url('./channel_panel_mask.svg#mask');
+			clip-path: url('assets/channel_panel_mask.svg#mask');
 		}
 
 		&::before {
@@ -250,7 +249,7 @@
 			$color-highlight-blue 70%,
 			white 120%
 		);
-		mask: url('../channels/channel_mask.png');
+		mask: url('assets/channel_mask.png');
 		mask-size: 100% 100%;
 		translate: -50% -50%;
 		width: 20vw;
@@ -265,7 +264,7 @@
 			content: '';
 			position: absolute;
 			inset: -0.2rem;
-			mask: url('../channels/channel_hover_mask.png');
+			mask: url('assets/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: white;
 		}

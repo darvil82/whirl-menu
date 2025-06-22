@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import type { Snippet } from 'svelte';
-	import { PAGE_SCROLL_DELAY } from '../channels/channels_def';
-	import { movingChannel } from '../channels/channels_status.svelte';
+	import { PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
+	import { movingChannel } from './channels_status.svelte';
 
 	const {
 		show,
@@ -67,8 +67,10 @@
 
 <style lang="scss">
 	.arrow-wrapper {
-		position: absolute;
-		top: 50%;
+		position: fixed;
+		top: calc(
+			50% - 15vh
+		); // they're not positioned inside the actual channel pannel so we gotta do this
 		translate: 0 -50%;
 		z-index: 1000;
 		transition:

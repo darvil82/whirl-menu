@@ -1,4 +1,4 @@
-import type { ChannelDef } from './channels_def';
+import type { ChannelDef } from '../../lib/channels_def/channels_def';
 
 class MovingChannel {
 	movingChannel: { channel: ChannelDef; originalCallback: (c: ChannelDef) => void } | undefined =
