@@ -1,4 +1,4 @@
-@function highlight-border($size: 0.3rem) {
+@function highlight-border($size: 0.12em) {
 	@return $size solid $color-highlight-blue;
 }
 
@@ -6,8 +6,8 @@
 	@return repeating-linear-gradient(
 		$direction,
 		$color2,
-		$color2 0.25vh,
-		$color1 0.25vh,
+		$color2 0.2vh,
+		$color1 0.2vh,
 		$color1 0.8vh
 	);
 }

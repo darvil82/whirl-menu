@@ -60,8 +60,8 @@
 
 <style lang="scss">
 	button {
-		font-size: 1.4em;
-		padding: 0.6em 2em;
+		font-size: 1.6em;
+		padding: 0.7em 2.1em;
 		border-radius: 50rem;
 		color: #464646;
 		background: #e3e8ef;
@@ -73,7 +73,7 @@
 			filter 0.15s;
 
 		&:not(.no-border) {
-			border: $color-highlight-blue 0.25rem solid;
+			border: highlight-border();
 		}
 
 		&::before {

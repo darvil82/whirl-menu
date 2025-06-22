@@ -5,6 +5,7 @@
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
 	import { setMousePosition } from '$lib/utils.svelte';
 	import Cursor from './(channels)/Cursor.svelte';
+	import Banner from './(banner)/Banner.svelte';
 
 	let musicAudioCtx: AudioContext;
 	let musicGainNode: GainNode;
@@ -36,6 +37,6 @@
 
 <Cursor></Cursor>
 <div class="menu">
-	<ChannelPanel></ChannelPanel>
-	<MenuButton disabled>testing</MenuButton>
+	<!-- <ChannelPanel></ChannelPanel> -->
+	<Banner></Banner>
 </div>
