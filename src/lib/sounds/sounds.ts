@@ -17,7 +17,9 @@ export const SOUNDS = {
 		move_page: { fileName: 'move_page.wav' },
 		interact: { fileName: 'channel_interact.wav' },
 		click: { fileName: 'channel_click.wav' },
-		switch: { fileName: 'channel_switch.wav' }
+		switch: { fileName: 'channel_switch.wav' },
+		zoomIn: { fileName: 'channel_zoom_in.wav' },
+		zoomOut: { fileName: 'channel_zoom_out.wav' }
 	},
 	MUSIC: {
 		main: { fileName: 'music.wav' }

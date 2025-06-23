@@ -45,7 +45,7 @@
 
 <div
 	class="menu"
-	style:transform-origin={selectedChannel.transformOrigin}
+	style:transform-origin={selectedChannel.transformOrigin(true)}
 	class:zoom={selectedChannel.isSelected}
 >
 	<ChannelPanel bind:this={channelPanel} bind:currentPage></ChannelPanel>
@@ -64,12 +64,19 @@
 
 <style lang="scss">
 	.menu {
+		will-change: contents;
 		scale: 1;
-		transition: scale 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+		height: 100vh;
+		transition:
+			all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+			transform-origin 0s;
 
 		&.zoom {
 			scale: 5;
-			transition: scale 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+			translate: -10vw -5vh; // slight offsets to make zoom look better
+			transition:
+				all 0.55s cubic-bezier(0.55, 0.055, 0.865, 0.115),
+				transform-origin 0s;
 		}
 	}
 </style>

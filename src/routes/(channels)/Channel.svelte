@@ -55,8 +55,7 @@
 			channel = undefined;
 		} else if (e.buttons == 1) {
 			playSound(SOUNDS.CHANNEL.click);
-			const { x, y, width, height } = element.getBoundingClientRect();
-			selectedChannel.set({ channel, absPos: [x + width / 2, y + height / 2] });
+			selectedChannel.set({ channel, boundingRect: element.getBoundingClientRect() });
 			stopHover();
 		}
 	}, 50);

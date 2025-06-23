@@ -1,5 +1,6 @@
 import type { Component } from 'svelte';
 import Test from '$lib/channels_def/Test.svelte';
+import Bait from './Bait.svelte';
 
 export const MAX_PAGES = 4;
 export const PAGE_SCROLL_DELAY = 500;
@@ -42,7 +43,7 @@ const CHANNELS: ChannelDef[] = [
 	{
 		name: 'A little longer name',
 		thumbnail: Test,
-		banner: Test,
+		banner: Bait,
 		position: [2, 1]
 	},
 	{

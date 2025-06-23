@@ -1,26 +1,31 @@
-<script>
+<script lang="typescript">
 	import MenuButton from '$lib/components/MenuButton.svelte';
-	import SOUNDS from '$lib/sounds/sounds';
-	import { fade } from 'svelte/transition';
+	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import { selectedChannel } from '../(channels)/channels_status.svelte';
+	import type { ChannelDef } from '$lib/channels_def/channels_def';
 
 	let zoom = $state(false);
 	let render = $state(false);
+	let channel: ChannelDef | undefined = $state();
 
 	function goBack() {
 		selectedChannel.unset();
 	}
 
 	function zoomIn() {
+		channel = selectedChannel.channel;
 		render = true;
 
 		setTimeout(() => {
 			zoom = true;
-		}, 50);
+			playSound(SOUNDS.CHANNEL.zoomIn);
+		}, 100);
 	}
 
 	function zoomOut() {
+		if (!render) return;
 		zoom = false;
+		playSound(SOUNDS.CHANNEL.zoomOut);
 
 		setTimeout(() => {
 			render = false;
@@ -34,11 +39,13 @@
 
 {#if render}
 	<div class="banner-wrapper" class:zoom>
-		<div class="content" style:transform-origin={selectedChannel.transformOrigin}>
+		<div class="content" style:transform-origin={selectedChannel.transformOrigin()}>
 			<div class="banner">
-				{#if selectedChannel.channel}
-					<selectedChannel.channel.banner />
-				{/if}
+				<div class="sandbox">
+					{#if channel}
+						<channel.banner />
+					{/if}
+				</div>
 			</div>
 			<div class="options">
 				<MenuButton clickSound={SOUNDS.CHANNEL.click} onclick={goBack}>Menú de Wii</MenuButton>
@@ -55,12 +62,13 @@
 		inset: 0;
 		scale: 1.19;
 		padding: 0em;
+		height: 100vh;
 
 		&,
 		.content {
 			transition:
 				all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
-				opacity 0.15s 0.4s;
+				opacity 0.5s 0s;
 		}
 
 		.content {
@@ -71,11 +79,18 @@
 			mask: url('./banner_mask.png');
 			mask-size: 100% 100%;
 			scale: 0.16;
+			will-change: contents;
 			opacity: 0;
 
 			.banner {
+				place-content: center;
 				position: relative;
-				flex-basis: 100%;
+				flex-grow: 1;
+
+				.sandbox {
+					position: absolute;
+					inset: 0;
+				}
 			}
 
 			.options {
@@ -125,7 +140,7 @@
 			.content {
 				transition:
 					all 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
-					opacity 0.1s;
+					opacity 0.5s;
 			}
 		}
 	}
