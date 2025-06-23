@@ -13,7 +13,7 @@
 		isolation: isolate;
 		display: grid;
 		place-items: center;
-		font-size: 5em;
+		font-size: 4em;
 		font-weight: bold;
 		color: rgba(0, 0, 0, 0.062);
 		background: linear-gradient(to top, $bg-2, $bg-1 20%, $bg-1 80%, $bg-2);

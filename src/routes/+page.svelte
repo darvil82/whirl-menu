@@ -6,9 +6,15 @@
 	import { setMousePosition } from '$lib/utils.svelte';
 	import Cursor from './(channels)/Cursor.svelte';
 	import Banner from './(banner)/Banner.svelte';
+	import ScrollArrow from './ScrollArrow.svelte';
+	import { MAX_PAGES } from '$lib/channels_def/channels_def';
+	import { selectedChannel } from './(channels)/channels_status.svelte';
 
 	let musicAudioCtx: AudioContext;
 	let musicGainNode: GainNode;
+
+	let currentPage: number = $state(0);
+	let channelPanel: ChannelPanel;
 
 	onMount(() => {
 		document.oncontextmenu = () => false;
@@ -36,7 +42,34 @@
 </script>
 
 <Cursor></Cursor>
-<div class="menu">
-	<!-- <ChannelPanel></ChannelPanel> -->
-	<Banner></Banner>
+
+<div
+	class="menu"
+	style:transform-origin={selectedChannel.transformOrigin}
+	class:zoom={selectedChannel.isSelected}
+>
+	<ChannelPanel bind:this={channelPanel} bind:currentPage></ChannelPanel>
 </div>
+<Banner></Banner>
+<ScrollArrow
+	position={'left'}
+	show={currentPage > 0}
+	onclick={() => channelPanel.scrollChannels('left')}>-</ScrollArrow
+>
+<ScrollArrow
+	position={'right'}
+	show={currentPage < MAX_PAGES - 1}
+	onclick={() => channelPanel.scrollChannels('right')}>+</ScrollArrow
+>
+
+<style lang="scss">
+	.menu {
+		scale: 1;
+		transition: scale 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+		&.zoom {
+			scale: 5;
+			transition: scale 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+		}
+	}
+</style>

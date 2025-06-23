@@ -3,7 +3,7 @@
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import type { ChannelDef } from '../../lib/channels_def/channels_def';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
-	import { movingChannel } from './channels_status.svelte';
+	import { movingChannel, selectedChannel } from './channels_status.svelte';
 
 	let {
 		channel,
@@ -21,6 +21,7 @@
 	let showTitle = $state(false);
 	let moving = $state(false);
 	let crtAnimation = $state(false);
+	let element: HTMLButtonElement;
 
 	function hover() {
 		if (movingChannel.isMoving) {
@@ -54,6 +55,9 @@
 			channel = undefined;
 		} else if (e.buttons == 1) {
 			playSound(SOUNDS.CHANNEL.click);
+			const { x, y, width, height } = element.getBoundingClientRect();
+			selectedChannel.set({ channel, absPos: [x + width / 2, y + height / 2] });
+			stopHover();
 		}
 	}, 50);
 
@@ -92,6 +96,7 @@
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
+	bind:this={element}
 	class="channel-wrapper"
 	class:active={(channel != undefined) != movingChannel.isMoving}
 	class:other-moving={movingChannel.isMoving && channel}

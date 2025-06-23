@@ -2,16 +2,15 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
-	import ChannelPanelArrow from './ChannelPanelArrow.svelte';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
 	import { movingChannel } from './channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
+	let { currentPage = $bindable(0) } = $props();
+
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
-	let currentPage: number = $state(0);
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
-
 	let scrollingPage = $state(false);
 
 	function getTime(): string[] {
@@ -19,7 +18,7 @@
 		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
 	}
 
-	function scrollChannels(direction: 'left' | 'right') {
+	export function scrollChannels(direction: 'left' | 'right') {
 		if (scrollingPage) return;
 
 		const newPage = currentPage + (direction == 'right' ? 1 : -1);
@@ -34,6 +33,16 @@
 			scrollingPage = false;
 			currentPage = newPage;
 		}, PAGE_SCROLL_DELAY);
+	}
+
+	function gotoPage(newPage: number) {
+		if (scrollingPage) return;
+
+		if (newPage < 0 || newPage >= MAX_PAGES) return;
+
+		lastMoveDir = undefined;
+		appsOffset = -100 * newPage + '%';
+		currentPage = newPage;
 	}
 
 	function getHideGridValue(at: number): 'all' | 'left' | 'right' | undefined {
@@ -118,15 +127,6 @@
 	</div>
 </div>
 
-<ChannelPanelArrow position={'left'} show={currentPage > 0} onclick={() => scrollChannels('left')}
-	>-</ChannelPanelArrow
->
-<ChannelPanelArrow
-	position={'right'}
-	show={currentPage < MAX_PAGES - 1}
-	onclick={() => scrollChannels('right')}>+</ChannelPanelArrow
->
-
 <style lang="scss">
 	.channel-panel {
 		display: flex;
@@ -140,7 +140,7 @@
 		align-self: stretch;
 		justify-content: start;
 		background: $background-repeating-gradient;
-		outline: highlight-border();
+		outline: highlight-border(0.2rem);
 	}
 
 	.channels-wrapper {
@@ -195,7 +195,7 @@
 		isolation: isolate;
 		padding-bottom: 1.5vh;
 		background: $background-repeating-gradient;
-		$border-thickness: 0.25rem;
+		$border-thickness: 0.2rem;
 		filter: drop-shadow($border-thickness 0rem 0rem $color-highlight-blue)
 			drop-shadow(0rem $border-thickness 0rem $color-highlight-blue)
 			drop-shadow(0rem - $border-thickness 0rem $color-highlight-blue);

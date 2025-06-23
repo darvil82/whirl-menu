@@ -1,35 +1,77 @@
 <script>
-	import Test from '$lib/channels_def/Test.svelte';
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS from '$lib/sounds/sounds';
+	import { fade } from 'svelte/transition';
+	import { selectedChannel } from '../(channels)/channels_status.svelte';
+
+	let zoom = $state(false);
+	let render = $state(false);
+
+	function goBack() {
+		selectedChannel.unset();
+	}
+
+	function zoomIn() {
+		render = true;
+
+		setTimeout(() => {
+			zoom = true;
+		}, 50);
+	}
+
+	function zoomOut() {
+		zoom = false;
+
+		setTimeout(() => {
+			render = false;
+		}, 1000);
+	}
+
+	$effect(() => {
+		selectedChannel.isSelected ? zoomIn() : zoomOut();
+	});
 </script>
 
-<div class="banner-wrapper">
-	<div class="content">
-		<div class="banner">
-			<Test></Test>
-		</div>
-		<div class="options">
-			<MenuButton clickSound={SOUNDS.CHANNEL.click}>Menú de Wii</MenuButton>
-			<MenuButton>Comenzar</MenuButton>
+{#if render}
+	<div class="banner-wrapper" class:zoom>
+		<div class="content" style:transform-origin={selectedChannel.transformOrigin}>
+			<div class="banner">
+				{#if selectedChannel.channel}
+					<selectedChannel.channel.banner />
+				{/if}
+			</div>
+			<div class="options">
+				<MenuButton clickSound={SOUNDS.CHANNEL.click} onclick={goBack}>Menú de Wii</MenuButton>
+				<MenuButton>Comenzar</MenuButton>
+			</div>
 		</div>
 	</div>
-</div>
+{/if}
 
 <style lang="scss">
 	.banner-wrapper {
 		position: fixed;
 		display: grid;
 		inset: 0;
-		background-color: black;
+		scale: 1.19;
+		padding: 0em;
+
+		&,
+		.content {
+			transition:
+				all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+				opacity 0.15s 0.4s;
+		}
 
 		.content {
 			position: relative;
 			display: flex;
 			flex-direction: column;
-			margin: 1em;
-			mask: url('../\(channels\)/assets/channel_mask.png');
+			margin: 0em;
+			mask: url('./banner_mask.png');
 			mask-size: 100% 100%;
+			scale: 0.16;
+			opacity: 0;
 
 			.banner {
 				position: relative;
@@ -66,6 +108,24 @@
 					border-top-right-radius: 50%;
 					box-shadow: 0 -#{$border} 0 0 black;
 				}
+			}
+		}
+
+		&.zoom {
+			scale: 1;
+			background: black;
+			padding: 1em;
+
+			.content {
+				scale: 1;
+				opacity: 1;
+			}
+
+			&,
+			.content {
+				transition:
+					all 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+					opacity 0.1s;
 			}
 		}
 	}
