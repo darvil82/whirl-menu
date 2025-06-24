@@ -4,6 +4,7 @@
 	import type { ChannelDef } from '../../lib/channels_def/channels_def';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel, selectedChannel } from './channels_status.svelte';
+	import CHANNELS, { channels } from '../../lib/channels_def/channels_def';
 
 	let {
 		channel,
@@ -35,7 +36,7 @@
 
 		hoverTimeout = setTimeout(() => {
 			showTitle = true;
-			playSound(SOUNDS.CHANNEL.hover_title);
+			playSound(SOUNDS.MISC.balloon);
 		}, 350);
 	}
 
@@ -51,10 +52,10 @@
 			moving = true;
 			stopHover(); // stop hover to prevent title from inmediately popping up if dropping on same place
 			movingChannel.set({ channel, originalCallback: receiveChannelData });
-			playSound(SOUNDS.CHANNEL.interact);
+			playSound(SOUNDS.CHANNEL.hold);
 			channel = undefined;
 		} else if (e.buttons == 1) {
-			playSound(SOUNDS.CHANNEL.click);
+			playSound(SOUNDS.BUTTON.click2);
 			selectedChannel.set({ channel, boundingRect: element.getBoundingClientRect() });
 			stopHover();
 		}
@@ -69,7 +70,7 @@
 		}
 
 		crtAnimation = true;
-		playSound(SOUNDS.CHANNEL.switch, 0.5);
+		playSound(SOUNDS.CHANNEL.drop, 0.5);
 
 		setTimeout(() => {
 			channel = c;
@@ -81,6 +82,7 @@
 
 		moving = false;
 		c.position = position;
+		console.log(channels);
 	}
 
 	function onStopClick(e: MouseEvent) {

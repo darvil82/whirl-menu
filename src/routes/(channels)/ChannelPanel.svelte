@@ -27,7 +27,7 @@
 		lastMoveDir = direction;
 		scrollingPage = true;
 		appsOffset = -100 * newPage + '%';
-		playSound(SOUNDS.CHANNEL.move_page);
+		playSound(SOUNDS.CHANNEL.scroll_page);
 
 		setTimeout(() => {
 			scrollingPage = false;
@@ -75,7 +75,7 @@
 			// if this was called, a channel did not capture it. so it fell outside
 			movingChannel.invokeOriginalCallback();
 			movingChannel.set(undefined);
-			playSound(SOUNDS.BUTTON.error);
+			playSound(SOUNDS.MISC.error);
 		}
 	}
 

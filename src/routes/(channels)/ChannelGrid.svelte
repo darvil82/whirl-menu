@@ -2,6 +2,7 @@
 	import Channel from './Channel.svelte';
 	import type { ChannelDef } from '../../lib/channels_def/channels_def';
 	import CHANNELS, {
+		channels,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS
 	} from '../../lib/channels_def/channels_def';
@@ -34,7 +35,7 @@
 	function getChannelDef(i: number): ChannelDef | undefined {
 		const [absX, absY] = getAbsPos(i);
 
-		return CHANNELS.find((c) => c.position[0] == absX && c.position[1] == absY);
+		return channels.find((c) => c.position[0] == absX && c.position[1] == absY);
 	}
 </script>
 

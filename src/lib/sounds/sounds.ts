@@ -7,22 +7,24 @@ export interface Sound {
 
 export const SOUNDS = {
 	BUTTON: {
-		click_default: { fileName: 'button_click_default.wav' },
-		click_back: { fileName: 'button_click_back.wav' },
-		hover: { fileName: 'button_hover.wav', volume: 0.25 },
-		error: { fileName: 'error.wav', volume: 0.25 }
+		click1: { fileName: 'button/click1.wav' },
+		click2: { fileName: 'button/click2.wav' },
+		cancel: { fileName: 'button/cancel.wav' },
+		hover: { fileName: 'button/hover.wav' }
 	},
 	CHANNEL: {
-		hover_title: { fileName: 'hover_title.wav', volume: 0.25 },
-		move_page: { fileName: 'move_page.wav' },
-		interact: { fileName: 'channel_interact.wav' },
-		click: { fileName: 'channel_click.wav' },
-		switch: { fileName: 'channel_switch.wav' },
-		zoomIn: { fileName: 'channel_zoom_in.wav' },
-		zoomOut: { fileName: 'channel_zoom_out.wav' }
+		scroll_page: { fileName: 'channel/scroll_page.wav' },
+		hold: { fileName: 'channel/hold.wav' },
+		drop: { fileName: 'channel/drop.wav' },
+		zoomIn: { fileName: 'channel/zoom_in.wav' },
+		zoomOut: { fileName: 'channel/zoom_out.wav' }
 	},
 	MUSIC: {
 		main: { fileName: 'music.wav' }
+	},
+	MISC: {
+		error: { fileName: 'error.wav', volume: 0.5 },
+		balloon: { fileName: 'balloon.wav' }
 	}
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
 
@@ -34,6 +36,11 @@ export function playSound(sound: Sound, volumeOverride?: number) {
 	const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
 
 	const audio = new Audio(getSoundPath(sound));
+	if (!audio) {
+		console.error('Failed to play sound:', soundProps);
+		return;
+	}
+
 	audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
 
 	console.log('playing ', soundProps);

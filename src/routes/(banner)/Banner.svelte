@@ -3,33 +3,42 @@
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import { selectedChannel } from '../(channels)/channels_status.svelte';
 	import type { ChannelDef } from '$lib/channels_def/channels_def';
+	import ScrollArrow from '../ScrollArrow.svelte';
 
 	let zoom = $state(false);
 	let render = $state(false);
-	let channel: ChannelDef | undefined = $state();
+	let showArrows = $state(false);
 
 	function goBack() {
 		selectedChannel.unset();
 	}
 
 	function zoomIn() {
-		channel = selectedChannel.channel;
 		render = true;
 
 		setTimeout(() => {
 			zoom = true;
 			playSound(SOUNDS.CHANNEL.zoomIn);
 		}, 100);
+
+		setTimeout(() => {
+			showArrows = true;
+		}, 750);
 	}
 
 	function zoomOut() {
 		if (!render) return;
 		zoom = false;
+		showArrows = false;
 		playSound(SOUNDS.CHANNEL.zoomOut);
 
 		setTimeout(() => {
 			render = false;
 		}, 1000);
+	}
+
+	function changeChannel(direction: 'left' | 'right') {
+		const position = selectedChannel.channel;
 	}
 
 	$effect(() => {
@@ -38,17 +47,19 @@
 </script>
 
 {#if render}
+	<ScrollArrow position={'left'} show={showArrows} onclick={() => {}}>-</ScrollArrow>
+	<ScrollArrow position={'right'} show={showArrows} onclick={() => {}}>+</ScrollArrow>
 	<div class="banner-wrapper" class:zoom>
 		<div class="content" style:transform-origin={selectedChannel.transformOrigin()}>
 			<div class="banner">
 				<div class="sandbox">
-					{#if channel}
-						<channel.banner />
+					{#if selectedChannel.channel}
+						<selectedChannel.channel.banner />
 					{/if}
 				</div>
 			</div>
 			<div class="options">
-				<MenuButton clickSound={SOUNDS.CHANNEL.click} onclick={goBack}>Menú de Wii</MenuButton>
+				<MenuButton clickSound={SOUNDS.BUTTON.click2} onclick={goBack}>Menú de Wii</MenuButton>
 				<MenuButton>Comenzar</MenuButton>
 			</div>
 		</div>

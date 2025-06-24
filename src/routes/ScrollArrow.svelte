@@ -4,12 +4,12 @@
 	import { movingChannel } from './(channels)/channels_status.svelte';
 
 	const {
-		show,
+		show = true,
 		onclick: _onclick,
 		position,
 		children
 	}: {
-		show: boolean;
+		show?: boolean;
 		onclick: (e: MouseEvent | undefined) => void;
 		position: 'left' | 'right';
 		children?: Snippet;
@@ -69,10 +69,11 @@
 	.arrow-wrapper {
 		position: fixed;
 		top: calc(
-			50% - 12vh
+			50% - 10vh
 		); // they're not positioned inside the actual channel pannel so we gotta do this
 		translate: 0 -50%;
 		z-index: 1000;
+		scale: 0.8;
 		transition:
 			transform 0.25s,
 			visibility 0.5s;

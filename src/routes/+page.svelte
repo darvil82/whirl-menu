@@ -15,6 +15,18 @@
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
+	let showArrows = $state(true);
+
+	$effect(() => {
+		if (selectedChannel.isSelected) {
+			showArrows = false;
+			return;
+		}
+
+		setTimeout(() => {
+			showArrows = true;
+		}, 750);
+	});
 
 	onMount(() => {
 		document.oncontextmenu = () => false;
@@ -53,12 +65,12 @@
 <Banner></Banner>
 <ScrollArrow
 	position={'left'}
-	show={currentPage > 0}
+	show={currentPage > 0 && showArrows}
 	onclick={() => channelPanel.scrollChannels('left')}>-</ScrollArrow
 >
 <ScrollArrow
 	position={'right'}
-	show={currentPage < MAX_PAGES - 1}
+	show={currentPage < MAX_PAGES - 1 && showArrows}
 	onclick={() => channelPanel.scrollChannels('right')}>+</ScrollArrow
 >
 

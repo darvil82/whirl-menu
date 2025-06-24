@@ -7,7 +7,7 @@
 		disabled = false,
 		onclick: _onclick,
 		noBorder = false,
-		clickSound = SOUNDS.BUTTON.click_default
+		clickSound = SOUNDS.BUTTON.click1
 	}: {
 		children: Snippet;
 		disabled?: boolean;
@@ -24,7 +24,7 @@
 		if (clicked) return;
 
 		if (disabled) {
-			playSound(SOUNDS.BUTTON.error);
+			playSound(SOUNDS.MISC.error);
 			return;
 		}
 
