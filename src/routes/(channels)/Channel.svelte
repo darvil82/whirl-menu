@@ -4,7 +4,7 @@
 	import type { ChannelDef } from '../../lib/channels_def/channels_def';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel, selectedChannel } from './channels_status.svelte';
-	import CHANNELS, { channels } from '../../lib/channels_def/channels_def';
+	import ORIGINAL_CHANNELS, { channels, updateChannel } from '../../lib/channels_def/channels_def';
 
 	let {
 		channel,
@@ -82,7 +82,7 @@
 
 		moving = false;
 		c.position = position;
-		console.log(channels);
+		updateChannel(c.id, (c) => (c.position = position));
 	}
 
 	function onStopClick(e: MouseEvent) {

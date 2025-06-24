@@ -10,7 +10,7 @@ export const SOUNDS = {
 		click1: { fileName: 'button/click1.wav' },
 		click2: { fileName: 'button/click2.wav' },
 		cancel: { fileName: 'button/cancel.wav' },
-		hover: { fileName: 'button/hover.wav' }
+		hover: { fileName: 'button/hover.wav', volume: 0.25 }
 	},
 	CHANNEL: {
 		scroll_page: { fileName: 'channel/scroll_page.wav' },
@@ -37,13 +37,13 @@ export function playSound(sound: Sound, volumeOverride?: number) {
 
 	const audio = new Audio(getSoundPath(sound));
 	if (!audio) {
-		console.error('Failed to play sound:', soundProps);
+		console.error('[sound] Failed to play:', soundProps);
 		return;
 	}
 
 	audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
 
-	console.log('playing ', soundProps);
+	console.log('[sound] Playing ', soundProps);
 	audio.play();
 }
 

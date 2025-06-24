@@ -81,6 +81,13 @@
 		--pos: 3vw;
 		--pos-2: 3.5vw;
 
+		&::before {
+			content: '';
+			position: absolute;
+			inset: -50% -120%;
+			// outline: red 0.2em solid;
+		}
+
 		.move-indicator {
 			position: absolute;
 			line-height: 0.8;
@@ -196,6 +203,10 @@
 
 			.arrow {
 				animation: arrow-retract 0.15s;
+			}
+
+			&::before {
+				left: -400%;
 			}
 		}
 

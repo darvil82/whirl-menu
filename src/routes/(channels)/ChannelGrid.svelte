@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import Channel from './Channel.svelte';
 	import type { ChannelDef } from '../../lib/channels_def/channels_def';
-	import CHANNELS, {
+	import ORIGINAL_CHANNELS, {
 		channels,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS

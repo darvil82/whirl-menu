@@ -2,8 +2,9 @@
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import { selectedChannel } from '../(channels)/channels_status.svelte';
-	import type { ChannelDef } from '$lib/channels_def/channels_def';
+	import { type ChannelDef } from '$lib/channels_def/channels_def';
 	import ScrollArrow from '../ScrollArrow.svelte';
+	import { onMount } from 'svelte';
 
 	let zoom = $state(false);
 	let render = $state(false);
@@ -34,12 +35,10 @@
 
 		setTimeout(() => {
 			render = false;
-		}, 1000);
+		}, 750);
 	}
 
-	function changeChannel(direction: 'left' | 'right') {
-		const position = selectedChannel.channel;
-	}
+	function changeChannel(direction: 'left' | 'right') {}
 
 	$effect(() => {
 		selectedChannel.isSelected ? zoomIn() : zoomOut();
@@ -47,10 +46,18 @@
 </script>
 
 {#if render}
-	<ScrollArrow position={'left'} show={showArrows} onclick={() => {}}>-</ScrollArrow>
-	<ScrollArrow position={'right'} show={showArrows} onclick={() => {}}>+</ScrollArrow>
+	<ScrollArrow position={'left'} show={showArrows} onclick={() => changeChannel('left')}
+		>-</ScrollArrow
+	>
+	<ScrollArrow position={'right'} show={showArrows} onclick={() => changeChannel('right')}
+		>+</ScrollArrow
+	>
 	<div class="banner-wrapper" class:zoom>
-		<div class="content" style:transform-origin={selectedChannel.transformOrigin()}>
+		<div
+			class="content"
+			style:transform-origin={selectedChannel.transformOrigin()}
+			class:interactable={showArrows}
+		>
 			<div class="banner">
 				<div class="sandbox">
 					{#if selectedChannel.channel}
@@ -78,8 +85,10 @@
 		&,
 		.content {
 			transition:
-				all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
-				opacity 0.5s 0s;
+				scale 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+				padding 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+				opacity 0.5s,
+				background 0.5s;
 		}
 
 		.content {
@@ -92,6 +101,10 @@
 			scale: 0.16;
 			will-change: contents;
 			opacity: 0;
+
+			&:not(.interactable) {
+				pointer-events: none;
+			}
 
 			.banner {
 				place-content: center;
@@ -150,8 +163,10 @@
 			&,
 			.content {
 				transition:
-					all 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
-					opacity 0.5s;
+					scale 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+					padding 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+					opacity 0.5s,
+					background 0.5s;
 			}
 		}
 	}

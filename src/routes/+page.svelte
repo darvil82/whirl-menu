@@ -7,7 +7,7 @@
 	import Cursor from './(channels)/Cursor.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ScrollArrow from './ScrollArrow.svelte';
-	import { MAX_PAGES } from '$lib/channels_def/channels_def';
+	import { loadChannels, MAX_PAGES } from '$lib/channels_def/channels_def';
 	import { selectedChannel } from './(channels)/channels_status.svelte';
 
 	let musicAudioCtx: AudioContext;

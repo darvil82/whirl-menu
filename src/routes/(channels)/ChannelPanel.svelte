@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
-	import { movingChannel } from './channels_status.svelte';
+	import { loadChannels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
+	import { movingChannel, selectedChannel } from './channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
 	let { currentPage = $bindable(0) } = $props();
@@ -11,7 +11,7 @@
 	let currentTime: string[] = $state(getTime());
 	let appsOffset: string = $state('0px');
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
-	let scrollingPage = $state(false);
+	let scrolling = $state(false);
 
 	function getTime(): string[] {
 		const date = new Date();
@@ -19,24 +19,24 @@
 	}
 
 	export function scrollChannels(direction: 'left' | 'right') {
-		if (scrollingPage) return;
+		if (scrolling) return;
 
 		const newPage = currentPage + (direction == 'right' ? 1 : -1);
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
 		lastMoveDir = direction;
-		scrollingPage = true;
+		scrolling = true;
 		appsOffset = -100 * newPage + '%';
 		playSound(SOUNDS.CHANNEL.scroll_page);
 
 		setTimeout(() => {
-			scrollingPage = false;
+			scrolling = false;
 			currentPage = newPage;
 		}, PAGE_SCROLL_DELAY);
 	}
 
 	function gotoPage(newPage: number) {
-		if (scrollingPage) return;
+		if (scrolling) return;
 
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
@@ -48,12 +48,12 @@
 	function getHideGridValue(at: number): 'all' | 'left' | 'right' | undefined {
 		if (at == currentPage) return undefined;
 
-		if (lastMoveDir == 'right' && scrollingPage) {
+		if (lastMoveDir == 'right' && scrolling) {
 			if (at == currentPage + 1) return undefined;
 			if (at == currentPage + 2) return 'right';
 		}
 
-		if (lastMoveDir == 'left' && scrollingPage) {
+		if (lastMoveDir == 'left' && scrolling) {
 			if (at == currentPage - 1) return undefined;
 			if (at == currentPage - 2) return 'left';
 		}
@@ -65,7 +65,7 @@
 	}
 
 	function onScrollHotkeys(e: KeyboardEvent) {
-		if (movingChannel.isMoving) return;
+		if (movingChannel.isMoving || selectedChannel.isSelected) return;
 		if (e.key == '+') scrollChannels('right');
 		else if (e.key == '-') scrollChannels('left');
 	}
@@ -102,7 +102,7 @@
 		style:top={getMousePosition()?.[1] + 'px'}
 	></div>
 {/if}
-<div class="channel-panel" style:--grid-translate={appsOffset}>
+<div class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
 	<div class="channels">
 		<div class="channels-wrapper">
 			{#each new Array(MAX_PAGES) as _, page}
@@ -113,8 +113,8 @@
 
 	<div
 		class="time-wrapper"
-		class:right={scrollingPage && lastMoveDir == 'right'}
-		class:left={scrollingPage && lastMoveDir == 'left'}
+		class:right={scrolling && lastMoveDir == 'right'}
+		class:left={scrolling && lastMoveDir == 'left'}
 	>
 		<div class="time">
 			{currentTime[0]} <span class="colon">:</span>
@@ -132,6 +132,10 @@
 		display: flex;
 		flex-direction: column;
 		filter: drop-shadow(0px 0px 1.5em rgba(0, 0, 0, 0.5));
+
+		&.scrolling {
+			pointer-events: none;
+		}
 	}
 
 	.channels {
@@ -156,12 +160,12 @@
 		display: flex;
 
 		&.right {
-			animation: move-right 0.5s;
+			animation: move-right 0.49s;
 		}
 
 		&.left {
 			translate: -100%;
-			animation: move-left 0.5s;
+			animation: move-left 0.49s;
 		}
 
 		@keyframes move-right {
