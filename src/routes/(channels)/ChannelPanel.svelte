@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
-	import { loadChannels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels_def/channels_def';
-	import { movingChannel, selectedChannel } from './channels_status.svelte';
+	import { loadChannels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
 	let { currentPage = $bindable(0) } = $props();

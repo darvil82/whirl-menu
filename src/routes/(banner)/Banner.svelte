@@ -1,8 +1,8 @@
 <script lang="typescript">
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import { selectedChannel } from '../(channels)/channels_status.svelte';
-	import { type ChannelDef } from '$lib/channels_def/channels_def';
+	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
+	import { updateOrderedChannels, type ChannelDef } from '$lib/channels/channel_utils';
 	import ScrollArrow from '../ScrollArrow.svelte';
 	import { onMount } from 'svelte';
 
@@ -39,6 +39,10 @@
 	}
 
 	function changeChannel(direction: 'left' | 'right') {}
+
+	onMount(() => {
+		updateOrderedChannels();
+	});
 
 	$effect(() => {
 		selectedChannel.isSelected ? zoomIn() : zoomOut();

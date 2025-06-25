@@ -1,10 +1,14 @@
 <script lang="typescript">
-	import DefaultThumbnail from '../../lib/channels_def/default_thumbnail/DefaultThumbnail.svelte';
+	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import type { ChannelDef } from '../../lib/channels_def/channels_def';
+	import {
+		updateAndSaveChannel,
+		updateChannel,
+		type ChannelDef,
+		type RuntimeChannel
+	} from '../../lib/channels/channel_utils';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
-	import { movingChannel, selectedChannel } from './channels_status.svelte';
-	import ORIGINAL_CHANNELS, { channels, updateChannel } from '../../lib/channels_def/channels_def';
+	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 
 	let {
 		channel,
@@ -12,7 +16,7 @@
 		hide,
 		position
 	}: {
-		channel?: ChannelDef;
+		channel?: RuntimeChannel;
 		titlePosition?: 'left' | 'right' | 'center';
 		hide?: boolean;
 		position: [number, number];
@@ -56,16 +60,16 @@
 			channel = undefined;
 		} else if (e.buttons == 1) {
 			playSound(SOUNDS.BUTTON.click2);
-			selectedChannel.set({ channel, boundingRect: element.getBoundingClientRect() });
+			selectedChannel.set(channel);
 			stopHover();
 		}
 	}, 50);
 
-	function receiveChannelData(c: ChannelDef, animate: boolean = false) {
+	function receiveChannelData(newChannel: RuntimeChannel, animate: boolean = false) {
 		if (!animate) {
-			channel = c;
+			channel = channel;
 			moving = false;
-			c.position = position;
+			newChannel.position = position;
 			return;
 		}
 
@@ -73,7 +77,7 @@
 		playSound(SOUNDS.CHANNEL.drop, 0.5);
 
 		setTimeout(() => {
-			channel = c;
+			channel = newChannel;
 		}, 500);
 
 		setTimeout(() => {
@@ -81,8 +85,9 @@
 		}, 750);
 
 		moving = false;
-		c.position = position;
-		updateChannel(c.id, (c) => (c.position = position));
+		updateAndSaveChannel(newChannel, (c) => {
+			c.position = position;
+		});
 	}
 
 	function onStopClick(e: MouseEvent) {
@@ -93,6 +98,12 @@
 			e.stopPropagation();
 		}
 	}
+
+	$effect(() => {
+		if (channel) {
+			updateChannel(channel, (c) => (c.element = element));
+		}
+	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->

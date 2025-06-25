@@ -1,11 +1,13 @@
 <script lang="typescript">
 	import Channel from './Channel.svelte';
-	import type { ChannelDef } from '../../lib/channels_def/channels_def';
-	import ORIGINAL_CHANNELS, {
+	import type { ChannelDef } from '../../lib/channels/channel_utils';
+	import {
 		channels,
+		getChannelDefAbs,
+		getChannelPosAbs,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS
-	} from '../../lib/channels_def/channels_def';
+	} from '../../lib/channels/channel_utils';
 
 	const {
 		page,
@@ -27,23 +29,13 @@
 		if (hide == 'all') return false;
 		return true;
 	}
-
-	function getAbsPos(i: number): [number, number] {
-		return [(i % PAGE_NUM_COLUMNS) + page * PAGE_NUM_COLUMNS, Math.floor(i / PAGE_NUM_COLUMNS)];
-	}
-
-	function getChannelDef(i: number): ChannelDef | undefined {
-		const [absX, absY] = getAbsPos(i);
-
-		return channels.find((c) => c.position[0] == absX && c.position[1] == absY);
-	}
 </script>
 
 <div class="channel-grid" class:hide>
 	{#each new Array(PAGE_NUM_CHANNELS) as _, i}
 		<Channel
-			position={getAbsPos(i)}
-			channel={getChannelDef(i)}
+			position={getChannelPosAbs(i, page)}
+			channel={getChannelDefAbs(i, page)}
 			titlePosition={getChannelPosition(i)}
 			hide={!getChannelVisibility(i)}
 		></Channel>

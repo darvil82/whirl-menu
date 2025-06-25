@@ -1,14 +1,11 @@
-import {
-	PAGE_NUM_COLUMNS,
-	PAGE_NUM_ROWS,
-	type ChannelDef
-} from '../../lib/channels_def/channels_def';
+import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, type RuntimeChannel } from './channel_utils';
 
 class MovingChannel {
-	movingChannel: { channel: ChannelDef; originalCallback: (c: ChannelDef) => void } | undefined =
-		$state(undefined);
+	movingChannel:
+		| { channel: RuntimeChannel; originalCallback: (c: RuntimeChannel) => void }
+		| undefined = $state(undefined);
 
-	get channel(): ChannelDef | undefined {
+	get channel(): RuntimeChannel | undefined {
 		return this.movingChannel?.channel;
 	}
 
@@ -23,24 +20,12 @@ class MovingChannel {
 }
 
 class SelectedChannel {
-	selectedChannel: { channel: ChannelDef | undefined; boundingRect: DOMRect; isSelected: boolean } =
-		$state({
-			channel: undefined,
-			boundingRect: {
-				left: 0,
-				top: 0,
-				width: 0,
-				height: 0,
-				x: 0,
-				y: 0,
-				bottom: 0,
-				right: 0,
-				toJSON: () => ''
-			},
-			isSelected: false
-		});
+	selectedChannel: { channel: RuntimeChannel | undefined; isSelected: boolean } = $state({
+		channel: undefined,
+		isSelected: false
+	});
 
-	get channel(): ChannelDef | undefined {
+	get channel(): RuntimeChannel | undefined {
 		return this.selectedChannel?.channel;
 	}
 
@@ -48,8 +33,9 @@ class SelectedChannel {
 		return this.selectedChannel.isSelected;
 	}
 
-	transformOrigin(middleOffset: boolean = false): string {
-		const { x, y, width, height } = this.selectedChannel.boundingRect;
+	transformOrigin(middleOffset: boolean = false): string | undefined {
+		if (!this.boundingRect) return undefined;
+		const { x, y, width, height } = this.boundingRect;
 
 		if (!middleOffset) {
 			return `${x + width / 2}px ${y + height / 2}px`;
@@ -67,14 +53,13 @@ class SelectedChannel {
 		return `${x + incrementWidth * channelGridPos[0]}px ${y + incrementHeight * channelGridPos[1]}px`;
 	}
 
-	get boundingRect(): DOMRect {
-		return this.selectedChannel.boundingRect!;
+	get boundingRect(): DOMRect | undefined {
+		return this.selectedChannel.channel?.element?.getBoundingClientRect();
 	}
 
-	set = (status: { channel: ChannelDef; boundingRect: DOMRect }) => {
+	set = (channel: RuntimeChannel) => {
 		this.selectedChannel = {
-			channel: status.channel,
-			boundingRect: status.boundingRect,
+			channel,
 			isSelected: true
 		};
 	};

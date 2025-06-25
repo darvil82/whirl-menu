@@ -2,7 +2,7 @@
 	import cursor_fist from '$lib/images/cursor_fist.png';
 	import cursor_default from '$lib/images/cursor_default.png';
 	import { getMousePosition } from '$lib/utils.svelte';
-	import { movingChannel } from './channels_status.svelte';
+	import { movingChannel } from '../../lib/channels/channels_status.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
