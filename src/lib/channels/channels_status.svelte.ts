@@ -1,4 +1,4 @@
-import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, type RuntimeChannel } from './channel_utils';
+import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, type RuntimeChannel } from './channel_utils';
 
 class MovingChannel {
 	movingChannel:
@@ -34,27 +34,22 @@ class SelectedChannel {
 	}
 
 	transformOrigin(middleOffset: boolean = false): string | undefined {
-		if (!this.boundingRect) return undefined;
-		const { x, y, width, height } = this.boundingRect;
+		if (!this.channel) return undefined;
+		const { width: channelWidth, height: channelHeight } = Channels.getChanneDOMRect();
 
 		if (!middleOffset) {
-			return `${x + width / 2}px ${y + height / 2}px`;
+			const [x, y] = Channels.getCSSPos(this.channel);
+
+			return `${x + channelWidth}px ${y + channelHeight}px`; // for some stupid reason we need to offset
 		}
 
-		if (!this.channel) return '';
+		const [x, y] = Channels.getCSSPos(this.channel, true);
 
-		const channelGridPos = [
-			this.channel?.position[0] % PAGE_NUM_COLUMNS,
-			this.channel?.position[1] % PAGE_NUM_ROWS
-		];
-		const incrementWidth = width / PAGE_NUM_COLUMNS;
-		const incrementHeight = height / PAGE_NUM_ROWS - 10; // some tiny tweaks here and there
+		const channelLocalGridPos = Channels.getPosLocalGrid(this.channel);
+		const incrementWidth = (channelWidth + 10) / PAGE_NUM_COLUMNS;
+		const incrementHeight = (channelHeight - 30) / PAGE_NUM_ROWS; // some tiny tweaks here and there
 
-		return `${x + incrementWidth * channelGridPos[0]}px ${y + incrementHeight * channelGridPos[1]}px`;
-	}
-
-	get boundingRect(): DOMRect | undefined {
-		return this.selectedChannel.channel?.element?.getBoundingClientRect();
+		return `${x + incrementWidth * channelLocalGridPos[0]}px ${y + incrementHeight * channelLocalGridPos[1]}px`;
 	}
 
 	set = (channel: RuntimeChannel) => {
@@ -63,6 +58,7 @@ class SelectedChannel {
 			isSelected: true
 		};
 	};
+
 	unset = () => (this.selectedChannel.isSelected = false);
 }
 

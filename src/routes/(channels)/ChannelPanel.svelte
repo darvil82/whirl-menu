@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
-	import { loadChannels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { Channels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
@@ -21,7 +21,7 @@
 	export function scrollChannels(direction: 'left' | 'right') {
 		if (scrolling) return;
 
-		const newPage = currentPage + (direction == 'right' ? 1 : -1);
+		const newPage = currentPage + (direction === 'right' ? 1 : -1);
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
 		lastMoveDir = direction;
@@ -36,7 +36,7 @@
 	}
 
 	function gotoPage(newPage: number) {
-		if (scrolling) return;
+		if (scrolling || newPage == currentPage) return;
 
 		if (newPage < 0 || newPage >= MAX_PAGES) return;
 
@@ -92,6 +92,11 @@
 			document.removeEventListener('keydown', onScrollHotkeys);
 			document.removeEventListener('mouseup', onMouseUp);
 		};
+	});
+
+	$effect(() => {
+		if (selectedChannel.isSelected)
+			gotoPage(Channels.getPage(selectedChannel.channel!.position[0]));
 	});
 </script>
 

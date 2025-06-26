@@ -1,10 +1,8 @@
 <script lang="typescript">
 	import Channel from './Channel.svelte';
-	import type { ChannelDef } from '../../lib/channels/channel_utils';
 	import {
+		Channels,
 		channels,
-		getChannelDefAbs,
-		getChannelPosAbs,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS
 	} from '../../lib/channels/channel_utils';
@@ -34,8 +32,8 @@
 <div class="channel-grid" class:hide>
 	{#each new Array(PAGE_NUM_CHANNELS) as _, i}
 		<Channel
-			position={getChannelPosAbs(i, page)}
-			channel={getChannelDefAbs(i, page)}
+			position={Channels.getPosAbs(i, page)}
+			channel={channels.getAtAbs(i, page)}
 			titlePosition={getChannelPosition(i)}
 			hide={!getChannelVisibility(i)}
 		></Channel>

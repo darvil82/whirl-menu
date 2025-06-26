@@ -1,10 +1,9 @@
 <script lang="typescript">
+	import { Channels, channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
-	import { updateOrderedChannels, type ChannelDef } from '$lib/channels/channel_utils';
 	import ScrollArrow from '../ScrollArrow.svelte';
-	import { onMount } from 'svelte';
 
 	let zoom = $state(false);
 	let render = $state(false);
@@ -15,7 +14,10 @@
 	}
 
 	function zoomIn() {
+		if (render) return;
 		render = true;
+		channels.updateOrdered();
+		Channels.refreshDOMRects();
 
 		setTimeout(() => {
 			zoom = true;
@@ -38,11 +40,10 @@
 		}, 750);
 	}
 
-	function changeChannel(direction: 'left' | 'right') {}
-
-	onMount(() => {
-		updateOrderedChannels();
-	});
+	function changeChannel(direction: 'left' | 'right') {
+		selectedChannel.set(channels.getNext(selectedChannel.channel!, direction));
+		playSound(SOUNDS.CHANNEL.scroll_page);
+	}
 
 	$effect(() => {
 		selectedChannel.isSelected ? zoomIn() : zoomOut();
@@ -86,11 +87,15 @@
 		padding: 0em;
 		height: 100vh;
 
+		$tfunction-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+		$tfunction-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+
 		&,
 		.content {
 			transition:
-				scale 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
-				padding 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+				scale 0.5s $tfunction-out,
+				translate 0.5s $tfunction-out,
+				padding 0.5s $tfunction-out,
 				opacity 0.5s,
 				background 0.5s;
 		}
@@ -103,6 +108,7 @@
 			mask: url('./banner_mask.png');
 			mask-size: 100% 100%;
 			scale: 0.16;
+			translate: 0.6em -0.6em;
 			will-change: contents;
 			opacity: 0;
 
@@ -162,13 +168,15 @@
 			.content {
 				scale: 1;
 				opacity: 1;
+				translate: 0 0;
 			}
 
 			&,
 			.content {
 				transition:
-					scale 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
-					padding 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+					scale 0.5s $tfunction-in,
+					translate 0.5s $tfunction-in,
+					padding 0.5s $tfunction-in,
 					opacity 0.5s,
 					background 0.5s;
 			}

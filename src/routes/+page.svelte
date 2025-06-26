@@ -7,7 +7,7 @@
 	import Cursor from './(channels)/Cursor.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ScrollArrow from './ScrollArrow.svelte';
-	import { channels, loadChannels, MAX_PAGES } from '$lib/channels/channel_utils';
+	import { Channels, channels, MAX_PAGES } from '$lib/channels/channel_utils';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
 
 	let musicAudioCtx: AudioContext;
@@ -29,6 +29,7 @@
 	});
 
 	onMount(() => {
+		Channels.refreshDOMRects();
 		document.oncontextmenu = () => false;
 		document.addEventListener('mousemove', (e) => setMousePosition([e.clientX, e.clientY]));
 
@@ -85,7 +86,7 @@
 
 		&.zoom {
 			scale: 5;
-			translate: -10vw -5vh; // slight offsets to make zoom look better
+			translate: -10vw 3vh; // slight offsets to make zoom look better
 			transition:
 				all 0.55s cubic-bezier(0.55, 0.055, 0.865, 0.115),
 				transform-origin 0s;

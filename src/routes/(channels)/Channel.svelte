@@ -1,12 +1,7 @@
 <script lang="typescript">
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
-	import {
-		updateAndSaveChannel,
-		updateChannel,
-		type ChannelDef,
-		type RuntimeChannel
-	} from '../../lib/channels/channel_utils';
+	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 
@@ -67,7 +62,7 @@
 
 	function receiveChannelData(newChannel: RuntimeChannel, animate: boolean = false) {
 		if (!animate) {
-			channel = channel;
+			channel = newChannel;
 			moving = false;
 			newChannel.position = position;
 			return;
@@ -85,7 +80,7 @@
 		}, 750);
 
 		moving = false;
-		updateAndSaveChannel(newChannel, (c) => {
+		channels.updateAndSave(newChannel, (c) => {
 			c.position = position;
 		});
 	}
@@ -98,12 +93,6 @@
 			e.stopPropagation();
 		}
 	}
-
-	$effect(() => {
-		if (channel) {
-			updateChannel(channel, (c) => (c.element = element));
-		}
-	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
