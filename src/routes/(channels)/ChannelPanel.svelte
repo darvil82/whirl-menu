@@ -219,7 +219,7 @@
 			position: absolute;
 			inset-block: 0;
 			background: $background-repeating-gradient;
-			clip-path: url('assets/channel_panel_mask.svg#mask');
+			clip-path: url('$lib/channels/images/channel_panel_mask.svg#mask');
 		}
 
 		&::before {
@@ -262,7 +262,7 @@
 			$color-highlight-blue 70%,
 			white 120%
 		);
-		mask: url('assets/channel_mask.png');
+		mask: url('$lib/channels/images/channel_mask.png');
 		mask-size: 100% 100%;
 		translate: -50% -50%;
 		width: 20vw;
@@ -277,7 +277,7 @@
 			content: '';
 			position: absolute;
 			inset: -0.2rem;
-			mask: url('assets/channel_hover_mask.png');
+			mask: url('$lib/channels/images/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: white;
 		}

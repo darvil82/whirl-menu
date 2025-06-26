@@ -134,7 +134,7 @@
 
 	.channel {
 		background: $color-gray;
-		mask: url('assets/channel_mask.png');
+		mask: url('$lib/channels/images/channel_mask.png');
 		mask-size: 100% 100%;
 		position: absolute;
 		inset: 0;
@@ -144,7 +144,7 @@
 			position: absolute;
 			inset: 0.25rem;
 			background: white;
-			mask: url('assets/channel_mask.png');
+			mask: url('$lib/channels/images/channel_mask.png');
 			mask-size: 100% 100%;
 			transition: filter 0.25s;
 

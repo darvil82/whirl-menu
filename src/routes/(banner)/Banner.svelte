@@ -110,7 +110,7 @@
 			display: flex;
 			flex-direction: column;
 			margin: 0em;
-			mask: url('./banner_mask.png');
+			mask: url('$lib/channels/images/channel_mask_hr.png');
 			mask-size: 100% 100%;
 			scale: 0.16;
 			translate: 0.6em -0.6em;
@@ -118,6 +118,8 @@
 			opacity: 0;
 
 			&:not(.interactable) {
+				mask: url('$lib/channels/images/channel_mask.png');
+				mask-size: 100% 100%;
 				pointer-events: none;
 			}
 

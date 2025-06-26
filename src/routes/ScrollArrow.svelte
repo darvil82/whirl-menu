@@ -78,9 +78,10 @@
 			transform 0.25s,
 			visibility 0.5s;
 
-		--pos: 3vw;
-		--pos-2: 3.5vw;
+		--pos: 2.5vw;
+		--pos-2: calc(var(--pos) + 0.5vw);
 
+		// hitbox
 		&::before {
 			content: '';
 			position: absolute;
