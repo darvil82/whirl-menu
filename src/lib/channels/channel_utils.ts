@@ -1,6 +1,4 @@
 import { unmount, type Component } from 'svelte';
-import Test from './defs/Test.svelte';
-import Test2 from './defs/Test2.svelte';
 import defined_channels from './defs/defined_channels';
 
 export const MAX_PAGES = 4;
@@ -20,11 +18,54 @@ export interface ChannelDef extends SimpleChannelDef {
 	name: string;
 }
 
-export interface RuntimeChannel extends ChannelDef {}
+export class RuntimeChannel implements ChannelDef {
+	thumbnail: Component;
+	banner: Component;
+	name: string;
+	id: string;
+	position: [number, number];
+
+	constructor(def: ChannelDef) {
+		this.thumbnail = def.thumbnail;
+		this.banner = def.banner;
+		this.name = def.name;
+		this.id = def.id;
+		this.position = def.position;
+	}
+
+	public getPage() {
+		return Math.floor(this.position[0] / PAGE_NUM_COLUMNS);
+	}
+
+	public getPosLocalGrid(): [number, number] {
+		return [
+			this.position[0] % PAGE_NUM_COLUMNS,
+			this.position[1] % PAGE_NUM_ROWS // shouldnt be needed but
+		];
+	}
+
+	public getCSSPos(atCenter: boolean = false): [number, number] {
+		const { width: gridWidth, height: gridHeight } = Channels.getGridDOMRect();
+
+		const [x, y] = this.getPosLocalGrid();
+		const [incX, incY] = [gridWidth / PAGE_NUM_COLUMNS, gridHeight / PAGE_NUM_ROWS + 5];
+
+		if (atCenter) {
+			const [offsetX, offsetY] = [gridWidth / PAGE_NUM_COLUMNS / 2, gridHeight / PAGE_NUM_ROWS / 2];
+			return [incX * x + offsetX, incY * y + offsetY];
+		}
+
+		return [incX * x, incY * y];
+	}
+
+	public static getPosAbs(i: number, page: number): [number, number] {
+		return [(i % PAGE_NUM_COLUMNS) + page * PAGE_NUM_COLUMNS, Math.floor(i / PAGE_NUM_COLUMNS)];
+	}
+}
 
 export class Channels {
 	private modified = false;
-	public defs: RuntimeChannel[];
+	private defs: RuntimeChannel[];
 	private ordered: RuntimeChannel[] | undefined = undefined;
 
 	private static cachedRects: { grid: DOMRect; channel: DOMRect } | undefined;
@@ -66,12 +107,12 @@ export class Channels {
 		return true;
 	}
 
-	public getAt([x, y]: [number, number]): ChannelDef | undefined {
+	public getAt([x, y]: [number, number]): RuntimeChannel | undefined {
 		return this.defs.find((c) => c.position[0] == x && c.position[1] == y);
 	}
 
 	public getAtAbs(i: number, page: number): RuntimeChannel | undefined {
-		return this.getAt(Channels.getPosAbs(i, page));
+		return this.getAt(RuntimeChannel.getPosAbs(i, page));
 	}
 
 	public getNext(current: RuntimeChannel, direction: 'left' | 'right'): RuntimeChannel {
@@ -88,15 +129,18 @@ export class Channels {
 
 		if (!storedChannels) {
 			console.log('[channels] No storage definition found. Loading defaults.');
-			return [...defined_channels];
+			return [...defined_channels].map((c) => new RuntimeChannel(c));
 		}
 
 		console.log('[channels] Loading from storage...');
 		const parsedChannels = JSON.parse(storedChannels) as SimpleChannelDef[];
-		return parsedChannels.map<RuntimeChannel>((c) => ({
-			...Channels.getDefined(c.id)!,
-			position: c.position
-		}));
+		return parsedChannels.map<RuntimeChannel>(
+			(c) =>
+				new RuntimeChannel({
+					...Channels.getDefined(c.id)!,
+					position: c.position
+				})
+		);
 	}
 
 	public updateOrdered() {
@@ -115,37 +159,12 @@ export class Channels {
 		return defined_channels.find((c) => c.id == id);
 	}
 
-	public static getPage(channelXPos: number) {
-		return Math.floor(channelXPos / PAGE_NUM_COLUMNS);
-	}
-
-	public static getPosAbs(i: number, page: number): [number, number] {
-		return [(i % PAGE_NUM_COLUMNS) + page * PAGE_NUM_COLUMNS, Math.floor(i / PAGE_NUM_COLUMNS)];
-	}
-
-	public static getPosLocalGrid(channel: RuntimeChannel): [number, number] {
-		return [
-			channel?.position[0] % PAGE_NUM_COLUMNS,
-			channel?.position[1] % PAGE_NUM_ROWS // shouldnt be needed but
-		];
-	}
-
-	public static getCSSPos(channel: RuntimeChannel, atCenter: boolean = false): [number, number] {
-		const { width: gridWidth, height: gridHeight } = Channels.cachedRects!.grid;
-
-		const [x, y] = Channels.getPosLocalGrid(channel);
-		const [incX, incY] = [gridWidth / PAGE_NUM_COLUMNS, gridHeight / PAGE_NUM_ROWS + 5];
-
-		if (atCenter) {
-			const [offsetX, offsetY] = [gridWidth / PAGE_NUM_COLUMNS / 2, gridHeight / PAGE_NUM_ROWS / 2];
-			return [incX * x + offsetX, incY * y + offsetY];
-		}
-
-		return [incX * x, incY * y];
-	}
-
 	public static getChanneDOMRect(): DOMRect {
 		return Channels.cachedRects!.channel;
+	}
+
+	public static getGridDOMRect(): DOMRect {
+		return Channels.cachedRects!.grid;
 	}
 
 	public static refreshDOMRects() {

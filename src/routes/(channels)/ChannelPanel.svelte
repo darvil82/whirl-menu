@@ -2,7 +2,12 @@
 	import { onMount } from 'svelte';
 	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
-	import { Channels, MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import {
+		Channels,
+		MAX_PAGES,
+		PAGE_SCROLL_DELAY,
+		RuntimeChannel
+	} from '$lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
 
@@ -95,8 +100,7 @@
 	});
 
 	$effect(() => {
-		if (selectedChannel.isSelected)
-			gotoPage(Channels.getPage(selectedChannel.channel!.position[0]));
+		if (selectedChannel.isSelected) gotoPage(selectedChannel.channel!.getPage());
 	});
 </script>
 

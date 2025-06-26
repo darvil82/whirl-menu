@@ -79,7 +79,6 @@
 	.menu {
 		will-change: contents;
 		scale: 1;
-		height: 100vh;
 		transition:
 			all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
 			transform-origin 0s;

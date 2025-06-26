@@ -4,7 +4,8 @@
 		Channels,
 		channels,
 		PAGE_NUM_CHANNELS,
-		PAGE_NUM_COLUMNS
+		PAGE_NUM_COLUMNS,
+		RuntimeChannel
 	} from '../../lib/channels/channel_utils';
 
 	const {
@@ -32,7 +33,7 @@
 <div class="channel-grid" class:hide>
 	{#each new Array(PAGE_NUM_CHANNELS) as _, i}
 		<Channel
-			position={Channels.getPosAbs(i, page)}
+			position={RuntimeChannel.getPosAbs(i, page)}
 			channel={channels.getAtAbs(i, page)}
 			titlePosition={getChannelPosition(i)}
 			hide={!getChannelVisibility(i)}

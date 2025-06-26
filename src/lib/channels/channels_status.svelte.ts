@@ -1,4 +1,4 @@
-import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, type RuntimeChannel } from './channel_utils';
+import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './channel_utils';
 
 class MovingChannel {
 	movingChannel:
@@ -38,14 +38,14 @@ class SelectedChannel {
 		const { width: channelWidth, height: channelHeight } = Channels.getChanneDOMRect();
 
 		if (!middleOffset) {
-			const [x, y] = Channels.getCSSPos(this.channel);
+			const [x, y] = this.channel.getCSSPos();
 
 			return `${x + channelWidth}px ${y + channelHeight}px`; // for some stupid reason we need to offset
 		}
 
-		const [x, y] = Channels.getCSSPos(this.channel, true);
+		const [x, y] = this.channel.getCSSPos(true);
 
-		const channelLocalGridPos = Channels.getPosLocalGrid(this.channel);
+		const channelLocalGridPos = this.channel.getPosLocalGrid();
 		const incrementWidth = (channelWidth + 10) / PAGE_NUM_COLUMNS;
 		const incrementHeight = (channelHeight - 30) / PAGE_NUM_ROWS; // some tiny tweaks here and there
 
