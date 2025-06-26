@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import SOUNDS, { playSound, type Sound } from '$lib/sounds/sounds';
+	import SOUNDS, { playSound, type Sound } from '$lib/assets/sounds/sounds';
 	import type { Snippet } from 'svelte';
 
 	const {

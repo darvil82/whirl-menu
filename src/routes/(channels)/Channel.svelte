@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
-	import SOUNDS, { playSound } from '$lib/sounds/sounds';
+	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
 	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -134,7 +134,7 @@
 
 	.channel {
 		background: $color-gray;
-		mask: url('$lib/channels/images/channel_mask.png');
+		mask: url('$lib/assets/images/channels/channel_mask.png');
 		mask-size: 100% 100%;
 		position: absolute;
 		inset: 0;
@@ -144,7 +144,7 @@
 			position: absolute;
 			inset: 0.25rem;
 			background: white;
-			mask: url('$lib/channels/images/channel_mask.png');
+			mask: url('$lib/assets/images/channels/channel_mask.png');
 			mask-size: 100% 100%;
 			transition: filter 0.25s;
 
@@ -197,7 +197,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			mask: url('assets/channel_hover_mask.png');
+			mask: url('$lib/assets/images/channels/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: $color-highlight-blue;
 			opacity: 0;

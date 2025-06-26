@@ -29,7 +29,7 @@ export const SOUNDS = {
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
 
 export function getSoundPath(sound: Sound): string {
-	return `./src/lib/sounds/${sound.fileName}`;
+	return `./src/lib/assets/sounds/${sound.fileName}`;
 }
 
 export function playSound(sound: Sound, volumeOverride?: number) {

@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import cursor_fist from '$lib/images/cursor_fist.png';
-	import cursor_default from '$lib/images/cursor_default.png';
+	import cursor_fist from '$lib/assets/images/cursor_fist.png';
+	import cursor_default from '$lib/assets/images/cursor_default.png';
 	import { getMousePosition } from '$lib/utils.svelte';
 	import { movingChannel } from '../../lib/channels/channels_status.svelte';
 	import { onMount } from 'svelte';
@@ -34,7 +34,7 @@
 		style:top={getMousePosition()?.[1] + 'px'}
 		class:fist={movingChannel.isMoving}
 		src={movingChannel.isMoving ? cursor_fist : cursor_default}
-		alt=""
+		alt="cursor"
 	/>
 {/if}
 

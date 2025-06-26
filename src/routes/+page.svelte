@@ -1,6 +1,5 @@
 <script lang="typescript">
 	import MenuButton from '$lib/components/MenuButton.svelte';
-	import SOUNDS, { getSoundPath, playSound } from '$lib/sounds/sounds';
 	import { onMount } from 'svelte';
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
 	import { setMousePosition } from '$lib/utils.svelte';
@@ -9,6 +8,7 @@
 	import ScrollArrow from './ScrollArrow.svelte';
 	import { Channels, channels, MAX_PAGES } from '$lib/channels/channel_utils';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
+	import SOUNDS, { getSoundPath } from '$lib/assets/sounds/sounds';
 
 	let musicAudioCtx: AudioContext;
 	let musicGainNode: GainNode;

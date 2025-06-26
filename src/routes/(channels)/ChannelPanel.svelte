@@ -1,6 +1,5 @@
 <script lang="typescript">
 	import { onMount } from 'svelte';
-	import SOUNDS, { playSound } from '$lib/sounds/sounds';
 	import ChannelGrid from './ChannelGrid.svelte';
 	import {
 		Channels,
@@ -10,6 +9,7 @@
 	} from '$lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import { getMousePosition } from '$lib/utils.svelte';
+	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
 
 	let { currentPage = $bindable(0) } = $props();
 
@@ -219,7 +219,7 @@
 			position: absolute;
 			inset-block: 0;
 			background: $background-repeating-gradient;
-			clip-path: url('$lib/channels/images/channel_panel_mask.svg#mask');
+			clip-path: url('$lib/assets/images/channels/channel_panel_mask.svg#mask');
 		}
 
 		&::before {
@@ -262,7 +262,7 @@
 			$color-highlight-blue 70%,
 			white 120%
 		);
-		mask: url('$lib/channels/images/channel_mask.png');
+		mask: url('$lib/assets/images/channels/channel_mask.png');
 		mask-size: 100% 100%;
 		translate: -50% -50%;
 		width: 20vw;
@@ -277,7 +277,7 @@
 			content: '';
 			position: absolute;
 			inset: -0.2rem;
-			mask: url('$lib/channels/images/channel_hover_mask.png');
+			mask: url('$lib/assets/images/channels/channel_hover_mask.png');
 			mask-size: 100% 100%;
 			background: white;
 		}

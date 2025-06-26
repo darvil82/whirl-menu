@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import { Channels, channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
-	import SOUNDS, { playSound } from '$lib/sounds/sounds';
+	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ScrollArrow from '../ScrollArrow.svelte';
 
@@ -110,7 +110,7 @@
 			display: flex;
 			flex-direction: column;
 			margin: 0em;
-			mask: url('$lib/channels/images/channel_mask_hr.png');
+			mask: url('$lib/assets/images/channels/channel_mask_hr.png');
 			mask-size: 100% 100%;
 			scale: 0.16;
 			translate: 0.6em -0.6em;
@@ -118,7 +118,7 @@
 			opacity: 0;
 
 			&:not(.interactable) {
-				mask: url('$lib/channels/images/channel_mask.png');
+				mask: url('$lib/assets/images/channels/channel_mask.png');
 				mask-size: 100% 100%;
 				pointer-events: none;
 			}
