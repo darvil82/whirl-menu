@@ -9,8 +9,9 @@
 	let render = $state(false);
 	let showArrows = $state(false);
 
-	function goBack() {
-		selectedChannel.unset();
+	function onScrollHotkeys(e: KeyboardEvent) {
+		if (e.key == '+') changeChannel('right');
+		else if (e.key == '-') changeChannel('left');
 	}
 
 	function zoomIn() {
@@ -26,6 +27,7 @@
 
 		setTimeout(() => {
 			showArrows = true;
+			document.addEventListener('keydown', onScrollHotkeys);
 		}, 750);
 	}
 
@@ -34,6 +36,7 @@
 		zoom = false;
 		showArrows = false;
 		playSound(SOUNDS.CHANNEL.zoomOut);
+		document.removeEventListener('keydown', onScrollHotkeys);
 
 		setTimeout(() => {
 			render = false;
@@ -71,7 +74,9 @@
 				</div>
 			</div>
 			<div class="options">
-				<MenuButton clickSound={SOUNDS.BUTTON.click2} onclick={goBack}>Menú de Wii</MenuButton>
+				<MenuButton clickSound={SOUNDS.BUTTON.click2} onclick={selectedChannel.unset}
+					>Menú de Wii</MenuButton
+				>
 				<MenuButton>Comenzar</MenuButton>
 			</div>
 		</div>
