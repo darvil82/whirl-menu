@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import { Channels, channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
-	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS, { playSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ScrollArrow from '../ScrollArrow.svelte';
 
@@ -19,6 +19,7 @@
 		render = true;
 		channels.updateOrdered();
 		Channels.refreshDOMRects();
+		systemMenuMusic.fadeOut();
 
 		setTimeout(() => {
 			zoom = true;
@@ -37,6 +38,7 @@
 		showArrows = false;
 		playSound(SOUNDS.CHANNEL.zoomOut);
 		document.removeEventListener('keydown', onScrollHotkeys);
+		systemMenuMusic.fadeIn();
 
 		setTimeout(() => {
 			render = false;

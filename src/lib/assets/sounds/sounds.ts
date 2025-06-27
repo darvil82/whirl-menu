@@ -47,4 +47,63 @@ export function playSound(sound: Sound, volumeOverride?: number) {
 	audio.play();
 }
 
+class SystemMenuMusic {
+	private ctx: AudioContext;
+	private gainNode: GainNode;
+	private source: AudioBufferSourceNode | undefined;
+	private volume: number;
+
+	public constructor(volume: number = 0.5) {
+		this.ctx = new AudioContext();
+		this.gainNode = this.ctx.createGain();
+		this.gainNode.gain.value = volume;
+		this.volume = volume;
+
+		fetch(getSoundPath(SOUNDS.MUSIC.main))
+			.then((response) => response.arrayBuffer())
+			.then((data) => this.ctx.decodeAudioData(data))
+			.then((buffer) => {
+				this.source = this.ctx.createBufferSource();
+				this.source.buffer = buffer;
+				this.source.loop = true;
+				this.source.loopStart = 27.716;
+				this.source.loopEnd = 34.968 + 1 * 60;
+				this.source.connect(this.gainNode).connect(this.ctx.destination);
+			})
+			.catch((e) => console.error('[system_music] Could not initialize music: ', e));
+	}
+
+	start() {
+		this.source?.start();
+	}
+
+	stop() {
+		this.source?.stop();
+	}
+
+	fadeOut(duration: number = 0.25) {
+		if (!this.source) return;
+		const currentTime = this.ctx.currentTime;
+		this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, currentTime);
+		this.gainNode.gain.linearRampToValueAtTime(0, currentTime + duration);
+	}
+
+	fadeIn(duration: number = 0.25) {
+		if (!this.source) return;
+		const currentTime = this.ctx.currentTime;
+		this.gainNode.gain.setValueAtTime(0, currentTime);
+		this.gainNode.gain.linearRampToValueAtTime(this.volume, currentTime + duration);
+	}
+
+	pause() {
+		this.ctx.suspend();
+	}
+
+	resume() {
+		this.ctx.resume();
+	}
+}
+
+export const systemMenuMusic = new SystemMenuMusic(0);
+
 export default SOUNDS;

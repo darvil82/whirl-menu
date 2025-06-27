@@ -6,12 +6,9 @@
 	import Cursor from './(channels)/Cursor.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ScrollArrow from './ScrollArrow.svelte';
-	import { Channels, channels, MAX_PAGES } from '$lib/channels/channel_utils';
+	import { Channels, MAX_PAGES } from '$lib/channels/channel_utils';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
-	import SOUNDS, { getSoundPath } from '$lib/assets/sounds/sounds';
-
-	let musicAudioCtx: AudioContext;
-	let musicGainNode: GainNode;
+	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
@@ -33,24 +30,9 @@
 		document.oncontextmenu = () => false;
 		document.addEventListener('mousemove', (e) => setMousePosition([e.clientX, e.clientY]));
 
-		// musicAudioCtx = new AudioContext();
-		// musicGainNode = musicAudioCtx.createGain();
-		// musicGainNode.gain.value = 0.25;
-
-		// fetch(getSoundPath(SOUNDS.MUSIC.main))
-		// 	.then((response) => response.arrayBuffer())
-		// 	.then((data) => musicAudioCtx.decodeAudioData(data))
-		// 	.then((buffer) => {
-		// 		const source = musicAudioCtx.createBufferSource();
-		// 		source.buffer = buffer;
-		// 		source.loop = true;
-		// 		source.loopStart = 27.716;
-		// 		source.loopEnd = 34.968 + 1 * 60;
-		// 		source.connect(musicGainNode).connect(musicAudioCtx.destination);
-		// 		source.start(0);
-		// 	});
-
-		// return () => musicAudioCtx.close();
+		setTimeout(() => {
+			systemMenuMusic.start();
+		}, 500);
 	});
 </script>
 
