@@ -33,7 +33,7 @@ class SelectedChannel {
 		return this.selectedChannel.isSelected;
 	}
 
-	transformOrigin(middleOffset: boolean = false): string | undefined {
+	transformOrigin = (middleOffset: boolean = false): string | undefined => {
 		if (!this.channel) return undefined;
 		const { width: channelWidth, height: channelHeight } = Channels.getChanneDOMRect();
 
@@ -50,7 +50,7 @@ class SelectedChannel {
 		const incrementHeight = (channelHeight - 30) / PAGE_NUM_ROWS; // some tiny tweaks here and there
 
 		return `${x + incrementWidth * channelLocalGridPos[0]}px ${y + incrementHeight * channelLocalGridPos[1]}px`;
-	}
+	};
 
 	set = (channel: RuntimeChannel) => {
 		this.selectedChannel = {

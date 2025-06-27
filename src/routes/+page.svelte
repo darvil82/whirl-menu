@@ -1,14 +1,13 @@
 <script lang="typescript">
-	import MenuButton from '$lib/components/MenuButton.svelte';
 	import { onMount } from 'svelte';
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
-	import { setMousePosition } from '$lib/utils.svelte';
 	import Cursor from './(channels)/Cursor.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ScrollArrow from './ScrollArrow.svelte';
 	import { Channels, MAX_PAGES } from '$lib/channels/channel_utils';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
+	import { mouse } from '$lib/utils.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
@@ -28,11 +27,14 @@
 	onMount(() => {
 		Channels.refreshDOMRects();
 		document.oncontextmenu = () => false;
-		document.addEventListener('mousemove', (e) => setMousePosition([e.clientX, e.clientY]));
 
 		setTimeout(() => {
 			systemMenuMusic.start();
 		}, 500);
+
+		return () => {
+			mouse.detach();
+		};
 	});
 </script>
 

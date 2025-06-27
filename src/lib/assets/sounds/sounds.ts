@@ -79,7 +79,11 @@ class AdvancedSound {
 
 				this.source.connect(this.gainNode).connect(this.ctx.destination);
 			})
-			.catch((e) => console.error('[system_music] Could not initialize music: ', e));
+			.catch((e) => {
+				throw new Error(
+					`[AdvancedSound] Failed to load sound: ${options.sound.fileName}, Error: ${e}`
+				);
+			});
 	}
 
 	start() {

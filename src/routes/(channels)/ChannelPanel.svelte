@@ -8,8 +8,8 @@
 		RuntimeChannel
 	} from '$lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
-	import { getMousePosition } from '$lib/utils.svelte';
 	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import { mouse } from '$lib/utils.svelte';
 
 	let { currentPage = $bindable(0) } = $props();
 
@@ -113,8 +113,8 @@
 {#if movingChannel.isMoving}
 	<div
 		class="moving-channel-indicator"
-		style:left={getMousePosition()?.[0] + 'px'}
-		style:top={getMousePosition()?.[1] + 'px'}
+		style:left={mouse.position[0] + 'px'}
+		style:top={mouse.position[1] + 'px'}
 	></div>
 {/if}
 <div class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>

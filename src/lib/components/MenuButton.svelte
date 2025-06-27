@@ -62,10 +62,10 @@
 	button {
 		font-size: 1.6em;
 		padding: 0.7em 2.1em;
-		border-radius: 50rem;
+		border-radius: 50em;
 		color: #464646;
 		background: #e3e8ef;
-		box-shadow: inset 0 0 1rem 0.5rem #bcc8d8;
+		box-shadow: inset 0 0 0.25em 0.2em #bcc8d8;
 		position: relative;
 		isolation: isolate;
 		transition:

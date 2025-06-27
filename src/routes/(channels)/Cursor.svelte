@@ -1,37 +1,16 @@
 <script lang="typescript">
 	import cursor_fist from '$lib/assets/images/cursor_fist.png';
 	import cursor_default from '$lib/assets/images/cursor_default.png';
-	import { getMousePosition } from '$lib/utils.svelte';
 	import { movingChannel } from '../../lib/channels/channels_status.svelte';
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-
-	let _show = $state(true);
-
-	function show() {
-		_show = true;
-	}
-
-	function hide() {
-		_show = false;
-	}
-
-	onMount(() => {
-		document.addEventListener('mouseleave', hide);
-		document.addEventListener('mouseenter', show);
-
-		return () => {
-			document.removeEventListener('mouseleave', hide);
-			document.addEventListener('mouseenter', show);
-		};
-	});
+	import { mouse } from '$lib/utils.svelte';
 </script>
 
-{#if getMousePosition() && _show}
+{#if mouse.isVisible}
 	<img
 		out:fade={{ duration: 150 }}
-		style:left={getMousePosition()?.[0] + 'px'}
-		style:top={getMousePosition()?.[1] + 'px'}
+		style:left={mouse.position[0] + 'px'}
+		style:top={mouse.position[1] + 'px'}
 		class:fist={movingChannel.isMoving}
 		src={movingChannel.isMoving ? cursor_fist : cursor_default}
 		alt="cursor"

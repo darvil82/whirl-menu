@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { movingChannel } from '../lib/channels/channels_status.svelte';
 
@@ -45,6 +45,8 @@
 		isHovering = false;
 		clearInterval(hoverInterval);
 	}
+
+	onMount(() => {});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
