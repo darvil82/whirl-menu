@@ -76,12 +76,16 @@
 	}
 
 	function onMouseUp() {
-		if (movingChannel.isMoving) {
-			// if this was called, a channel did not capture it. so it fell outside
-			movingChannel.invokeOriginalCallback();
-			movingChannel.set(undefined);
-			playSound(SOUNDS.MISC.error);
-		}
+		if (!movingChannel.isMoving) return;
+
+		// if this was called, a channel did not capture it. so it fell outside
+		movingChannel.invokeOriginalCallback();
+		movingChannel.set(undefined);
+		playSound(SOUNDS.MISC.error);
+	}
+
+	function onMouseMove() {
+		if (!movingChannel.isMoving) return;
 	}
 
 	onMount(() => {
@@ -91,11 +95,13 @@
 
 		document.addEventListener('keydown', onScrollHotkeys);
 		document.addEventListener('mouseup', onMouseUp);
+		document.addEventListener('mousemove', onMouseMove);
 
 		return () => {
 			clearInterval(timer);
 			document.removeEventListener('keydown', onScrollHotkeys);
 			document.removeEventListener('mouseup', onMouseUp);
+			document.removeEventListener('mousemove', onMouseMove);
 		};
 	});
 

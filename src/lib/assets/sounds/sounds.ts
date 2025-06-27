@@ -17,7 +17,8 @@ export const SOUNDS = {
 		hold: { fileName: 'channel/hold.wav' },
 		drop: { fileName: 'channel/drop.wav' },
 		zoomIn: { fileName: 'channel/zoom_in.wav' },
-		zoomOut: { fileName: 'channel/zoom_out.wav' }
+		zoomOut: { fileName: 'channel/zoom_out.wav' },
+		drag: { fileName: 'channel/drag.wav' }
 	},
 	MUSIC: {
 		main: { fileName: 'music.wav' }
@@ -47,27 +48,35 @@ export function playSound(sound: Sound, volumeOverride?: number) {
 	audio.play();
 }
 
-class SystemMenuMusic {
+class AdvancedSound {
 	private ctx: AudioContext;
 	private gainNode: GainNode;
 	private source: AudioBufferSourceNode | undefined;
 	private volume: number;
 
-	public constructor(volume: number = 0.5) {
+	public constructor(options: {
+		sound: Sound;
+		volume?: number;
+		loop?: { start: number; end: number };
+	}) {
 		this.ctx = new AudioContext();
 		this.gainNode = this.ctx.createGain();
-		this.gainNode.gain.value = volume;
-		this.volume = volume;
+		this.volume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
+		this.gainNode.gain.value = this.volume;
 
-		fetch(getSoundPath(SOUNDS.MUSIC.main))
+		fetch(getSoundPath(options.sound))
 			.then((response) => response.arrayBuffer())
 			.then((data) => this.ctx.decodeAudioData(data))
 			.then((buffer) => {
 				this.source = this.ctx.createBufferSource();
 				this.source.buffer = buffer;
-				this.source.loop = true;
-				this.source.loopStart = 27.716;
-				this.source.loopEnd = 34.968 + 1 * 60;
+
+				if (options.loop) {
+					this.source.loop = true;
+					this.source.loopStart = options.loop.start;
+					this.source.loopEnd = options.loop.end;
+				}
+
 				this.source.connect(this.gainNode).connect(this.ctx.destination);
 			})
 			.catch((e) => console.error('[system_music] Could not initialize music: ', e));
@@ -104,6 +113,10 @@ class SystemMenuMusic {
 	}
 }
 
-export const systemMenuMusic = new SystemMenuMusic(0);
+export const systemMenuMusic = new AdvancedSound({
+	sound: SOUNDS.MUSIC.main,
+	volume: 0,
+	loop: { start: 27.716, end: 34.968 + 1 * 60 }
+});
 
 export default SOUNDS;
