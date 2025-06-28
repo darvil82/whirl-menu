@@ -16,14 +16,16 @@ export interface ChannelDef extends SimpleChannelDef {
 	thumbnail: Component;
 	banner: Component;
 	name: string;
+	locked?: boolean;
 }
 
 export class RuntimeChannel implements ChannelDef {
-	thumbnail: Component;
-	banner: Component;
-	name: string;
-	id: string;
-	position: [number, number];
+	public thumbnail: Component;
+	public banner: Component;
+	public name: string;
+	public id: string;
+	public position: [number, number];
+	public locked: boolean;
 
 	constructor(def: ChannelDef) {
 		this.thumbnail = def.thumbnail;
@@ -31,6 +33,7 @@ export class RuntimeChannel implements ChannelDef {
 		this.name = def.name;
 		this.id = def.id;
 		this.position = def.position;
+		this.locked = def.locked ?? false;
 	}
 
 	public getPage() {

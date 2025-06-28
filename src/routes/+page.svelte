@@ -61,17 +61,18 @@
 
 <style lang="scss">
 	.menu {
+		$duration: 0.5s;
 		will-change: contents;
 		scale: 1;
 		transition:
-			all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+			all $duration cubic-bezier(0.215, 0.61, 0.355, 1),
 			transform-origin 0s;
 
 		&.zoom {
 			scale: 5;
 			translate: -10vw 3vh; // slight offsets to make zoom look better
 			transition:
-				all 0.55s cubic-bezier(0.55, 0.055, 0.865, 0.115),
+				all #{$duration + 0.05s} cubic-bezier(0.55, 0.055, 0.865, 0.115),
 				transform-origin 0s;
 		}
 	}

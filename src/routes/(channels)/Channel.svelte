@@ -47,7 +47,7 @@
 	const onclick = debounce((e: MouseEvent) => {
 		if (moving || !channel || crtAnimation) return;
 
-		if (e.buttons == 3) {
+		if (e.buttons == 3 && !channel.locked) {
 			moving = true;
 			stopHover(); // stop hover to prevent title from inmediately popping up if dropping on same place
 			movingChannel.set({ channel, originalCallback: receiveChannelData });
@@ -134,7 +134,7 @@
 
 	.channel {
 		background: $color-gray;
-		mask: url('$lib/assets/images/channels/channel_mask.png');
+		mask: url('$lib/assets/images/channels/channel_mask_lr.png');
 		mask-size: 100% 100%;
 		position: absolute;
 		inset: 0;
@@ -144,7 +144,7 @@
 			position: absolute;
 			inset: 0.25rem;
 			background: white;
-			mask: url('$lib/assets/images/channels/channel_mask.png');
+			mask: url('$lib/assets/images/channels/channel_mask_lr.png');
 			mask-size: 100% 100%;
 			transition: filter 0.25s;
 
@@ -197,7 +197,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			mask: url('$lib/assets/images/channels/channel_hover_mask.png');
+			mask: url('$lib/assets/images/channels/channel_hover_mask_lr.png');
 			mask-size: 100% 100%;
 			background: $color-highlight-blue;
 			opacity: 0;
@@ -214,7 +214,7 @@
 		}
 
 		&.other-moving .content {
-			filter: brightness(0.5) contrast(0.75);
+			filter: brightness(0.8) contrast(0.5);
 		}
 
 		*,

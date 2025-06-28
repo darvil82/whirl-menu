@@ -261,31 +261,39 @@
 	}
 
 	.moving-channel-indicator {
-		background: linear-gradient(
-			to bottom,
-			white -20%,
-			$color-highlight-blue 30%,
-			$color-highlight-blue 70%,
-			white 120%
-		);
-		mask: url('$lib/assets/images/channels/channel_mask.png');
 		mask-size: 100% 100%;
 		translate: -50% -50%;
+		filter: drop-shadow(0.75em 0.6em 0em rgba(0 0 0 / 0.15));
 		width: 20vw;
 		height: 20vh;
 		position: fixed;
 		z-index: 900;
 		pointer-events: none;
-		scale: 0.7;
-		opacity: 0.9;
+		scale: 0.75;
 
 		&::after {
 			content: '';
 			position: absolute;
 			inset: -0.2rem;
-			mask: url('$lib/assets/images/channels/channel_hover_mask.png');
+			mask: url('$lib/assets/images/channels/channel_hover_mask_lr.png');
 			mask-size: 100% 100%;
 			background: white;
+		}
+
+		&::before {
+			content: '';
+			background: linear-gradient(
+				to bottom,
+				white -30%,
+				$color-highlight-blue 40%,
+				$color-highlight-blue 60%,
+				white 130%
+			);
+			position: absolute;
+			inset: 0;
+			mask: url('$lib/assets/images/channels/channel_mask_lr.png');
+			opacity: 0.8;
+			mask-size: 100% 100%;
 		}
 	}
 </style>

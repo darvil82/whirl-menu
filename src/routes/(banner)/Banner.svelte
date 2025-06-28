@@ -38,7 +38,7 @@
 		showArrows = false;
 		playSound(SOUNDS.CHANNEL.zoomOut);
 		document.removeEventListener('keydown', onScrollHotkeys);
-		systemMenuMusic.fadeIn();
+		systemMenuMusic.fadeIn(3);
 
 		setTimeout(() => {
 			render = false;
@@ -94,17 +94,18 @@
 		padding: 0em;
 		height: 100vh;
 
+		$duration: 0.5s;
 		$tfunction-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		$tfunction-out: cubic-bezier(0.215, 0.61, 0.355, 1);
 
 		&,
 		.content {
 			transition:
-				scale 0.5s $tfunction-out,
-				translate 0.5s $tfunction-out,
-				padding 0.5s $tfunction-out,
-				opacity 0.5s,
-				background 0.5s;
+				scale $duration $tfunction-out,
+				translate $duration $tfunction-out,
+				padding $duration $tfunction-out,
+				opacity $duration,
+				background $duration;
 		}
 
 		.content {
@@ -120,7 +121,7 @@
 			opacity: 0;
 
 			&:not(.interactable) {
-				mask: url('$lib/assets/images/channels/channel_mask.png');
+				mask: url('$lib/assets/images/channels/channel_mask_lr.png');
 				mask-size: 100% 100%;
 				pointer-events: none;
 			}
@@ -183,11 +184,11 @@
 			&,
 			.content {
 				transition:
-					scale 0.5s $tfunction-in,
-					translate 0.5s $tfunction-in,
-					padding 0.5s $tfunction-in,
-					opacity 0.5s,
-					background 0.5s;
+					scale $duration $tfunction-in,
+					translate $duration $tfunction-in,
+					padding $duration $tfunction-in,
+					opacity $duration,
+					background $duration;
 			}
 		}
 	}

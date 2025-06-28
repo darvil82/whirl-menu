@@ -8,7 +8,8 @@ export default [
 		name: 'Test channel',
 		thumbnail: Test,
 		banner: Test2,
-		position: [0, 0]
+		position: [0, 0],
+		locked: true
 	},
 	{
 		id: 'test2',
