@@ -1,15 +1,23 @@
 import type { ChannelDef } from '../channel_utils';
+import DiscChannelThumbnail from './disc_channel/DiscChannelThumbnail.svelte';
 import Test from './Test.svelte';
 import Test2 from './Test2.svelte';
 
 export default [
 	{
+		id: 'disc',
+		name: 'Disc Channel',
+		thumbnail: DiscChannelThumbnail,
+		banner: Test2,
+		position: [0, 0],
+		locked: true
+	},
+	{
 		id: 'test1',
 		name: 'Test channel',
 		thumbnail: Test,
 		banner: Test2,
-		position: [0, 0],
-		locked: true
+		position: [1, 0]
 	},
 	{
 		id: 'test2',
