@@ -63,6 +63,7 @@
 	.menu {
 		$duration: 0.5s;
 		will-change: contents;
+
 		scale: 1;
 		transition:
 			all $duration cubic-bezier(0.215, 0.61, 0.355, 1),

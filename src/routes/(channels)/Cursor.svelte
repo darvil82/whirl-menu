@@ -7,28 +7,40 @@
 </script>
 
 {#if mouse.isVisible}
-	<img
+	<div
 		out:fade={{ duration: 150 }}
+		class="cursor"
 		style:left={mouse.position[0] + 'px'}
 		style:top={mouse.position[1] + 'px'}
-		class:fist={movingChannel.isMoving}
-		src={movingChannel.isMoving ? cursor_fist : cursor_default}
-		alt="cursor"
-	/>
+	>
+		<img
+			class:fist={movingChannel.isMoving}
+			src={movingChannel.isMoving ? cursor_fist : cursor_default}
+			alt="cursor"
+		/>
+	</div>
 {/if}
 
 <style lang="scss">
-	img {
+	.cursor {
+		filter: drop-shadow(0.4vh 0.4vh 0 rgba(0, 0, 0, 0.25));
 		position: absolute;
 		pointer-events: none;
 		z-index: 10000;
-		width: 8vh;
-		height: 8vh;
-		translate: -35% -5%;
-		filter: drop-shadow(0.4vh 0.4vh 0 rgba(0, 0, 0, 0.25));
 
-		&.fist {
-			translate: -50% -50%;
+		img {
+			--pointer-finger-offset-y: 37%;
+			--pointer-finger-offset-x: 13%;
+
+			width: 8vh;
+			height: 8vh;
+			translate: calc(-1 * var(--pointer-finger-offset-y)) calc(-1 * var(--pointer-finger-offset-x));
+			transform-origin: var(--pointer-finger-offset-y) var(--pointer-finger-offset-x);
+
+			&.fist {
+				--pointer-finger-offset-y: 50%;
+				--pointer-finger-offset-x: 50%;
+			}
 		}
 	}
 </style>

@@ -230,9 +230,9 @@
 		background: white;
 		border: 3px solid $color-gray;
 		padding: 0.5em 1.25em;
-		font-size: 3vh;
+		font-size: 4vh;
 		color: #555;
-		min-width: 35vh;
+		min-width: 40vh;
 		box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.15);
 		text-wrap: nowrap;
 		z-index: 1;
