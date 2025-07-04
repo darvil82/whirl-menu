@@ -72,7 +72,7 @@ export function bubble(
 	}
 ): Attachment {
 	return (element) => {
-		if (!(element instanceof HTMLElement)) return;
+		if (!(element instanceof HTMLElement) || !show) return;
 
 		const bubble = document.createElement('div');
 		let hoverTimeout: number;
@@ -86,7 +86,6 @@ export function bubble(
 		bubble.textContent = ellipsize(label, 30);
 
 		function mouseover(e: MouseEvent) {
-			if (!show) return;
 			hoverTimeout = setTimeout(() => {
 				bubble.classList.add('visible');
 				playSound(SOUNDS.MISC.balloon);

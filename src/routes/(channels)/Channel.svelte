@@ -17,18 +17,13 @@
 		position: [number, number];
 	} = $props();
 
-	let showTitle = $state(false);
 	let moving = $state(false);
 	let crtAnimation = $state(false);
 	let element: HTMLButtonElement;
 
 	function hover() {
-		if (!channel && !movingChannel.isMoving) return;
+		if ((channel !== undefined) != !movingChannel.isMoving) return;
 		playSound(SOUNDS.BUTTON.hover);
-	}
-
-	function stopHover() {
-		showTitle = false;
 	}
 
 	const onclick = debounce((e: MouseEvent) => {
@@ -36,14 +31,12 @@
 
 		if (e.buttons == 3 && !channel.locked) {
 			moving = true;
-			stopHover(); // stop hover to prevent title from inmediately popping up if dropping on same place
 			movingChannel.set({ channel, originalCallback: receiveChannelData });
 			playSound(SOUNDS.CHANNEL.hold);
 			channel = undefined;
 		} else if (e.buttons == 1) {
 			playSound(SOUNDS.BUTTON.click2);
 			selectedChannel.set(channel);
-			stopHover();
 		}
 	}, 50);
 
@@ -85,12 +78,13 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={element}
-	{@attach bubble(channel?.name ?? '', channel !== undefined, { anchor: bubblePosition })}
+	{@attach bubble(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
+		anchor: bubblePosition
+	})}
 	class="channel-wrapper"
 	class:active={(channel != undefined) != movingChannel.isMoving}
 	class:other-moving={movingChannel.isMoving && channel}
 	onmouseover={hover}
-	onmouseleave={stopHover}
 	onmousedown={onclick}
 	onmouseup={onStopClick}
 	style:visibility={hide ? 'hidden' : undefined}
