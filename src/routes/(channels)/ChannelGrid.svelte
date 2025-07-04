@@ -1,12 +1,11 @@
 <script lang="typescript">
-	import Channel from './Channel.svelte';
 	import {
-		Channels,
 		channels,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS,
 		RuntimeChannel
 	} from '../../lib/channels/channel_utils';
+	import Channel from './Channel.svelte';
 
 	const {
 		page,
@@ -35,7 +34,7 @@
 		<Channel
 			position={RuntimeChannel.getPosAbs(i, page)}
 			channel={channels.getAtAbs(i, page)}
-			titlePosition={getChannelPosition(i)}
+			bubblePosition={getChannelPosition(i)}
 			hide={!getChannelVisibility(i)}
 		></Channel>
 	{/each}

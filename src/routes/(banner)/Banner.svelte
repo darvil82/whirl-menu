@@ -1,18 +1,13 @@
 <script lang="typescript">
+	import SOUNDS, { playSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { Channels, channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
-	import SOUNDS, { playSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ScrollArrow from '../ScrollArrow.svelte';
 
 	let zoom = $state(false);
 	let render = $state(false);
 	let showArrows = $state(false);
-
-	function onScrollHotkeys(e: KeyboardEvent) {
-		if (e.key == '+') changeChannel('right');
-		else if (e.key == '-') changeChannel('left');
-	}
 
 	function zoomIn() {
 		if (render) return;
@@ -28,7 +23,6 @@
 
 		setTimeout(() => {
 			showArrows = true;
-			document.addEventListener('keydown', onScrollHotkeys);
 		}, 750);
 	}
 
@@ -37,7 +31,6 @@
 		zoom = false;
 		showArrows = false;
 		playSound(SOUNDS.CHANNEL.zoomOut);
-		document.removeEventListener('keydown', onScrollHotkeys);
 		systemMenuMusic.fadeIn(3);
 
 		setTimeout(() => {

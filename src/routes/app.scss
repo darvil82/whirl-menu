@@ -1,3 +1,5 @@
+@use '$lib/utils.scss' as *;
+
 *,
 ::after,
 ::before {
@@ -36,4 +38,48 @@ button {
 @font-face {
 	font-family: 'DSEG7';
 	src: url('$lib/assets/fonts/DSEG7Classic-Bold.ttf');
+}
+
+.bubble {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	border-radius: 5rem;
+	pointer-events: none;
+	background: white;
+	border: 3px solid $color-gray;
+	padding: 0.5em 1.25em;
+	font-size: 4vh;
+	color: #555;
+	min-width: 40vh;
+	box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	text-wrap: nowrap;
+	z-index: 1;
+
+	visibility: hidden;
+	opacity: 0;
+	scale: 0.9;
+	translate: calc(var(--offset-x) * 1rem) calc(var(--offset-y) * 1rem);
+	transition: all 0.15s;
+
+	&.left {
+		right: auto;
+		left: 0;
+	}
+
+	&.right {
+		left: auto;
+		right: 0;
+	}
+
+	&.center {
+		left: 50%;
+		transform: translateX(-50%);
+		transform-origin: 0 0;
+	}
+
+	&.visible {
+		opacity: 1;
+		scale: 1;
+		visibility: visible;
+	}
 }

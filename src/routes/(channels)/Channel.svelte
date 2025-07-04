@@ -1,46 +1,33 @@
 <script lang="typescript">
-	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import { bubble, debounce, type AnchorPosition } from '$lib/utils.svelte';
 	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
-	import { debounce, ellipsize } from '$lib/utils.svelte';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
+	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 
 	let {
 		channel,
-		titlePosition,
+		bubblePosition,
 		hide,
 		position
 	}: {
 		channel?: RuntimeChannel;
-		titlePosition?: 'left' | 'right' | 'center';
+		bubblePosition: AnchorPosition;
 		hide?: boolean;
 		position: [number, number];
 	} = $props();
 
-	let hoverTimeout: number;
 	let showTitle = $state(false);
 	let moving = $state(false);
 	let crtAnimation = $state(false);
 	let element: HTMLButtonElement;
 
 	function hover() {
-		if (movingChannel.isMoving) {
-			playSound(SOUNDS.BUTTON.hover);
-			return;
-		}
-
-		if (!channel) return;
-
+		if (!channel && !movingChannel.isMoving) return;
 		playSound(SOUNDS.BUTTON.hover);
-
-		hoverTimeout = setTimeout(() => {
-			showTitle = true;
-			playSound(SOUNDS.MISC.balloon);
-		}, 350);
 	}
 
 	function stopHover() {
-		clearTimeout(hoverTimeout);
 		showTitle = false;
 	}
 
@@ -98,6 +85,7 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={element}
+	{@attach bubble(channel?.name ?? '', channel !== undefined, { anchor: bubblePosition })}
 	class="channel-wrapper"
 	class:active={(channel != undefined) != movingChannel.isMoving}
 	class:other-moving={movingChannel.isMoving && channel}
@@ -108,7 +96,6 @@
 	style:visibility={hide ? 'hidden' : undefined}
 >
 	<div class="channel">
-		<!-- <span class="debug">pos: {position}</span> -->
 		<div class="content" class:crt-animation={crtAnimation}>
 			{#if channel && !moving}
 				<channel.thumbnail />
@@ -117,21 +104,9 @@
 			{/if}
 		</div>
 	</div>
-	{#if !moving}
-		<div class="hover-tag {titlePosition}" class:visible={showTitle}>
-			{ellipsize(channel?.name ?? '', 25)}
-		</div>
-	{/if}
 </button>
 
 <style lang="scss">
-	.debug {
-		position: absolute;
-		top: 1rem;
-		left: 1rem;
-		z-index: 1;
-	}
-
 	.channel {
 		background: $color-gray;
 		mask: url('$lib/assets/images/channels/channel_mask_lr.png');
@@ -220,48 +195,6 @@
 		*,
 		&::after {
 			pointer-events: none;
-		}
-	}
-
-	.hover-tag {
-		position: absolute;
-		top: calc(100% + 0.4rem);
-		border-radius: 5rem;
-		background: white;
-		border: 3px solid $color-gray;
-		padding: 0.5em 1.25em;
-		font-size: 4vh;
-		color: #555;
-		min-width: 40vh;
-		box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.15);
-		text-wrap: nowrap;
-		z-index: 1;
-
-		visibility: hidden;
-		opacity: 0;
-		scale: 0.9;
-		transition: all 0.15s;
-
-		&.left {
-			right: auto;
-			left: 0;
-		}
-
-		&.right {
-			left: auto;
-			right: 0;
-		}
-
-		&.center {
-			left: 50%;
-			transform: translateX(-50%);
-			transform-origin: 0 0;
-		}
-
-		&.visible {
-			opacity: 1;
-			scale: 1;
-			visibility: visible;
 		}
 	}
 </style>

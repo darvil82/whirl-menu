@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import { onMount, type Snippet } from 'svelte';
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { onMount, type Snippet } from 'svelte';
 	import { movingChannel } from '../lib/channels/channels_status.svelte';
 
 	const {
@@ -10,41 +10,60 @@
 		children
 	}: {
 		show?: boolean;
-		onclick: (e: MouseEvent | undefined) => void;
+		onclick: (e?: MouseEvent) => void;
 		position: 'left' | 'right';
 		children?: Snippet;
 	} = $props();
 
+	let active = $state(false);
 	let clicked = $state(false);
-	let isHovering = $state(false);
+	let isHovering = false;
 	let hoverInterval: number | undefined;
+	let label: '+' | '-' = $derived(position === 'left' ? '-' : '+');
 
-	function onclick(event: MouseEvent | undefined) {
+	function onclick(event?: MouseEvent | undefined) {
 		if (event && event.button !== 0) return;
-		if (clicked) return;
+		if (active || !show) return;
 
-		clicked = true;
-		_onclick?.(event);
-		setTimeout(() => (clicked = false), PAGE_SCROLL_DELAY);
+		active = true;
+		if (event) clicked = true;
+
+		_onclick(event);
+		setTimeout(() => {
+			active = false;
+			clicked = false;
+		}, PAGE_SCROLL_DELAY);
 	}
 
-	function hoverAutoClick() {
+	function hoverAutoClick(e: MouseEvent) {
 		if (isHovering && movingChannel.isMoving) {
-			onclick(undefined);
+			onclick(e);
 		}
 	}
 
-	function onmouseover() {
+	function onmouseover(e: MouseEvent) {
 		if (isHovering) return;
 
 		isHovering = true;
-		hoverInterval = setInterval(hoverAutoClick, PAGE_SCROLL_DELAY + 25); // 25ms to ensure it doesn't trigger too early
+		hoverInterval = setInterval(() => hoverAutoClick(e), PAGE_SCROLL_DELAY + 25); // 25ms to ensure it doesn't trigger too early
 	}
 
 	function onmouseleave() {
 		isHovering = false;
 		clearInterval(hoverInterval);
 	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key == label) onclick();
+	}
+
+	onMount(() => {
+		document.addEventListener('keydown', handleKeydown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeydown);
+		};
+	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
@@ -60,7 +79,7 @@
 	<div class="arrow"></div>
 	<div class="move-indicator">
 		{#if children}
-			<span>{@render children()}</span>
+			<span>{label}</span>
 		{/if}
 	</div>
 </button>
