@@ -63,7 +63,7 @@ export function debounce<P extends any[]>(
 	};
 }
 
-export function bubble(
+export function balloon(
 	label: string,
 	show: boolean,
 	options: {

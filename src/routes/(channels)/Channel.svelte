@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
-	import { bubble, debounce, type AnchorPosition } from '$lib/utils.svelte';
+	import { balloon, debounce, type AnchorPosition } from '$lib/utils.svelte';
 	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
@@ -78,7 +78,7 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={element}
-	{@attach bubble(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
+	{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
 		anchor: bubblePosition
 	})}
 	class="channel-wrapper"
