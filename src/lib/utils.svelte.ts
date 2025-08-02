@@ -70,9 +70,9 @@ export function balloon(
 		anchor?: AnchorPosition;
 		offset?: [number, number];
 	}
-): Attachment {
+): Attachment<HTMLElement> {
 	return (element) => {
-		if (!(element instanceof HTMLElement) || !show) return;
+		if (!show) return;
 
 		const bubble = document.createElement('div');
 		let hoverTimeout: number;

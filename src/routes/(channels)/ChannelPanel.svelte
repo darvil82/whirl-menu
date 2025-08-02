@@ -1,15 +1,10 @@
 <script lang="typescript">
-	import { onMount } from 'svelte';
-	import ChannelGrid from './ChannelGrid.svelte';
-	import {
-		Channels,
-		MAX_PAGES,
-		PAGE_SCROLL_DELAY,
-		RuntimeChannel
-	} from '$lib/channels/channel_utils';
-	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { mouse } from '$lib/utils.svelte';
+	import { onMount, untrack } from 'svelte';
+	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
+	import ChannelGrid from './ChannelGrid.svelte';
 
 	let { currentPage = $bindable(0) } = $props();
 
@@ -106,7 +101,7 @@
 	});
 
 	$effect(() => {
-		if (selectedChannel.isSelected) gotoPage(selectedChannel.channel!.getPage());
+		if (selectedChannel.isSelected) untrack(() => gotoPage(selectedChannel.channel!.getPage()));
 	});
 </script>
 

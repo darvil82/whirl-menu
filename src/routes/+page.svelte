@@ -1,19 +1,20 @@
 <script lang="typescript">
+	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
+	import { Channels, MAX_PAGES } from '$lib/channels/channel_utils';
+	import { mouse } from '$lib/utils.svelte';
 	import { onMount } from 'svelte';
+	import { selectedChannel } from '../lib/channels/channels_status.svelte';
+	import Banner from './(banner)/Banner.svelte';
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
 	import Cursor from './(channels)/Cursor.svelte';
-	import Banner from './(banner)/Banner.svelte';
 	import ScrollArrow from './ScrollArrow.svelte';
-	import { Channels, MAX_PAGES } from '$lib/channels/channel_utils';
-	import { selectedChannel } from '../lib/channels/channels_status.svelte';
-	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { mouse } from '$lib/utils.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
 	let showArrows = $state(true);
 
 	$effect(() => {
+		console.log('shit');
 		if (selectedChannel.isSelected) {
 			showArrows = false;
 			return;

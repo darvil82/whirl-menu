@@ -2,6 +2,7 @@
 	import SOUNDS, { playSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { Channels, channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
+	import { untrack } from 'svelte';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ScrollArrow from '../ScrollArrow.svelte';
 
@@ -44,7 +45,8 @@
 	}
 
 	$effect(() => {
-		selectedChannel.isSelected ? zoomIn() : zoomOut();
+		const func = selectedChannel.isSelected ? zoomIn : zoomOut;
+		untrack(func);
 	});
 </script>
 
