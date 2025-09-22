@@ -262,6 +262,7 @@
 			font-weight: bold;
 			letter-spacing: 0.15rem;
 			position: absolute;
+			text-wrap: nowrap;
 			top: 40%;
 			left: 50%;
 			translate: -50% -40%;
