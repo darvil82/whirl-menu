@@ -3,6 +3,7 @@
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { mouse } from '$lib/utils.svelte';
 	import { onMount, untrack } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ChannelGrid from './ChannelGrid.svelte';
 
@@ -12,6 +13,7 @@
 	let appsOffset: string = $state('0px');
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
 	let scrolling = $state(false);
+	let showWiiMenuText = $state(true);
 
 	function getTime(): string[] {
 		const date = new Date();
@@ -86,7 +88,11 @@
 	onMount(() => {
 		const timer = setInterval(() => {
 			currentTime = getTime();
-		}, 1000 * 5);
+		}, 5000);
+
+		setTimeout(() => {
+			showWiiMenuText = false;
+		}, 3000);
 
 		document.addEventListener('keydown', onScrollHotkeys);
 		document.addEventListener('mouseup', onMouseUp);
@@ -104,6 +110,20 @@
 		if (selectedChannel.isSelected) untrack(() => gotoPage(selectedChannel.channel!.getPage()));
 	});
 </script>
+
+{#snippet time()}
+	{@const duration = 150}
+	<div class="time">
+		{#if showWiiMenuText}
+			<div class="text-wii-menu" out:fade={{ duration }}>Wii Menu</div>
+		{:else}
+			<div class="text-clock" in:fade={{ duration, delay: duration * 2 }}>
+				{currentTime[0]} <span class="colon">:</span>
+				{currentTime[1]}
+			</div>
+		{/if}
+	</div>
+{/snippet}
 
 {#if movingChannel.isMoving}
 	<div
@@ -126,14 +146,8 @@
 		class:right={scrolling && lastMoveDir == 'right'}
 		class:left={scrolling && lastMoveDir == 'left'}
 	>
-		<div class="time">
-			{currentTime[0]} <span class="colon">:</span>
-			{currentTime[1]}
-		</div>
-		<div class="time">
-			{currentTime[0]} <span class="colon">:</span>
-			{currentTime[1]}
-		</div>
+		{@render time()}
+		{@render time()}
 	</div>
 </div>
 
@@ -197,13 +211,8 @@
 		justify-content: center;
 		align-items: center;
 
-		font-size: 7vh;
-		color: $color-gray-dark;
-		font-family: 'DSEG7';
-		letter-spacing: 0.5rem;
-		line-height: 1;
-
 		width: 25vw;
+		height: 9vh;
 		margin-inline: calc(50% - 25vw / 2);
 		position: relative;
 		isolation: isolate;
@@ -221,6 +230,7 @@
 			inset-block: 0;
 			background: $background-repeating-gradient;
 			clip-path: url('$lib/assets/images/channels/channel_panel_mask.svg#mask');
+			z-index: -1;
 		}
 
 		&::before {
@@ -234,9 +244,32 @@
 			transform: scaleX(-1);
 		}
 
+		.text-clock {
+			display: flex;
+			width: 5.7ch;
+			justify-content: flex-end;
+			flex-shrink: 0;
+			font-family: 'Segments';
+			font-size: 7vh;
+			color: $color-gray-dark;
+			letter-spacing: 0.5rem;
+			line-height: 1;
+		}
+
+		.text-wii-menu {
+			font-size: 3.5vh;
+			color: $color-highlight-blue;
+			font-weight: bold;
+			letter-spacing: 0.15rem;
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			translate: -50% -40%;
+		}
+
 		.colon {
 			animation: blink 1s infinite alternate;
-			font-size: 8vh;
+			// width: 1rem;
 
 			@keyframes blink {
 				0% {
