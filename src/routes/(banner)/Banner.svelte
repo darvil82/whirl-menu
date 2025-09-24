@@ -1,7 +1,8 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { channels } from '$lib/channels/channel_utils';
+	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
+	import { throttle } from '$lib/utils.svelte';
 	import { untrack } from 'svelte';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ScrollArrow from '../../lib/components/ScrollArrow.svelte';
@@ -38,10 +39,10 @@
 		}, 750);
 	}
 
-	function changeChannel(direction: 'left' | 'right') {
+	const changeChannel = throttle((direction: 'left' | 'right') => {
 		selectedChannel.set(channels.getNext(selectedChannel.channel!, direction));
 		SimpleSound.play(SOUNDS.CHANNEL.scroll_page);
-	}
+	}, PAGE_SCROLL_DELAY);
 
 	$effect(() => {
 		const func = selectedChannel.isSelected ? zoomIn : zoomOut;

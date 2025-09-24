@@ -1,9 +1,9 @@
 <script lang="typescript">
-	import cursor_fist from '$lib/assets/images/cursor_fist.png';
 	import cursor_default from '$lib/assets/images/cursor_default.png';
-	import { movingChannel } from '../../lib/channels/channels_status.svelte';
-	import { fade } from 'svelte/transition';
+	import cursor_fist from '$lib/assets/images/cursor_fist.png';
 	import { mouse } from '$lib/utils.svelte';
+	import { fade } from 'svelte/transition';
+	import { movingChannel } from '../channels/channels_status.svelte';
 </script>
 
 {#if mouse.isVisible}

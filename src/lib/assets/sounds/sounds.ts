@@ -1,6 +1,6 @@
 import { makeNamespace } from '$lib/utils.svelte';
 
-const VOLUME_MULTIPLIER = 0.25;
+const VOLUME_MULTIPLIER = 0.2;
 
 export interface Sound {
 	fileName: string;

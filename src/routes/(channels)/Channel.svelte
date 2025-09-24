@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { balloon, debounce, type AnchorPosition } from '$lib/utils.svelte';
-	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
+	import { Channels, channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 
@@ -36,6 +36,7 @@
 			channel = undefined;
 		} else if (e.buttons == 1) {
 			SimpleSound.play(SOUNDS.BUTTON.click2);
+			Channels.refreshDOMRects();
 			selectedChannel.set(channel);
 		}
 	}, 50);

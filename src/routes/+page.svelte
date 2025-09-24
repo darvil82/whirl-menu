@@ -4,10 +4,10 @@
 	import { mouse } from '$lib/utils.svelte';
 	import { onMount } from 'svelte';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
+	import Cursor from '../lib/components/Cursor.svelte';
 	import ScrollArrow from '../lib/components/ScrollArrow.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
-	import Cursor from './(channels)/Cursor.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;

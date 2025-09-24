@@ -63,6 +63,21 @@ export function debounce<P extends any[]>(
 	};
 }
 
+export function throttle<P extends any[]>(
+	func: (...args: P) => void,
+	limit: number
+): (...args: P) => void {
+	let inThrottle: boolean;
+
+	return (...args: P) => {
+		if (!inThrottle) {
+			func(...args);
+			inThrottle = true;
+			setTimeout(() => (inThrottle = false), limit);
+		}
+	};
+}
+
 export function balloon(
 	label: string,
 	show: boolean,
