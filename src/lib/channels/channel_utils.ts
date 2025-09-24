@@ -1,4 +1,5 @@
-import { unmount, type Component } from 'svelte';
+import { makeNamespace } from '$lib/utils.svelte';
+import { type Component } from 'svelte';
 import defined_channels from './defs/defined_channels';
 
 export const MAX_PAGES = 4;
@@ -70,6 +71,7 @@ export class Channels {
 	private modified = false;
 	private defs: RuntimeChannel[];
 	private ordered: RuntimeChannel[] | undefined = undefined;
+	private static ns = makeNamespace('channels');
 
 	private static cachedRects: { grid: DOMRect; channel: DOMRect } | undefined;
 
@@ -106,7 +108,7 @@ export class Channels {
 				}))
 			)
 		);
-		console.log('[channels] Updated storage data.');
+		Channels.ns.log('Updated storage data.');
 		return true;
 	}
 
@@ -131,11 +133,11 @@ export class Channels {
 		const storedChannels = localStorage.getItem('channels');
 
 		if (!storedChannels) {
-			console.log('[channels] No storage definition found. Loading defaults.');
+			Channels.ns.log('No storage definition found. Loading defaults.');
 			return [...defined_channels].map((c) => new RuntimeChannel(c));
 		}
 
-		console.log('[channels] Loading from storage...');
+		Channels.ns.log('Loading from storage...');
 		const parsedChannels = JSON.parse(storedChannels) as SimpleChannelDef[];
 		return parsedChannels.map<RuntimeChannel>(
 			(c) =>
@@ -171,6 +173,7 @@ export class Channels {
 	}
 
 	public static refreshDOMRects() {
+		Channels.ns.log('Refreshing cached DOM rects...');
 		Channels.cachedRects = {
 			grid: document.querySelector('.channel-grid')!.getBoundingClientRect(),
 			channel: document.querySelector('.channel-wrapper')!.getBoundingClientRect()

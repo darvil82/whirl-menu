@@ -1,3 +1,5 @@
+import { makeNamespace } from '$lib/utils.svelte';
+
 const VOLUME_MULTIPLIER = 0.25;
 
 export interface Sound {
@@ -29,30 +31,38 @@ export const SOUNDS = {
 	}
 } as const satisfies { [category: string]: { [soundName: string]: Sound } };
 
-export function getSoundPath(sound: Sound): string {
-	return `./src/lib/assets/sounds/${sound.fileName}`;
-}
+export class SimpleSound {
+	private static ns = makeNamespace('simple_sound');
+	private constructor() {}
 
-export function playSound(sound: Sound, volumeOverride?: number) {
-	const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
-
-	const audio = new Audio(getSoundPath(sound));
-	if (!audio) {
-		console.error('[sound] Failed to play:', soundProps);
-		return;
+	static getSoundPath(sound: Sound): string {
+		return `./src/lib/assets/sounds/${sound.fileName}`;
 	}
 
-	audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
+	static play(sound: Sound, volumeOverride?: number) {
+		const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
 
-	console.log('[sound] Playing ', soundProps);
-	audio.play();
+		const audio = new Audio(SimpleSound.getSoundPath(sound));
+		if (!audio) {
+			SimpleSound.ns.error('Failed to play:', soundProps);
+			return;
+		}
+
+		audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
+
+		SimpleSound.ns.log('Playing:', soundProps);
+		audio.play();
+	}
 }
 
 class AdvancedSound {
 	private ctx: AudioContext;
+	private sound: Sound;
 	private gainNode: GainNode;
 	private source: AudioBufferSourceNode | undefined;
 	private volume: number;
+
+	private ns = makeNamespace('advanced_sound', () => this.sound.fileName);
 
 	public constructor(options: {
 		sound: Sound;
@@ -63,8 +73,9 @@ class AdvancedSound {
 		this.gainNode = this.ctx.createGain();
 		this.volume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
 		this.gainNode.gain.value = this.volume;
+		this.sound = options.sound;
 
-		fetch(getSoundPath(options.sound))
+		fetch(SimpleSound.getSoundPath(options.sound))
 			.then((response) => response.arrayBuffer())
 			.then((data) => this.ctx.decodeAudioData(data))
 			.then((buffer) => {
@@ -79,31 +90,35 @@ class AdvancedSound {
 
 				this.source.connect(this.gainNode).connect(this.ctx.destination);
 			})
-			.catch((e) => {
-				throw new Error(
-					`[AdvancedSound] Failed to load sound: ${options.sound.fileName}, Error: ${e}`
-				);
-			});
+			.catch((e) => this.ns.throw(`Failed to load sound: ${options.sound.fileName}, Error: ${e}`));
 	}
 
 	start() {
 		this.source?.start();
+		this.ns.log('Started playing');
 	}
 
 	stop() {
 		this.source?.stop();
+		this.ns.log('Stopped playing');
 	}
 
 	fadeOut(duration: number = 0.25) {
 		if (!this.source) return;
+		this.ns.log('Fading out');
 		const currentTime = this.ctx.currentTime;
+		this.gainNode.gain.cancelScheduledValues(currentTime);
+
 		this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, currentTime);
 		this.gainNode.gain.linearRampToValueAtTime(0, currentTime + duration);
 	}
 
 	fadeIn(duration: number = 0.25) {
 		if (!this.source) return;
+		this.ns.log('Fading in');
 		const currentTime = this.ctx.currentTime;
+		this.gainNode.gain.cancelScheduledValues(currentTime);
+
 		this.gainNode.gain.setValueAtTime(0, currentTime);
 		this.gainNode.gain.linearRampToValueAtTime(this.volume, currentTime + duration);
 	}

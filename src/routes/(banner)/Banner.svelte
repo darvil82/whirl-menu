@@ -1,10 +1,10 @@
 <script lang="typescript">
-	import SOUNDS, { playSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { Channels, channels } from '$lib/channels/channel_utils';
+	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
+	import { channels } from '$lib/channels/channel_utils';
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import { untrack } from 'svelte';
 	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
-	import ScrollArrow from '../ScrollArrow.svelte';
+	import ScrollArrow from '../../lib/components/ScrollArrow.svelte';
 
 	let zoom = $state(false);
 	let render = $state(false);
@@ -14,12 +14,11 @@
 		if (render) return;
 		render = true;
 		channels.updateOrdered();
-		Channels.refreshDOMRects();
 		systemMenuMusic.fadeOut();
 
 		setTimeout(() => {
 			zoom = true;
-			playSound(SOUNDS.CHANNEL.zoomIn);
+			SimpleSound.play(SOUNDS.CHANNEL.zoomIn);
 		}, 100);
 
 		setTimeout(() => {
@@ -31,7 +30,7 @@
 		if (!render) return;
 		zoom = false;
 		showArrows = false;
-		playSound(SOUNDS.CHANNEL.zoomOut);
+		SimpleSound.play(SOUNDS.CHANNEL.zoomOut);
 		systemMenuMusic.fadeIn(3);
 
 		setTimeout(() => {
@@ -41,7 +40,7 @@
 
 	function changeChannel(direction: 'left' | 'right') {
 		selectedChannel.set(channels.getNext(selectedChannel.channel!, direction));
-		playSound(SOUNDS.CHANNEL.scroll_page);
+		SimpleSound.play(SOUNDS.CHANNEL.scroll_page);
 	}
 
 	$effect(() => {
@@ -116,7 +115,7 @@
 			opacity: 0;
 
 			&:not(.interactable) {
-				mask: url('$lib/assets/images/channels/channel_mask_lr.png');
+				mask: url('$lib/assets/images/channels/channel_mask_lr.png'); // switch to high res mask when finally zommed in
 				mask-size: 100% 100%;
 				pointer-events: none;
 			}

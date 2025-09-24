@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { balloon, debounce, type AnchorPosition } from '$lib/utils.svelte';
 	import { channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -23,7 +23,7 @@
 
 	function hover() {
 		if ((channel !== undefined) != !movingChannel.isMoving) return;
-		playSound(SOUNDS.BUTTON.hover);
+		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 
 	const onclick = debounce((e: MouseEvent) => {
@@ -32,10 +32,10 @@
 		if (e.buttons == 3 && !channel.locked) {
 			moving = true;
 			movingChannel.set({ channel, originalCallback: receiveChannelData });
-			playSound(SOUNDS.CHANNEL.hold);
+			SimpleSound.play(SOUNDS.CHANNEL.hold);
 			channel = undefined;
 		} else if (e.buttons == 1) {
-			playSound(SOUNDS.BUTTON.click2);
+			SimpleSound.play(SOUNDS.BUTTON.click2);
 			selectedChannel.set(channel);
 		}
 	}, 50);
@@ -49,7 +49,7 @@
 		}
 
 		crtAnimation = true;
-		playSound(SOUNDS.CHANNEL.drop, 0.5);
+		SimpleSound.play(SOUNDS.CHANNEL.drop, 0.5);
 
 		setTimeout(() => {
 			channel = newChannel;

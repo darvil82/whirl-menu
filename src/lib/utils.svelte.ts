@@ -1,5 +1,5 @@
 import type { Attachment } from 'svelte/attachments';
-import SOUNDS, { playSound } from './assets/sounds/sounds';
+import SOUNDS, { SimpleSound } from './assets/sounds/sounds';
 
 export type Direction1D = 'left' | 'right';
 export type AnchorPosition = Direction1D | 'center';
@@ -88,7 +88,7 @@ export function balloon(
 		function mouseover(e: MouseEvent) {
 			hoverTimeout = setTimeout(() => {
 				bubble.classList.add('visible');
-				playSound(SOUNDS.MISC.balloon);
+				SimpleSound.play(SOUNDS.MISC.balloon);
 			}, 350);
 		}
 
@@ -106,5 +106,20 @@ export function balloon(
 			element.removeEventListener('mouseleave', mouseleave);
 			bubble.remove();
 		};
+	};
+}
+
+function getHeading(namespace: string, extra?: () => string) {
+	return '[' + (extra ? `${namespace} (${extra()})` : namespace) + ']:';
+}
+
+export function makeNamespace(namespace: string, extra?: () => string) {
+	return {
+		log: (...params: any[]) => console.log(getHeading(namespace, extra), ...params),
+		warn: (...params: any[]) => console.warn(getHeading(namespace, extra), ...params),
+		error: (...params: any[]) => console.error(getHeading(namespace, extra), ...params),
+		throw: (msg: string) => {
+			throw new Error(`${getHeading(namespace, extra)} ${msg}`);
+		}
 	};
 }

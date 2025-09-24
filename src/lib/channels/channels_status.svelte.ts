@@ -53,6 +53,7 @@ class SelectedChannel {
 	};
 
 	set = (channel: RuntimeChannel) => {
+		Channels.refreshDOMRects();
 		this.selectedChannel = {
 			channel,
 			isSelected: true

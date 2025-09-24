@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import SOUNDS, { playSound, type Sound } from '$lib/assets/sounds/sounds';
+	import SOUNDS, { SimpleSound, type Sound } from '$lib/assets/sounds/sounds';
 	import type { Snippet } from 'svelte';
 
 	const {
@@ -24,12 +24,12 @@
 		if (clicked) return;
 
 		if (disabled) {
-			playSound(SOUNDS.MISC.error);
+			SimpleSound.play(SOUNDS.MISC.error);
 			return;
 		}
 
 		clicked = true;
-		playSound(clickSound);
+		SimpleSound.play(clickSound);
 		_onclick?.(event);
 		btn.addEventListener(
 			'animationend',
@@ -42,7 +42,7 @@
 
 	function hover() {
 		if (disabled || clicked) return;
-		playSound(SOUNDS.BUTTON.hover);
+		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 </script>
 

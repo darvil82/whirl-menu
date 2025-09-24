@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import SOUNDS, { playSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { mouse } from '$lib/utils.svelte';
 	import { onMount, untrack } from 'svelte';
@@ -29,7 +29,7 @@
 		lastMoveDir = direction;
 		scrolling = true;
 		appsOffset = -100 * newPage + '%';
-		playSound(SOUNDS.CHANNEL.scroll_page);
+		SimpleSound.play(SOUNDS.CHANNEL.scroll_page);
 
 		setTimeout(() => {
 			scrolling = false;
@@ -78,7 +78,7 @@
 		// if this was called, a channel did not capture it. so it fell outside
 		movingChannel.invokeOriginalCallback();
 		movingChannel.set(undefined);
-		playSound(SOUNDS.MISC.error);
+		SimpleSound.play(SOUNDS.MISC.error);
 	}
 
 	function onMouseMove() {

@@ -1,20 +1,19 @@
 <script lang="typescript">
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { Channels, MAX_PAGES } from '$lib/channels/channel_utils';
+	import { MAX_PAGES } from '$lib/channels/channel_utils';
 	import { mouse } from '$lib/utils.svelte';
 	import { onMount } from 'svelte';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
+	import ScrollArrow from '../lib/components/ScrollArrow.svelte';
 	import Banner from './(banner)/Banner.svelte';
 	import ChannelPanel from './(channels)/ChannelPanel.svelte';
 	import Cursor from './(channels)/Cursor.svelte';
-	import ScrollArrow from './ScrollArrow.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
 	let showArrows = $state(true);
 
 	$effect(() => {
-		console.log('shit');
 		if (selectedChannel.isSelected) {
 			showArrows = false;
 			return;
@@ -26,7 +25,6 @@
 	});
 
 	onMount(() => {
-		Channels.refreshDOMRects();
 		document.oncontextmenu = () => false;
 
 		setTimeout(() => {
