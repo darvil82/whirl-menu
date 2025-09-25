@@ -13,22 +13,17 @@ export function ellipsize(str: string, maxSize: number): string {
 class Mouse {
 	private pos: [number, number] | undefined = $state();
 	private inView = $state(true);
-	private isDragging = $state(false);
 
 	public constructor() {
 		document.addEventListener('mousemove', this.onMove);
 		document.addEventListener('mouseleave', this.onHide);
 		document.addEventListener('mouseenter', this.onShow);
-		document.addEventListener('mousedown', this.onMouseDown);
-		document.addEventListener('mouseup', this.onMouseUp);
 	}
 
 	public detach() {
 		document.removeEventListener('mousemove', this.onMove);
 		document.removeEventListener('mouseleave', this.onHide);
 		document.removeEventListener('mouseenter', this.onShow);
-		document.removeEventListener('mousedown', this.onMouseDown);
-		document.removeEventListener('mouseup', this.onMouseUp);
 	}
 
 	private onHide = () => {
@@ -39,16 +34,6 @@ class Mouse {
 		this.inView = true;
 	};
 
-	private onMouseDown = debounce((e: MouseEvent) => {
-		if (e.buttons == 3) {
-			this.isDragging = true;
-		}
-	}, 50);
-
-	private onMouseUp = (e: MouseEvent) => {
-		this.isDragging = false;
-	};
-
 	private onMove = (e: MouseEvent) => {
 		this.pos = [e.x, e.y];
 	};
@@ -57,12 +42,8 @@ class Mouse {
 		return this.pos ?? [0, 0];
 	}
 
-	get visible() {
+	get isVisible() {
 		return this.pos !== undefined && this.inView;
-	}
-
-	get dragging() {
-		return this.isDragging;
 	}
 }
 

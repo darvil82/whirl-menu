@@ -6,7 +6,7 @@
 	import { movingChannel } from '../channels/channels_status.svelte';
 </script>
 
-{#if mouse.visible}
+{#if mouse.isVisible}
 	<div
 		out:fade={{ duration: 150 }}
 		class="cursor"
