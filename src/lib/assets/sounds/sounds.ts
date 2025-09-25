@@ -29,7 +29,7 @@ export const SOUNDS = {
 		error: { fileName: 'error.wav', volume: 0.5 },
 		balloon: { fileName: 'balloon.wav' }
 	}
-} as const satisfies { [category: string]: { [soundName: string]: Sound } };
+} satisfies { [category: string]: { [soundName: string]: Sound } };
 
 export class SimpleSound {
 	private static ns = makeNamespace('simple_sound');

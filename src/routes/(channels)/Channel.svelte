@@ -19,7 +19,6 @@
 
 	let moving = $state(false);
 	let crtAnimation = $state(false);
-	let element: HTMLButtonElement;
 
 	function hover() {
 		if ((channel !== undefined) != !movingChannel.isMoving) return;
@@ -76,30 +75,34 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_mouse_events_have_key_events -->
-<button
-	bind:this={element}
-	{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
-		anchor: bubblePosition
-	})}
-	class="channel-wrapper"
-	class:active={(channel != undefined) != movingChannel.isMoving}
-	class:other-moving={movingChannel.isMoving && channel}
-	onmouseover={hover}
-	onmousedown={onclick}
-	onmouseup={onStopClick}
-	style:visibility={hide ? 'hidden' : undefined}
->
-	<div class="channel">
-		<div class="content" class:crt-animation={crtAnimation}>
-			{#if channel && !moving}
-				<channel.thumbnail />
-			{:else}
-				<DefaultThumbnail />
-			{/if}
+{#if hide}
+	<!-- placeholder to keep grid layout -->
+	<div></div>
+{:else}
+	<!-- svelte-ignore a11y_mouse_events_have_key_events -->
+	<button
+		{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
+			anchor: bubblePosition
+		})}
+		class="channel-wrapper"
+		class:active={(channel != undefined) != movingChannel.isMoving}
+		class:other-moving={movingChannel.isMoving && channel}
+		onmouseover={hover}
+		onmousedown={onclick}
+		onmouseup={onStopClick}
+		style:visibility={hide ? 'hidden' : undefined}
+	>
+		<div class="channel">
+			<div class="content" class:crt-animation={crtAnimation}>
+				{#if channel && !moving}
+					<channel.thumbnail />
+				{:else}
+					<DefaultThumbnail />
+				{/if}
+			</div>
 		</div>
-	</div>
-</button>
+	</button>
+{/if}
 
 <style lang="scss">
 	.channel {
