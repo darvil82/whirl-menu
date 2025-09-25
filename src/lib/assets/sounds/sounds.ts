@@ -1,4 +1,4 @@
-import { makeNamespace } from '$lib/utils.svelte';
+import { makeNamespace } from '$lib/scripts/utils.svelte';
 
 const VOLUME_MULTIPLIER = 0.2;
 
