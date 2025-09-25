@@ -1,7 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { balloon, channelDragEnv, type AnchorPosition } from '$lib/utils.svelte';
-	import { onMount } from 'svelte';
+	import { balloon, debounce, type AnchorPosition } from '$lib/utils.svelte';
 	import { Channels, channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
@@ -27,35 +26,20 @@
 		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 
-	function onClick(e: MouseEvent) {
+	const onclick = debounce((e: MouseEvent) => {
 		if (moving || !channel || crtAnimation) return;
 
-		SimpleSound.play(SOUNDS.BUTTON.click2);
-		Channels.refreshDOMRects();
-		selectedChannel.set(channel);
-	}
-
-	function onDrag(e: MouseEvent) {
-		if (moving || !channel || crtAnimation || channel.locked) return false;
-
-		moving = true;
-		movingChannel.set({ channel, originalCallback: receiveChannelData });
-		SimpleSound.play(SOUNDS.CHANNEL.hold);
-		channel = undefined;
-		return true;
-	}
-
-	function onDrop(e: MouseEvent) {
-		if (!channel) {
-			receiveChannelData(movingChannel.channel!, true);
-
-			movingChannel.unset();
-			e.stopPropagation();
-			return true;
+		if (e.buttons == 3 && !channel.locked) {
+			moving = true;
+			movingChannel.set({ channel, originalCallback: receiveChannelData });
+			SimpleSound.play(SOUNDS.CHANNEL.hold);
+			channel = undefined;
+		} else if (e.buttons == 1) {
+			SimpleSound.play(SOUNDS.BUTTON.click2);
+			Channels.refreshDOMRects();
+			selectedChannel.set(channel);
 		}
-
-		return false;
-	}
+	}, 50);
 
 	function receiveChannelData(newChannel: RuntimeChannel, animate: boolean = false) {
 		if (!animate) {
@@ -82,15 +66,14 @@
 		});
 	}
 
-	onMount(() => {
-		channelDragEnv.registerDraggable({ element, onDrag, onClick });
-		channelDragEnv.registerDropZone({ element, onDrop });
+	function onStopClick(e: MouseEvent) {
+		if (movingChannel.isMoving && !channel) {
+			receiveChannelData(movingChannel.channel!, true);
 
-		return () => {
-			channelDragEnv.unregisterDraggable(element);
-			channelDragEnv.unregisterDropZone(element);
-		};
-	});
+			movingChannel.unset();
+			e.stopPropagation();
+		}
+	}
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
@@ -103,6 +86,8 @@
 	class:active={(channel != undefined) != movingChannel.isMoving}
 	class:other-moving={movingChannel.isMoving && channel}
 	onmouseover={hover}
+	onmousedown={onclick}
+	onmouseup={onStopClick}
 	style:visibility={hide ? 'hidden' : undefined}
 >
 	<div class="channel">
