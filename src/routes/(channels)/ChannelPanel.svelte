@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
-	import { mouse } from '$lib/utils.svelte';
+	import { channelDragEnv, mouse } from '$lib/utils.svelte';
 	import { onMount, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -72,17 +72,13 @@
 		else if (e.key == '-') scrollChannels('left');
 	}
 
-	function onMouseUp() {
+	function onDropChannelOut() {
 		if (!movingChannel.isMoving) return;
 
 		// if this was called, a channel did not capture it. so it fell outside
 		movingChannel.invokeOriginalCallback();
 		movingChannel.set(undefined);
 		SimpleSound.play(SOUNDS.MISC.error);
-	}
-
-	function onMouseMove() {
-		if (!movingChannel.isMoving) return;
 	}
 
 	onMount(() => {
@@ -95,14 +91,13 @@
 		}, 3000);
 
 		document.addEventListener('keydown', onScrollHotkeys);
-		document.addEventListener('mouseup', onMouseUp);
-		document.addEventListener('mousemove', onMouseMove);
+		// document.addEventListener('mouseup', onMouseUp);
+		channelDragEnv.onOnDropOutside = onDropChannelOut;
 
 		return () => {
 			clearInterval(timer);
 			document.removeEventListener('keydown', onScrollHotkeys);
-			document.removeEventListener('mouseup', onMouseUp);
-			document.removeEventListener('mousemove', onMouseMove);
+			channelDragEnv.onOnDropOutside = undefined;
 		};
 	});
 
