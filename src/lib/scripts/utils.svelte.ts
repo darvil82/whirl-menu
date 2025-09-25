@@ -1,5 +1,5 @@
 import type { Attachment } from 'svelte/attachments';
-import SOUNDS, { SimpleSound } from './assets/sounds/sounds';
+import SOUNDS, { SimpleSound } from '../assets/sounds/sounds';
 
 export type Direction1D = 'left' | 'right';
 export type AnchorPosition = Direction1D | 'center';
@@ -70,11 +70,10 @@ export function throttle<P extends any[]>(
 	let inThrottle: boolean;
 
 	return (...args: P) => {
-		if (!inThrottle) {
-			func(...args);
-			inThrottle = true;
-			setTimeout(() => (inThrottle = false), limit);
-		}
+		if (inThrottle) return;
+		func(...args);
+		inThrottle = true;
+		setTimeout(() => (inThrottle = false), limit);
 	};
 }
 
