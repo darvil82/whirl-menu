@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
-	import { mouse } from '$lib/utils.svelte';
+	import { mouse } from '$lib/scripts/utils.svelte';
 	import { onMount, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -152,6 +152,8 @@
 </div>
 
 <style lang="scss">
+	$border-thickness: 0.3rem;
+
 	.channel-panel {
 		display: flex;
 		flex-direction: column;
@@ -168,7 +170,8 @@
 		align-self: stretch;
 		justify-content: start;
 		background: $background-repeating-gradient;
-		outline: highlight-border(0.2rem);
+
+		outline: highlight-border($border-thickness);
 	}
 
 	.channels-wrapper {
@@ -218,10 +221,7 @@
 		isolation: isolate;
 		padding-bottom: 1.5vh;
 		background: $background-repeating-gradient;
-		$border-thickness: 0.2rem;
-		filter: drop-shadow($border-thickness 0rem 0rem $color-highlight-blue)
-			drop-shadow(0rem $border-thickness 0rem $color-highlight-blue)
-			drop-shadow(0rem - $border-thickness 0rem $color-highlight-blue);
+		filter: drop-shadow(0rem $border-thickness 0rem $color-highlight-blue);
 
 		&::before,
 		&::after {

@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { balloon, debounce, type AnchorPosition } from '$lib/utils.svelte';
+	import { balloon, debounce, type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { Channels, channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';

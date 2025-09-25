@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES } from '$lib/channels/channel_utils';
-	import { mouse } from '$lib/utils.svelte';
+	import { mouse } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 	import { selectedChannel } from '../lib/channels/channels_status.svelte';
 	import Cursor from '../lib/components/Cursor.svelte';
