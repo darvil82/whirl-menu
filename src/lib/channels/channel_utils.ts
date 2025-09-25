@@ -1,4 +1,4 @@
-import { makeNamespace } from '$lib/scripts/utils.svelte';
+import { makeNamespace } from '$lib/utils.svelte';
 import { type Component } from 'svelte';
 import defined_channels from './defs/defined_channels';
 

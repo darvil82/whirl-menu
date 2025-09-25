@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
-	import { channelDragEnv, mouse } from '$lib/scripts/cursor.svelte';
+	import { channelDragEnv, mouse } from '$lib/utils.svelte';
 	import { onMount, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -91,6 +91,7 @@
 		}, 3000);
 
 		document.addEventListener('keydown', onScrollHotkeys);
+		// document.addEventListener('mouseup', onMouseUp);
 		channelDragEnv.onOnDropOutside = onDropChannelOut;
 
 		return () => {

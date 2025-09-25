@@ -1,7 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { channelDragEnv } from '$lib/scripts/cursor.svelte';
-	import { balloon, type AnchorPosition } from '$lib/scripts/utils.svelte';
+	import { balloon, channelDragEnv, type AnchorPosition } from '$lib/utils.svelte';
 	import { onMount } from 'svelte';
 	import { Channels, channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
