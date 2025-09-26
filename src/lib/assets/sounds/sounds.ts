@@ -90,7 +90,9 @@ class AdvancedSound {
 
 				this.source.connect(this.gainNode).connect(this.ctx.destination);
 			})
-			.catch((e) => this.ns.throw(`Failed to load sound: ${options.sound.fileName}, Error: ${e}`));
+			.catch((e) => {
+				throw this.ns.throwable(`Failed to load sound: ${options.sound.fileName}, Error: ${e}`);
+			});
 	}
 
 	start() {

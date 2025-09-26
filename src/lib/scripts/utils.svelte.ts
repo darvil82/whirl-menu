@@ -132,8 +132,6 @@ export function makeNamespace(namespace: string, extra?: () => string) {
 		log: (...params: any[]) => console.log(getHeading(namespace, extra), ...params),
 		warn: (...params: any[]) => console.warn(getHeading(namespace, extra), ...params),
 		error: (...params: any[]) => console.error(getHeading(namespace, extra), ...params),
-		throw: (msg: string) => {
-			throw new Error(`${getHeading(namespace, extra)} ${msg}`);
-		}
+		throwable: (msg: string) => new Error(`${getHeading(namespace, extra)} ${msg}`)
 	};
 }
