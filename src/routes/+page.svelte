@@ -37,7 +37,7 @@
 	});
 </script>
 
-<Cursor></Cursor>
+<Cursor />
 
 <div
 	class="menu"
