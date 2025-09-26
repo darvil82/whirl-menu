@@ -66,12 +66,6 @@
 		return 'all';
 	}
 
-	function onScrollHotkeys(e: KeyboardEvent) {
-		if (movingChannel.isMoving || selectedChannel.isSelected) return;
-		if (e.key == '+') scrollChannels('right');
-		else if (e.key == '-') scrollChannels('left');
-	}
-
 	function onMouseUp() {
 		if (!movingChannel.isMoving) return;
 
@@ -94,13 +88,11 @@
 			showWiiMenuText = false;
 		}, 3000);
 
-		document.addEventListener('keydown', onScrollHotkeys);
 		document.addEventListener('mouseup', onMouseUp);
 		document.addEventListener('mousemove', onMouseMove);
 
 		return () => {
 			clearInterval(timer);
-			document.removeEventListener('keydown', onScrollHotkeys);
 			document.removeEventListener('mouseup', onMouseUp);
 			document.removeEventListener('mousemove', onMouseMove);
 		};

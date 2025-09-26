@@ -7,12 +7,14 @@
 		show = true,
 		onclick: _onclick,
 		position,
-		children
+		children,
+		onKeyDownPredicate
 	}: {
 		show?: boolean;
 		onclick: (e?: MouseEvent) => void;
 		position: 'left' | 'right';
 		children?: Snippet;
+		onKeyDownPredicate?: () => boolean;
 	} = $props();
 
 	let active = $state(false);
@@ -54,7 +56,7 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key == label) onclick();
+		if (e.key == label && onKeyDownPredicate?.()) onclick();
 	}
 
 	onMount(() => {
