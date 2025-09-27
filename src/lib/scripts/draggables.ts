@@ -11,6 +11,10 @@ class DragContext<T> {
 		this._extraData = data;
 	}
 
+	public deny() {
+		this._isAccepted = false;
+	}
+
 	public get accepted() {
 		return this._isAccepted;
 	}
@@ -56,6 +60,15 @@ class DraggableEnvironment<T> {
 		if (!dragger)
 			throw this.ns.throwable('could not find dragger with given element to unregister');
 		this.draggers.splice(this.draggers.indexOf(dragger));
+	}
+
+	public get isDragging() {
+		return this.dragging !== undefined;
+	}
+
+	public get draggingData() {
+		if (!this.isDragging) throw this.ns.throwable('nothing is being dragged at this moment');
+		return this.dragging;
 	}
 
 	private onMouseDown(e: MouseEvent) {
