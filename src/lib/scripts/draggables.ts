@@ -4,7 +4,10 @@ class DragContext<T> {
 	private _isAccepted: boolean = false;
 	private _extraData: T | undefined;
 
-	public constructor(private _event: MouseEvent) {}
+	public constructor(
+		private _event: MouseEvent,
+		private _dragger: Dragger<T>
+	) {}
 
 	public accept(data?: T) {
 		this._isAccepted = true;
@@ -23,8 +26,16 @@ class DragContext<T> {
 		return this._extraData;
 	}
 
+	public get dragger() {
+		return this._dragger;
+	}
+
 	public get event() {
 		return this._event;
+	}
+
+	public forwardData(newCtx: DragContext<T>) {
+		newCtx._extraData = this._extraData;
 	}
 }
 
@@ -34,10 +45,17 @@ interface Dragger<T> {
 	onDrag: (ctx: DragContext<T>) => void;
 }
 
+interface Droppable<T> {
+	element: HTMLElement;
+	onDrop: (ctx: DragContext<T>) => void;
+}
+
 class DraggableEnvironment<T> {
 	private onMouseDownDebounced = debounce(this.onMouseDown, 50);
 	private draggers: Dragger<T>[] = [];
-	private dragging: Dragger<T> | undefined;
+	private droppables: Droppable<T>[] = [];
+	private dragging: DragContext<T> | undefined;
+	private onDropOutside: ((ctx: DragContext<T>) => void) | undefined;
 
 	private ns = makeNamespace('draggable_environment', () => this.name);
 
@@ -62,6 +80,17 @@ class DraggableEnvironment<T> {
 		this.draggers.splice(this.draggers.indexOf(dragger));
 	}
 
+	public registerDroppable(droppable: Droppable<T>) {
+		this.droppables.push(droppable);
+	}
+
+	public unregisterDroppable(element: HTMLElement) {
+		const droppable = this.droppables.find((d) => d.element === element);
+		if (!droppable)
+			throw this.ns.throwable('could not find droppable with given element to unregister');
+		this.droppables.splice(this.droppables.indexOf(droppable));
+	}
+
 	public get isDragging() {
 		return this.dragging !== undefined;
 	}
@@ -72,14 +101,14 @@ class DraggableEnvironment<T> {
 	}
 
 	private onMouseDown(e: MouseEvent) {
-		if (this.dragging) return;
+		if (this.isDragging) return;
 
 		const element = e.target as HTMLElement;
 		const dragger = this.getDraggerWithElement(element);
 		if (!dragger) return;
 
 		if (e.buttons == 3) {
-			const ctx = new DragContext<T>(e);
+			const ctx = new DragContext<T>(e, dragger);
 			dragger.onDrag(ctx);
 
 			if (!ctx.accepted) {
@@ -87,15 +116,41 @@ class DraggableEnvironment<T> {
 				return;
 			}
 
-			this.dragging = dragger;
+			this.dragging = ctx;
 		} else if (e.buttons == 1) {
 			dragger.onClick(e);
 		}
 	}
 
-	private onMouseUp(e: MouseEvent) {}
+	private onMouseUp(e: MouseEvent) {
+		if (!this.dragging) return;
+
+		const element = e.target as HTMLElement;
+		const droppable = this.getDroppableWithElement(element);
+
+		const newCtx = new DragContext<T>(e, this.dragging.dragger);
+		this.dragging.forwardData(newCtx);
+
+		if (!droppable) {
+			this.ns.error('no droppable found. calling onDropOutside (if any)');
+			this.onDropOutside?.(newCtx);
+		} else {
+			droppable.onDrop(newCtx);
+
+			if (!newCtx.accepted) {
+				this.ns.error('droppable denied drop. falling back to onDropOutside (if any)');
+				this.onDropOutside?.(newCtx);
+			}
+		}
+
+		this.dragging = undefined;
+	}
 
 	private getDraggerWithElement(element: HTMLElement): Dragger<T> | undefined {
 		return this.draggers.find((d) => d.element === element);
+	}
+
+	private getDroppableWithElement(element: HTMLElement): Droppable<T> | undefined {
+		return this.droppables.find((d) => d.element === element);
 	}
 }
