@@ -43,6 +43,7 @@ interface Dragger<T> {
 	element: HTMLElement;
 	onClick: (e: MouseEvent) => void;
 	onDrag: (ctx: DragContext<T>) => void;
+	onDropOutside?: (ctx: DragContext<T>) => void;
 }
 
 interface Droppable<T> {
@@ -55,7 +56,7 @@ class DraggableEnvironment<T> {
 	private draggers: Dragger<T>[] = [];
 	private droppables: Droppable<T>[] = [];
 	private dragging: DragContext<T> | undefined;
-	private onDropOutside: ((ctx: DragContext<T>) => void) | undefined;
+	private defaultOnDropOutside: ((ctx: DragContext<T>) => void) | undefined;
 
 	private ns = makeNamespace('draggable_environment', () => this.name);
 
@@ -132,18 +133,30 @@ class DraggableEnvironment<T> {
 		this.dragging.forwardData(newCtx);
 
 		if (!droppable) {
-			this.ns.error('no droppable found. calling onDropOutside (if any)');
-			this.onDropOutside?.(newCtx);
+			this.ns.error('no droppable found.');
+			this.handleOnDropOutside();
 		} else {
 			droppable.onDrop(newCtx);
 
 			if (!newCtx.accepted) {
-				this.ns.error('droppable denied drop. falling back to onDropOutside (if any)');
-				this.onDropOutside?.(newCtx);
+				this.ns.error('droppable denied drop.');
+				this.handleOnDropOutside();
 			}
 		}
 
+		this.ns.error('stopped dragging');
 		this.dragging = undefined;
+	}
+
+	private handleOnDropOutside() {
+		if (!this.dragging) return;
+
+		if (!this.dragging?.dragger.onDropOutside) {
+			this.defaultOnDropOutside?.(this.dragging);
+			return;
+		}
+
+		this.dragging.dragger.onDropOutside(this.dragging);
 	}
 
 	private getDraggerWithElement(element: HTMLElement): Dragger<T> | undefined {
