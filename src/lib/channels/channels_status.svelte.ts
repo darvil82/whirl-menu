@@ -1,23 +1,5 @@
+import { DraggableEnvironment } from '$lib/scripts/draggables.svelte';
 import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './channel_utils';
-
-class MovingChannel {
-	movingChannel:
-		| { channel: RuntimeChannel; originalCallback: (c: RuntimeChannel) => void }
-		| undefined = $state(undefined);
-
-	get channel(): RuntimeChannel | undefined {
-		return this.movingChannel?.channel;
-	}
-
-	get isMoving(): boolean {
-		return this.movingChannel != undefined;
-	}
-
-	set = (status: typeof this.movingChannel) => (this.movingChannel = status);
-	unset = () => (this.movingChannel = undefined);
-
-	invokeOriginalCallback = () => this.movingChannel?.originalCallback(this.movingChannel.channel);
-}
 
 class SelectedChannel {
 	selectedChannel: { channel: RuntimeChannel | undefined; isSelected: boolean } = $state({
@@ -62,5 +44,5 @@ class SelectedChannel {
 	unset = () => (this.selectedChannel.isSelected = false);
 }
 
-export const movingChannel = new MovingChannel();
+export const movingChannels = new DraggableEnvironment<RuntimeChannel>('channels');
 export const selectedChannel = new SelectedChannel();

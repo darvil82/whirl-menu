@@ -3,7 +3,7 @@
 	import { MAX_PAGES } from '$lib/channels/channel_utils';
 	import { mouse } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
-	import { movingChannel, selectedChannel } from '../lib/channels/channels_status.svelte';
+	import { movingChannels, selectedChannel } from '../lib/channels/channels_status.svelte';
 	import Cursor from '../lib/components/Cursor.svelte';
 	import ScrollArrow from '../lib/components/ScrollArrow.svelte';
 	import Banner from './(banner)/Banner.svelte';
@@ -51,13 +51,13 @@
 	position={'left'}
 	show={currentPage > 0 && showArrows}
 	onclick={() => channelPanel.scrollChannels('left')}
-	onKeyDownPredicate={() => !movingChannel.isMoving}>-</ScrollArrow
+	onKeyDownPredicate={() => !movingChannels.isMoving}>-</ScrollArrow
 >
 <ScrollArrow
 	position={'right'}
 	show={currentPage < MAX_PAGES - 1 && showArrows}
 	onclick={() => channelPanel.scrollChannels('right')}
-	onKeyDownPredicate={() => !movingChannel.isMoving}>+</ScrollArrow
+	onKeyDownPredicate={() => !movingChannels.isMoving}>+</ScrollArrow
 >
 
 <style lang="scss">

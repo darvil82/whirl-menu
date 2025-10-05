@@ -4,7 +4,7 @@
 	import { mouse } from '$lib/scripts/utils.svelte';
 	import { onMount, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
+	import { movingChannels, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import ChannelGrid from './ChannelGrid.svelte';
 
 	let { currentPage = $bindable(0) } = $props();
@@ -66,18 +66,14 @@
 		return 'all';
 	}
 
-	function onMouseUp() {
-		if (!movingChannel.isMoving) return;
+	// function onMouseUp() {
+	// 	if (!movingChannels.isDragging) return;
 
-		// if this was called, a channel did not capture it. so it fell outside
-		movingChannel.invokeOriginalCallback();
-		movingChannel.set(undefined);
-		SimpleSound.play(SOUNDS.MISC.error);
-	}
-
-	function onMouseMove() {
-		if (!movingChannel.isMoving) return;
-	}
+	// 	// if this was called, a channel did not capture it. so it fell outside
+	// 	movingChannels.invokeOriginalCallback();
+	// 	movingChannels.set(undefined);
+	// 	SimpleSound.play(SOUNDS.MISC.error);
+	// }
 
 	onMount(() => {
 		const timer = setInterval(() => {
@@ -88,13 +84,11 @@
 			showWiiMenuText = false;
 		}, 3000);
 
-		document.addEventListener('mouseup', onMouseUp);
-		document.addEventListener('mousemove', onMouseMove);
+		// document.addEventListener('mouseup', onMouseUp);
 
 		return () => {
 			clearInterval(timer);
-			document.removeEventListener('mouseup', onMouseUp);
-			document.removeEventListener('mousemove', onMouseMove);
+			// document.removeEventListener('mouseup', onMouseUp);
 		};
 	});
 
@@ -117,7 +111,7 @@
 	</div>
 {/snippet}
 
-{#if movingChannel.isMoving}
+{#if movingChannels.isDragging}
 	<div
 		class="moving-channel-indicator"
 		style:left={mouse.position[0] + 'px'}

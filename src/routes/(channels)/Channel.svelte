@@ -1,53 +1,65 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { balloon, debounce, type AnchorPosition } from '$lib/scripts/utils.svelte';
-	import { Channels, channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
-	import { movingChannel, selectedChannel } from '../../lib/channels/channels_status.svelte';
+	import type { DragContext } from '$lib/scripts/draggables.svelte';
+	import { balloon, type AnchorPosition } from '$lib/scripts/utils.svelte';
+	import { onMount } from 'svelte';
+	import { channels, Channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
+	import { movingChannels, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 
 	let {
 		channel,
 		bubblePosition,
-		hide,
 		position
 	}: {
 		channel?: RuntimeChannel;
 		bubblePosition: AnchorPosition;
-		hide?: boolean;
 		position: [number, number];
 	} = $props();
 
 	let moving = $state(false);
 	let crtAnimation = $state(false);
+	let channelElement: HTMLButtonElement;
 
 	function hover() {
-		if ((channel !== undefined) != !movingChannel.isMoving) return;
+		if ((channel !== undefined) != !movingChannels.isDragging) return;
 		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 
-	const onclick = debounce((e: MouseEvent) => {
+	function onClick(e: MouseEvent) {
 		if (moving || !channel || crtAnimation) return;
 
-		if (e.buttons == 3 && !channel.locked) {
-			moving = true;
-			movingChannel.set({ channel, originalCallback: receiveChannelData });
-			SimpleSound.play(SOUNDS.CHANNEL.hold);
-			channel = undefined;
-		} else if (e.buttons == 1) {
-			SimpleSound.play(SOUNDS.BUTTON.click2);
-			Channels.refreshDOMRects();
-			selectedChannel.set(channel);
-		}
-	}, 50);
+		SimpleSound.play(SOUNDS.BUTTON.click2);
+		Channels.refreshDOMRects();
+		selectedChannel.set(channel);
+	}
 
-	function receiveChannelData(newChannel: RuntimeChannel, animate: boolean = false) {
-		if (!animate) {
-			channel = newChannel;
-			moving = false;
-			newChannel.position = position;
+	function onDrag(ctx: DragContext<RuntimeChannel>) {
+		if (channel?.locked || !channel) {
+			ctx.deny();
 			return;
 		}
 
+		moving = true;
+		SimpleSound.play(SOUNDS.CHANNEL.hold);
+		ctx.accept(channel);
+		channel = undefined;
+	}
+
+	function onDropOutside(ctx: DragContext<RuntimeChannel>) {
+		channel = ctx.extraData!;
+		moving = false;
+		channel.position = position;
+		SimpleSound.play(SOUNDS.MISC.error);
+	}
+
+	function onDrop(ctx: DragContext<RuntimeChannel>) {
+		if (channel) {
+			ctx.deny();
+			return;
+		}
+
+		const newChannel = ctx.extraData!;
 		crtAnimation = true;
 		SimpleSound.play(SOUNDS.CHANNEL.drop, 0.5);
 
@@ -63,46 +75,50 @@
 		channels.updateAndSave(newChannel, (c) => {
 			c.position = position;
 		});
+		ctx.accept();
 	}
 
-	function onStopClick(e: MouseEvent) {
-		if (movingChannel.isMoving && !channel) {
-			receiveChannelData(movingChannel.channel!, true);
+	onMount(() => {
+		movingChannels.registerDragger({ element: channelElement, onClick, onDrag, onDropOutside });
+		movingChannels.registerDroppable({ element: channelElement, onDrop });
 
-			movingChannel.unset();
-			e.stopPropagation();
-		}
-	}
+		return () => {
+			movingChannels.unregisterDragger(channelElement);
+			movingChannels.unregisterDroppable(channelElement);
+		};
+	});
+
+	// function onStopClick(e: MouseEvent) {
+	// 	if (movingChannels.isMoving && !channel) {
+	// 		receiveChannelData(movingChannels.channel!, true);
+
+	// 		movingChannels.unset();
+	// 		e.stopPropagation();
+	// 	}
+	// }
 </script>
 
-{#if hide}
-	<!-- placeholder to keep grid layout -->
-	<div></div>
-{:else}
-	<!-- svelte-ignore a11y_mouse_events_have_key_events -->
-	<button
-		{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannel.isMoving, {
-			anchor: bubblePosition
-		})}
-		class="channel-wrapper"
-		class:active={(channel != undefined) != movingChannel.isMoving}
-		class:other-moving={movingChannel.isMoving && channel}
-		onmouseover={hover}
-		onmousedown={onclick}
-		onmouseup={onStopClick}
-		style:visibility={hide ? 'hidden' : undefined}
-	>
-		<div class="channel">
-			<div class="content" class:crt-animation={crtAnimation}>
-				{#if channel && !moving}
-					<channel.thumbnail />
-				{:else}
-					<DefaultThumbnail />
-				{/if}
-			</div>
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
+<button
+	bind:this={channelElement}
+	{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannels.isDragging, {
+		anchor: bubblePosition
+	})}
+	class="channel-wrapper"
+	class:active={(channel != undefined) != movingChannels.isDragging}
+	class:other-moving={movingChannels.isDragging && channel}
+	onmouseover={hover}
+>
+	<div class="channel">
+		<div class="content" class:crt-animation={crtAnimation}>
+			{#if channel && !moving}
+				<channel.thumbnail />
+			{:else}
+				<DefaultThumbnail />
+			{/if}
 		</div>
-	</button>
-{/if}
+	</div>
+</button>
 
 <style lang="scss">
 	.channel {

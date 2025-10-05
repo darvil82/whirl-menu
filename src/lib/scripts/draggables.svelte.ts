@@ -1,6 +1,6 @@
 import { debounce, makeNamespace } from './utils.svelte';
 
-class DragContext<T> {
+export class DragContext<T> {
 	private _isAccepted: boolean = false;
 	private _extraData: T | undefined;
 
@@ -51,11 +51,11 @@ interface Droppable<T> {
 	onDrop: (ctx: DragContext<T>) => void;
 }
 
-class DraggableEnvironment<T> {
-	private onMouseDownDebounced = debounce(this.onMouseDown, 50);
+export class DraggableEnvironment<T> {
+	private onMouseDownDebounced = debounce((e: MouseEvent) => this.onMouseDown(e), 50);
 	private draggers: Dragger<T>[] = [];
 	private droppables: Droppable<T>[] = [];
-	private dragging: DragContext<T> | undefined;
+	private dragging: DragContext<T> | undefined = $state();
 	private defaultOnDropOutside: ((ctx: DragContext<T>) => void) | undefined;
 
 	private ns = makeNamespace('draggable_environment', () => this.name);
@@ -72,6 +72,7 @@ class DraggableEnvironment<T> {
 
 	public registerDragger(dragger: Dragger<T>) {
 		this.draggers.push(dragger);
+		this.ns.log('registered', dragger);
 	}
 
 	public unregisterDragger(element: HTMLElement) {
@@ -79,6 +80,7 @@ class DraggableEnvironment<T> {
 		if (!dragger)
 			throw this.ns.throwable('could not find dragger with given element to unregister');
 		this.draggers.splice(this.draggers.indexOf(dragger));
+		this.ns.log('unregistered', dragger);
 	}
 
 	public registerDroppable(droppable: Droppable<T>) {
@@ -113,17 +115,18 @@ class DraggableEnvironment<T> {
 			dragger.onDrag(ctx);
 
 			if (!ctx.accepted) {
-				this.ns.error('draggable denied drag');
+				this.ns.log('draggable denied drag');
 				return;
 			}
 
+			this.ns.log('dragging');
 			this.dragging = ctx;
 		} else if (e.buttons == 1) {
 			dragger.onClick(e);
 		}
 	}
 
-	private onMouseUp(e: MouseEvent) {
+	private onMouseUp = (e: MouseEvent) => {
 		if (!this.dragging) return;
 
 		const element = e.target as HTMLElement;
@@ -133,30 +136,30 @@ class DraggableEnvironment<T> {
 		this.dragging.forwardData(newCtx);
 
 		if (!droppable) {
-			this.ns.error('no droppable found.');
-			this.handleOnDropOutside();
+			this.ns.log('no droppable found.');
+			this.handleOnDropOutside(newCtx);
 		} else {
 			droppable.onDrop(newCtx);
 
 			if (!newCtx.accepted) {
-				this.ns.error('droppable denied drop.');
-				this.handleOnDropOutside();
+				this.ns.log('droppable denied drop.');
+				this.handleOnDropOutside(newCtx);
 			}
 		}
 
-		this.ns.error('stopped dragging');
+		this.ns.log('stopped dragging');
 		this.dragging = undefined;
-	}
+	};
 
-	private handleOnDropOutside() {
+	private handleOnDropOutside(newCtx: DragContext<T>) {
 		if (!this.dragging) return;
 
 		if (!this.dragging?.dragger.onDropOutside) {
-			this.defaultOnDropOutside?.(this.dragging);
+			this.defaultOnDropOutside?.(newCtx);
 			return;
 		}
 
-		this.dragging.dragger.onDropOutside(this.dragging);
+		this.dragging.dragger.onDropOutside(newCtx);
 	}
 
 	private getDraggerWithElement(element: HTMLElement): Dragger<T> | undefined {

@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
 	import { onMount, type Snippet } from 'svelte';
-	import { movingChannel } from '../channels/channels_status.svelte';
+	import { movingChannels } from '../channels/channels_status.svelte';
 
 	const {
 		show = true,
@@ -38,7 +38,7 @@
 	}
 
 	function hoverAutoClick(e: MouseEvent) {
-		if (isHovering && movingChannel.isMoving) {
+		if (isHovering && movingChannels.isDragging) {
 			onclick(e);
 		}
 	}
