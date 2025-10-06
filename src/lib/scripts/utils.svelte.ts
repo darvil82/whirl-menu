@@ -13,6 +13,7 @@ export function ellipsize(str: string, maxSize: number): string {
 class Mouse {
 	private pos: [number, number] | undefined = $state();
 	private inView = $state(true);
+	_isDragging = $state(false);
 
 	public constructor() {
 		document.addEventListener('mousemove', this.onMove);
@@ -44,6 +45,10 @@ class Mouse {
 
 	get isVisible() {
 		return this.pos !== undefined && this.inView;
+	}
+
+	get dragging() {
+		return this._isDragging;
 	}
 }
 
@@ -134,4 +139,11 @@ export function makeNamespace(namespace: string, extra?: () => string) {
 		error: (...params: any[]) => console.error(getHeading(namespace, extra), ...params),
 		throwable: (msg: string) => new Error(`${getHeading(namespace, extra)} ${msg}`)
 	};
+}
+
+export function getRandomId() {
+	return (
+		(Math.random() * 10).toString().replace('.', '') +
+		(Math.random() * 10).toString().replace('.', '')
+	);
 }

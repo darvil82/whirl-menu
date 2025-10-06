@@ -51,12 +51,8 @@
 </script>
 
 {#if render}
-	<ScrollArrow position={'left'} show={showArrows} onclick={() => changeChannel('left')}
-		>-</ScrollArrow
-	>
-	<ScrollArrow position={'right'} show={showArrows} onclick={() => changeChannel('right')}
-		>+</ScrollArrow
-	>
+	<ScrollArrow position={'left'} show={showArrows} onclick={() => changeChannel('left')} />
+	<ScrollArrow position={'right'} show={showArrows} onclick={() => changeChannel('right')} />
 	<div class="banner-wrapper" class:zoom>
 		<div
 			class="content"

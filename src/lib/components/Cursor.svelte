@@ -3,7 +3,6 @@
 	import cursor_fist from '$lib/assets/images/cursor_fist.png';
 	import { mouse } from '$lib/scripts/utils.svelte';
 	import { fade } from 'svelte/transition';
-	import { movingChannels } from '../channels/channels_status.svelte';
 </script>
 
 {#if mouse.isVisible}
@@ -14,8 +13,8 @@
 		style:top={mouse.position[1] + 'px'}
 	>
 		<img
-			class:fist={movingChannels.isDragging}
-			src={movingChannels.isDragging ? cursor_fist : cursor_default}
+			class:fist={mouse.dragging}
+			src={mouse.dragging ? cursor_fist : cursor_default}
 			alt="cursor"
 		/>
 	</div>

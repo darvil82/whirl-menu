@@ -79,23 +79,19 @@
 	}
 
 	onMount(() => {
-		movingChannels.registerDragger({ element: channelElement, onClick, onDrag, onDropOutside });
-		movingChannels.registerDroppable({ element: channelElement, onDrop });
+		const unsubDragger = movingChannels.registerDragger({
+			element: channelElement,
+			onClick,
+			onDrag,
+			onDropOutside
+		});
+		const unsubDropper = movingChannels.registerDroppable({ element: channelElement, onDrop });
 
 		return () => {
-			movingChannels.unregisterDragger(channelElement);
-			movingChannels.unregisterDroppable(channelElement);
+			unsubDragger();
+			unsubDropper();
 		};
 	});
-
-	// function onStopClick(e: MouseEvent) {
-	// 	if (movingChannels.isMoving && !channel) {
-	// 		receiveChannelData(movingChannels.channel!, true);
-
-	// 		movingChannels.unset();
-	// 		e.stopPropagation();
-	// 	}
-	// }
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->

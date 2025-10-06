@@ -1,4 +1,4 @@
-import { debounce, makeNamespace } from './utils.svelte';
+import { debounce, getRandomId, makeNamespace, mouse } from './utils.svelte';
 
 export class DragContext<T> {
 	private _isAccepted: boolean = false;
@@ -46,6 +46,8 @@ interface Dragger<T> {
 	onDropOutside?: (ctx: DragContext<T>) => void;
 }
 
+type WithId<T> = T & { id: string };
+
 interface Droppable<T> {
 	element: HTMLElement;
 	onDrop: (ctx: DragContext<T>) => void;
@@ -53,8 +55,8 @@ interface Droppable<T> {
 
 export class DraggableEnvironment<T> {
 	private onMouseDownDebounced = debounce((e: MouseEvent) => this.onMouseDown(e), 50);
-	private draggers: Dragger<T>[] = [];
-	private droppables: Droppable<T>[] = [];
+	private draggers: WithId<Dragger<T>>[] = [];
+	private droppables: WithId<Droppable<T>>[] = [];
 	private dragging: DragContext<T> | undefined = $state();
 	private defaultOnDropOutside: ((ctx: DragContext<T>) => void) | undefined;
 
@@ -70,28 +72,24 @@ export class DraggableEnvironment<T> {
 		document.removeEventListener('mouseup', this.onMouseUp);
 	}
 
-	public registerDragger(dragger: Dragger<T>) {
-		this.draggers.push(dragger);
-		this.ns.log('registered', dragger);
+	private registerThing<T>(to: WithId<T>[], thing: T, kind: string): () => void {
+		const thisId = getRandomId();
+		to.push({ id: thisId, ...thing });
+		this.ns.log(`registered ${kind}`, thing);
+
+		return () => {
+			const index = to.findIndex((a) => thisId === a.id);
+			to.splice(index, 1);
+			this.ns.log(`unregistered ${kind}`, thing);
+		};
 	}
 
-	public unregisterDragger(element: HTMLElement) {
-		const dragger = this.getDraggerWithElement(element);
-		if (!dragger)
-			throw this.ns.throwable('could not find dragger with given element to unregister');
-		this.draggers.splice(this.draggers.indexOf(dragger));
-		this.ns.log('unregistered', dragger);
+	public registerDragger(dragger: Dragger<T>) {
+		return this.registerThing(this.draggers, dragger, 'dragger');
 	}
 
 	public registerDroppable(droppable: Droppable<T>) {
-		this.droppables.push(droppable);
-	}
-
-	public unregisterDroppable(element: HTMLElement) {
-		const droppable = this.droppables.find((d) => d.element === element);
-		if (!droppable)
-			throw this.ns.throwable('could not find droppable with given element to unregister');
-		this.droppables.splice(this.droppables.indexOf(droppable));
+		return this.registerThing(this.droppables, droppable, 'droppable');
 	}
 
 	public get isDragging() {
@@ -120,7 +118,7 @@ export class DraggableEnvironment<T> {
 			}
 
 			this.ns.log('dragging');
-			this.dragging = ctx;
+			this.setDraggingState(ctx);
 		} else if (e.buttons == 1) {
 			dragger.onClick(e);
 		}
@@ -148,7 +146,7 @@ export class DraggableEnvironment<T> {
 		}
 
 		this.ns.log('stopped dragging');
-		this.dragging = undefined;
+		this.setDraggingState(undefined);
 	};
 
 	private handleOnDropOutside(newCtx: DragContext<T>) {
@@ -168,5 +166,10 @@ export class DraggableEnvironment<T> {
 
 	private getDroppableWithElement(element: HTMLElement): Droppable<T> | undefined {
 		return this.droppables.find((d) => d.element === element);
+	}
+
+	private setDraggingState(ctx: DragContext<T> | undefined) {
+		this.dragging = ctx;
+		mouse._isDragging = ctx !== undefined;
 	}
 }

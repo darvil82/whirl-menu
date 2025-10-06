@@ -1,19 +1,17 @@
 <script lang="typescript">
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
-	import { onMount, type Snippet } from 'svelte';
+	import { onMount } from 'svelte';
 	import { movingChannels } from '../channels/channels_status.svelte';
 
 	const {
 		show = true,
 		onclick: _onclick,
 		position,
-		children,
 		onKeyDownPredicate
 	}: {
 		show?: boolean;
 		onclick: (e?: MouseEvent) => void;
 		position: 'left' | 'right';
-		children?: Snippet;
 		onKeyDownPredicate?: () => boolean;
 	} = $props();
 
@@ -80,9 +78,7 @@
 >
 	<div class="arrow"></div>
 	<div class="move-indicator">
-		{#if children}
-			<span>{label}</span>
-		{/if}
+		<span>{label}</span>
 	</div>
 </button>
 
@@ -112,7 +108,6 @@
 
 		.move-indicator {
 			position: absolute;
-			line-height: 0.8;
 			color: #777;
 			font-weight: bold;
 			right: 3vh;
@@ -133,7 +128,7 @@
 
 			span {
 				font-size: 17vh;
-				line-height: 0.65;
+				line-height: 0.7;
 			}
 		}
 
