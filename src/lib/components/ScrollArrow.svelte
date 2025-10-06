@@ -56,7 +56,7 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key == label && onKeyDownPredicate?.()) onclick();
+		if (e.key == label && (!onKeyDownPredicate || onKeyDownPredicate?.())) onclick();
 	}
 
 	onMount(() => {

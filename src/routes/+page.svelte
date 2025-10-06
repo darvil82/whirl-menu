@@ -51,13 +51,13 @@
 	position={'left'}
 	show={currentPage > 0 && showArrows}
 	onclick={() => channelPanel.scrollChannels('left')}
-	onKeyDownPredicate={() => !movingChannels.isMoving}>-</ScrollArrow
+	onKeyDownPredicate={() => !movingChannels.isDragging}>-</ScrollArrow
 >
 <ScrollArrow
 	position={'right'}
 	show={currentPage < MAX_PAGES - 1 && showArrows}
 	onclick={() => channelPanel.scrollChannels('right')}
-	onKeyDownPredicate={() => !movingChannels.isMoving}>+</ScrollArrow
+	onKeyDownPredicate={() => !movingChannels.isDragging}>+</ScrollArrow
 >
 
 <style lang="scss">
