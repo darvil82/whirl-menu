@@ -7,7 +7,7 @@
 	import Cursor from '../lib/components/Cursor.svelte';
 	import ScrollArrow from '../lib/components/ScrollArrow.svelte';
 	import Banner from './(banner)/Banner.svelte';
-	import ChannelPanel from './(channels)/ChannelPanel.svelte';
+	import ChannelPanel from './(channels)/(channelPanel)/ChannelPanel.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
