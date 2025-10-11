@@ -36,7 +36,7 @@
 	}
 
 	function onDrag(ctx: DragContext<RuntimeChannel>) {
-		if (channel?.locked || !channel) {
+		if (channel?.locked || !channel || crtAnimation) {
 			ctx.deny();
 			return;
 		}
