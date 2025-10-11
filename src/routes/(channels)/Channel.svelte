@@ -105,76 +105,16 @@
 	class:other-moving={movingChannels.isDragging && channel}
 	onmouseover={hover}
 >
-	<div class="channel">
-		<div class="content" class:crt-animation={crtAnimation}>
-			{#if channel && !moving}
-				<channel.thumbnail />
-			{:else}
-				<DefaultThumbnail />
-			{/if}
-		</div>
+	<div class="content" class:crt-animation={crtAnimation}>
+		{#if channel && !moving}
+			<channel.thumbnail />
+		{:else}
+			<DefaultThumbnail />
+		{/if}
 	</div>
 </button>
 
 <style lang="scss">
-	.channel {
-		background: $color-gray;
-		mask: url('$lib/assets/images/channels/channel_mask_lr.png');
-		mask-size: 100% 100%;
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-
-		.content {
-			position: absolute;
-			inset: 0.25rem;
-			background: white;
-			mask: url('$lib/assets/images/channels/channel_mask_lr.png');
-			mask-size: 100% 100%;
-			transition: filter 0.25s;
-
-			// crt animation effect
-			&::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				background-color: white;
-				z-index: 1;
-				visibility: hidden;
-
-				@keyframes crt {
-					0% {
-						visibility: visible;
-						scale: 0.1 0.1;
-						opacity: 0;
-					}
-					15% {
-						scale: 0.1 0.8;
-						opacity: 1;
-					}
-					30% {
-						scale: 1 0.1;
-						opacity: 1;
-					}
-					45% {
-						scale: 1 1;
-						opacity: 1;
-					}
-					75% {
-						opacity: 1;
-					}
-					100% {
-						opacity: 0;
-					}
-				}
-			}
-
-			&.crt-animation::before {
-				animation: crt 0.75s forwards;
-			}
-		}
-	}
-
 	.channel-wrapper {
 		position: relative;
 
@@ -188,6 +128,15 @@
 			opacity: 0;
 			scale: 0.9;
 			transition: 0.5s ease-in;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: url('$lib/assets/images/channels/channel_mask_lr.png');
+			background-size: 100% 100%;
+			filter: brightness(0.75);
 		}
 
 		&.active {
@@ -205,6 +154,55 @@
 		*,
 		&::after {
 			pointer-events: none;
+		}
+	}
+
+	.content {
+		position: absolute;
+		inset: 0.4vh;
+		background: white;
+		mask: url('$lib/assets/images/channels/channel_mask_lr.png');
+		mask-size: 100% 100%;
+		transition: filter 0.25s;
+
+		// crt animation effect
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-color: white;
+			z-index: 1;
+			visibility: hidden;
+
+			@keyframes crt {
+				0% {
+					visibility: visible;
+					scale: 0.1 0.1;
+					opacity: 0;
+				}
+				15% {
+					scale: 0.1 0.8;
+					opacity: 1;
+				}
+				30% {
+					scale: 1 0.1;
+					opacity: 1;
+				}
+				45% {
+					scale: 1 1;
+					opacity: 1;
+				}
+				75% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+		}
+
+		&.crt-animation::before {
+			animation: crt 0.75s forwards;
 		}
 	}
 </style>
