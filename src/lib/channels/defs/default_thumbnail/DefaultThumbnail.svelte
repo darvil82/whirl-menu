@@ -5,8 +5,9 @@
 
 <style lang="scss">
 	.default {
-		$bg-1: #cacaca;
-		$bg-2: #dbdbdb;
+		$bg-1: #cfcfcf;
+		$bg-2: #dadada;
+		$highlight: #e6e6e6;
 
 		position: absolute;
 		inset: 0;
@@ -15,8 +16,9 @@
 		place-items: center;
 		font-size: 5vh;
 		font-weight: bold;
-		color: rgba(0, 0, 0, 0.062);
-		background: linear-gradient(to top, $bg-2, $bg-1 20%, $bg-1 80%, $bg-2);
+		color: rgba(0, 0, 0, 0.04);
+		background: linear-gradient(to top, $bg-2, $bg-1 20%, $bg-1 90%, $highlight);
+		// background: $bg-1;
 
 		&::before {
 			content: '';
@@ -72,12 +74,18 @@
 			top: -200%;
 			background: linear-gradient(
 				to bottom,
-				transparent 15%,
-				white 20%,
-				transparent 25%,
+				transparent,
+				white 5%,
+				transparent 10%,
+				transparent 20%,
+				white 26%,
+				transparent 35%,
+				transparent 45%,
+				white 48%,
 				transparent 53%,
-				white 60%,
-				transparent 67%
+				transparent 59%,
+				white 64%,
+				transparent 68%
 			);
 			animation: test 60s calc(var(--start-offset, 0) * -1s) linear infinite;
 			opacity: 0.2;

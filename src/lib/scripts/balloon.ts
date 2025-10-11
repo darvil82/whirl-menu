@@ -40,8 +40,8 @@ export function balloon(
 		}
 
 		function mouseleave(e: MouseEvent) {
-			balloon.classList.remove('visible');
 			clearTimeout(hoverTimeout);
+			balloon.classList.remove('visible');
 		}
 
 		element.addEventListener('mouseover', mouseover);
