@@ -1,7 +1,8 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
+	import { balloon } from '$lib/scripts/balloon';
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
-	import { balloon, type AnchorPosition } from '$lib/scripts/utils.svelte';
+	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 	import { channels, Channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
 	import { movingChannels, selectedChannel } from '../../lib/channels/channels_status.svelte';
@@ -136,7 +137,7 @@
 			inset: 0;
 			background: url('$lib/assets/images/channels/channel_mask_lr.png');
 			background-size: 100% 100%;
-			filter: brightness(0.75);
+			filter: brightness(0.72);
 		}
 
 		&.active {
