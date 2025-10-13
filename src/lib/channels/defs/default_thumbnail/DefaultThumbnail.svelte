@@ -50,26 +50,26 @@
 			position: absolute;
 			inset: 0;
 			mask: url('./noise_mask.png');
+			mask-size: 200% 200%;
 			mask-mode: luminance;
 			background: rgba(44, 44, 44, 0.4);
-			scale: 2;
 			animation: move 0.75s steps(3) infinite;
 
 			@keyframes move {
 				0% {
-					translate: -50% -50%;
+					mask-position: -50% -50%;
 				}
 				25% {
-					translate: 50% -50%;
+					mask-position: 50% -50%;
 				}
 				50% {
-					translate: 50% 50%;
+					mask-position: 50% 50%;
 				}
 				75% {
-					translate: -50% 50%;
+					mask-position: -50% 50%;
 				}
 				100% {
-					translate: -50% -50%;
+					mask-position: -50% -50%;
 				}
 			}
 		}
@@ -106,12 +106,12 @@
 			}
 		}
 
-		// &.optimize {
-		// 	&::after,
-		// 	&::before,
-		// 	.scrolling-effect {
-		// 		animation-play-state: paused;
-		// 	}
-		// }
+		&.optimize {
+			&::after,
+			&::before,
+			.scrolling-effect {
+				animation-play-state: paused;
+			}
+		}
 	}
 </style>

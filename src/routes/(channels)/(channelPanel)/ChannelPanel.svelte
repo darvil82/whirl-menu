@@ -98,7 +98,7 @@
 	.channel-panel {
 		display: flex;
 		flex-direction: column;
-		filter: drop-shadow(0px 0px 1.5em rgba(0, 0, 0, 0.5));
+		filter: drop-shadow(0px 0px 2.75rem rgba(0, 0, 0, 0.5));
 
 		&.scrolling {
 			pointer-events: none;
