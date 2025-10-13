@@ -146,7 +146,6 @@ export class DraggableEnvironment<T> {
 		}
 
 		this.ns.log('stopped dragging');
-		this.setDraggingState(undefined);
 	};
 
 	private handleOnDropOutside(newCtx: DragContext<T>) {
@@ -158,6 +157,7 @@ export class DraggableEnvironment<T> {
 		}
 
 		this.dragging.dragger.onDropOutside(newCtx);
+		this.setDraggingState(undefined);
 	}
 
 	private getDraggerWithElement(element: HTMLElement): Dragger<T> | undefined {

@@ -1,4 +1,17 @@
 import { makeNamespace } from '$lib/scripts/utils.svelte';
+import balloon from './balloon.wav';
+import cancel from './button/cancel.wav';
+import click1 from './button/click1.wav';
+import click2 from './button/click2.wav';
+import hover from './button/hover.wav';
+import drag from './channel/drag.wav';
+import drop from './channel/drop.wav';
+import hold from './channel/hold.wav';
+import scroll_page from './channel/scroll_page.wav';
+import zoom_in from './channel/zoom_in.wav';
+import zoom_out from './channel/zoom_out.wav';
+import error from './error.wav';
+import music from './music.wav';
 
 const VOLUME_MULTIPLIER = 0.2;
 
@@ -9,25 +22,25 @@ export interface Sound {
 
 export const SOUNDS = {
 	BUTTON: {
-		click1: { fileName: 'button/click1.wav' },
-		click2: { fileName: 'button/click2.wav' },
-		cancel: { fileName: 'button/cancel.wav' },
-		hover: { fileName: 'button/hover.wav', volume: 0.25 }
+		click1: { fileName: click1 },
+		click2: { fileName: click2 },
+		cancel: { fileName: cancel },
+		hover: { fileName: hover, volume: 0.25 }
 	},
 	CHANNEL: {
-		scroll_page: { fileName: 'channel/scroll_page.wav' },
-		hold: { fileName: 'channel/hold.wav' },
-		drop: { fileName: 'channel/drop.wav' },
-		zoomIn: { fileName: 'channel/zoom_in.wav' },
-		zoomOut: { fileName: 'channel/zoom_out.wav' },
-		drag: { fileName: 'channel/drag.wav' }
+		scroll_page: { fileName: scroll_page },
+		hold: { fileName: hold },
+		drop: { fileName: drop },
+		zoomIn: { fileName: zoom_in },
+		zoomOut: { fileName: zoom_out },
+		drag: { fileName: drag }
 	},
 	MUSIC: {
-		main: { fileName: 'music.wav' }
+		main: { fileName: music }
 	},
 	MISC: {
-		error: { fileName: 'error.wav', volume: 0.5 },
-		balloon: { fileName: 'balloon.wav' }
+		error: { fileName: error, volume: 0.5 },
+		balloon: { fileName: balloon }
 	}
 } satisfies { [category: string]: { [soundName: string]: Sound } };
 
@@ -35,14 +48,10 @@ export class SimpleSound {
 	private static ns = makeNamespace('simple_sound');
 	private constructor() {}
 
-	static getSoundPath(sound: Sound): string {
-		return `./src/lib/assets/sounds/${sound.fileName}`;
-	}
-
 	static play(sound: Sound, volumeOverride?: number) {
 		const soundProps = { ...sound, volume: volumeOverride ?? sound.volume ?? 1 };
 
-		const audio = new Audio(SimpleSound.getSoundPath(sound));
+		const audio = new Audio(sound.fileName);
 		if (!audio) {
 			SimpleSound.ns.error('Failed to play:', soundProps);
 			return;
@@ -75,7 +84,7 @@ class AdvancedSound {
 		this.gainNode.gain.value = this.volume;
 		this.sound = options.sound;
 
-		fetch(SimpleSound.getSoundPath(options.sound))
+		fetch(this.sound.fileName)
 			.then((response) => response.arrayBuffer())
 			.then((data) => this.ctx.decodeAudioData(data))
 			.then((buffer) => {
@@ -136,7 +145,7 @@ class AdvancedSound {
 
 export const systemMenuMusic = new AdvancedSound({
 	sound: SOUNDS.MUSIC.main,
-	volume: 0,
+	volume: 1,
 	loop: { start: 27.716, end: 34.968 + 1 * 60 }
 });
 
