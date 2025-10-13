@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import { PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import { onMount } from 'svelte';
 	import { movingChannels } from '../channels/channels_status.svelte';
 

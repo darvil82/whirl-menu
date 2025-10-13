@@ -1,4 +1,4 @@
-@function highlight-border($size: 0.12em) {
+@function highlight-border($size: 0.1em) {
 	@return $size solid $color-highlight-blue;
 }
 

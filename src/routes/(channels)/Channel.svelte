@@ -4,7 +4,12 @@
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
 	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
-	import { channels, Channels, type RuntimeChannel } from '../../lib/channels/channel_utils';
+	import {
+		channels,
+		Channels,
+		type ChannelThumbnailData,
+		type RuntimeChannel
+	} from '../../lib/channels/channels';
 	import { movingChannels, selectedChannel } from '../../lib/channels/channels_status.svelte';
 	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
 
@@ -36,7 +41,7 @@
 	}
 
 	function onDrag(ctx: DragContext<RuntimeChannel>) {
-		if (channel?.locked || !channel || crtAnimation) {
+		if (!channel || channel.locked || crtAnimation) {
 			ctx.deny();
 			return;
 		}
@@ -79,6 +84,12 @@
 		ctx.accept();
 	}
 
+	function getChannelThumbnailData(): ChannelThumbnailData {
+		return {
+			optimized: selectedChannel.bannerShown
+		};
+	}
+
 	onMount(() => {
 		const unsubDragger = movingChannels.registerDragger({
 			element: channelElement,
@@ -108,9 +119,9 @@
 >
 	<div class="content" class:crt-animation={crtAnimation}>
 		{#if channel && !moving}
-			<channel.thumbnail />
+			<channel.thumbnail {...getChannelThumbnailData()} />
 		{:else}
-			<DefaultThumbnail />
+			<DefaultThumbnail {...getChannelThumbnailData()} />
 		{/if}
 	</div>
 </button>

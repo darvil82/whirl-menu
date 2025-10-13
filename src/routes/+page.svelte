@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { MAX_PAGES } from '$lib/channels/channel_utils';
+	import { MAX_PAGES } from '$lib/channels/channels';
 	import { mouse } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 	import { movingChannels, selectedChannel } from '../lib/channels/channels_status.svelte';

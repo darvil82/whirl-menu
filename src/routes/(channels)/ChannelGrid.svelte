@@ -4,7 +4,7 @@
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS,
 		RuntimeChannel
-	} from '../../lib/channels/channel_utils';
+	} from '../../lib/channels/channels';
 	import Channel from './Channel.svelte';
 
 	const {

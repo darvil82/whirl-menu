@@ -1,3 +1,9 @@
+<script lang="typescript">
+	import type { ChannelThumbnailData } from '../channels';
+
+	const props: ChannelThumbnailData = $props();
+</script>
+
 <div class="c">
 	<h2>Test channel</h2>
 </div>

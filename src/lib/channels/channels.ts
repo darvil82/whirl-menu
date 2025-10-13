@@ -14,19 +14,23 @@ export interface SimpleChannelDef {
 }
 
 export interface ChannelDef extends SimpleChannelDef {
-	thumbnail: Component;
+	thumbnail: Component<ChannelThumbnailData>;
 	banner: Component;
 	name: string;
 	locked?: boolean;
 }
 
+export interface ChannelThumbnailData {
+	optimized: boolean;
+}
+
 export class RuntimeChannel implements ChannelDef {
-	public thumbnail: Component;
-	public banner: Component;
-	public name: string;
-	public id: string;
-	public position: [number, number];
-	public locked: boolean;
+	public thumbnail: ChannelDef['thumbnail'];
+	public banner: ChannelDef['banner'];
+	public name: ChannelDef['name'];
+	public id: ChannelDef['id'];
+	public position: ChannelDef['position'];
+	public locked: ChannelDef['locked'];
 
 	constructor(def: ChannelDef) {
 		this.thumbnail = def.thumbnail;

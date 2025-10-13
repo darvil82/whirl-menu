@@ -1,11 +1,13 @@
 import { DraggableEnvironment } from '$lib/scripts/draggables.svelte';
-import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './channel_utils';
+import { Channels, PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './channels';
 
 class SelectedChannel {
-	selectedChannel: { channel: RuntimeChannel | undefined; isSelected: boolean } = $state({
+	private selectedChannel: { channel: RuntimeChannel | undefined; isSelected: boolean } = $state({
 		channel: undefined,
 		isSelected: false
 	});
+	_isBannerShown = $state(false);
+	_isFullyFocused = $state(false);
 
 	get channel(): RuntimeChannel | undefined {
 		return this.selectedChannel?.channel;
@@ -13,6 +15,14 @@ class SelectedChannel {
 
 	get isSelected(): boolean {
 		return this.selectedChannel.isSelected;
+	}
+
+	get bannerShown(): boolean {
+		return this._isBannerShown;
+	}
+
+	get fullyFocused(): boolean {
+		return this._isFullyFocused;
 	}
 
 	transformOrigin = (middleOffset: boolean = false): string | undefined => {

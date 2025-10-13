@@ -1,3 +1,9 @@
+<script lang="typescript">
+	import type { ChannelThumbnailData } from '$lib/channels/channels';
+
+	const props: ChannelThumbnailData = $props();
+</script>
+
 <div class="disc-channel">
 	<div class="disc"></div>
 </div>

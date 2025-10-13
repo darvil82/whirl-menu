@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import { mouse } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';
 	import { movingChannels, selectedChannel } from '../../../lib/channels/channels_status.svelte';
@@ -73,11 +73,13 @@
 {/if}
 <div class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
 	<div class="channels">
-		<div class="channels-wrapper">
-			{#each new Array(MAX_PAGES) as _, page}
-				<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
-			{/each}
-		</div>
+		{#if !selectedChannel.fullyFocused}
+			<div class="channels-wrapper">
+				{#each new Array(MAX_PAGES) as _, page}
+					<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
+				{/each}
+			</div>
+		{/if}
 	</div>
 
 	<div

@@ -1,4 +1,10 @@
-<div class="default">
+<script lang="typescript">
+	import type { ChannelThumbnailData } from '$lib/channels/channels';
+
+	const props: ChannelThumbnailData = $props();
+</script>
+
+<div class="default" class:optimize={props.optimized}>
 	Wii
 	<div class="scrolling-effect" style:--start-offset={Math.random() * 60}></div>
 </div>
@@ -99,5 +105,13 @@
 				}
 			}
 		}
+
+		// &.optimize {
+		// 	&::after,
+		// 	&::before,
+		// 	.scrolling-effect {
+		// 		animation-play-state: paused;
+		// 	}
+		// }
 	}
 </style>

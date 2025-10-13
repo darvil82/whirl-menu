@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channel_utils';
+	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import MenuButton from '$lib/components/MenuButton.svelte';
 	import { throttle } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';
@@ -8,12 +8,10 @@
 	import ScrollArrow from '../../lib/components/ScrollArrow.svelte';
 
 	let zoom = $state(false);
-	let render = $state(false);
-	let showArrows = $state(false);
 
 	function zoomIn() {
-		if (render) return;
-		render = true;
+		if (selectedChannel._isBannerShown) return;
+		selectedChannel._isBannerShown = true;
 		channels.updateOrdered();
 		systemMenuMusic.fadeOut();
 
@@ -23,20 +21,20 @@
 		}, 100);
 
 		setTimeout(() => {
-			showArrows = true;
+			selectedChannel._isFullyFocused = true;
 		}, 750);
 	}
 
 	function zoomOut() {
-		if (!render) return;
+		if (!selectedChannel._isBannerShown) return;
 		zoom = false;
-		showArrows = false;
+		selectedChannel._isFullyFocused = false;
 		SimpleSound.play(SOUNDS.CHANNEL.zoomOut);
 		systemMenuMusic.fadeIn(3);
 
 		setTimeout(() => {
-			render = false;
-		}, 750);
+			selectedChannel._isBannerShown = false;
+		}, 500);
 	}
 
 	const changeChannel = throttle((direction: 'left' | 'right') => {
@@ -50,14 +48,22 @@
 	});
 </script>
 
-{#if render}
-	<ScrollArrow position={'left'} show={showArrows} onclick={() => changeChannel('left')} />
-	<ScrollArrow position={'right'} show={showArrows} onclick={() => changeChannel('right')} />
+{#if selectedChannel._isBannerShown}
+	<ScrollArrow
+		position={'left'}
+		show={selectedChannel.fullyFocused}
+		onclick={() => changeChannel('left')}
+	/>
+	<ScrollArrow
+		position={'right'}
+		show={selectedChannel.fullyFocused}
+		onclick={() => changeChannel('right')}
+	/>
 	<div class="banner-wrapper" class:zoom>
 		<div
 			class="content"
 			style:transform-origin={selectedChannel.transformOrigin()}
-			class:interactable={showArrows}
+			class:interactable={selectedChannel.fullyFocused}
 		>
 			<div class="banner">
 				<div class="sandbox">
@@ -129,13 +135,13 @@
 			}
 
 			.options {
-				$gradient: radial-gradient(50vw, rgba(255, 255, 255, 0.5), transparent);
+				$gradient: radial-gradient(40vw at 50% -75%, rgba(255, 255, 255, 1), transparent);
 				position: relative;
 				display: flex;
 				justify-content: center;
-				gap: 5em;
-				padding: 2.4em;
-				padding-top: 1em;
+				gap: 3em;
+				padding: 2.5em;
+				padding-top: 0.75em;
 				background: $gradient, lines-repeating-gradient(#cecec4, #e4e4e1);
 
 				&::before {
