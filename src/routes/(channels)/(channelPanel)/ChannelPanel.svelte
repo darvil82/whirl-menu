@@ -76,7 +76,7 @@
 		{#if !selectedChannel.fullyFocused}
 			<div class="channels-wrapper">
 				{#each new Array(MAX_PAGES) as _, page}
-					<ChannelGrid {page} hide={getHideGridValue(page)}></ChannelGrid>
+					<ChannelGrid {page} {scrolling} hide={getHideGridValue(page)} />
 				{/each}
 			</div>
 		{/if}

@@ -40,6 +40,10 @@ button {
 	src: url('$lib/assets/fonts/segment-clock.ttf');
 }
 
+img {
+	display: block;
+}
+
 .bubble {
 	position: absolute;
 	top: calc(100% + 0.4rem);

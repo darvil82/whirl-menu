@@ -16,11 +16,13 @@
 	let {
 		channel,
 		bubblePosition,
-		position
+		position,
+		scrolling
 	}: {
 		channel?: RuntimeChannel;
 		bubblePosition: AnchorPosition;
 		position: [number, number];
+		scrolling: boolean;
 	} = $props();
 
 	let moving = $state(false);
@@ -86,7 +88,7 @@
 
 	function getChannelThumbnailData(): ChannelThumbnailData {
 		return {
-			optimized: selectedChannel.bannerShown
+			optimized: selectedChannel.bannerShown || scrolling
 		};
 	}
 

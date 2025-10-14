@@ -1,12 +1,17 @@
 <script lang="typescript">
+	import wiiLogo from '$lib/assets/images/Wii.svg';
 	import type { ChannelThumbnailData } from '$lib/channels/channels';
 
 	const props: ChannelThumbnailData = $props();
 </script>
 
 <div class="default" class:optimize={props.optimized}>
-	Wii
 	<div class="scrolling-effect" style:--start-offset={Math.random() * 60}></div>
+	{#if props.optimized}
+		<div class="logo-text">Wii</div>
+	{:else}
+		<img class="logo" src={wiiLogo} alt="" />
+	{/if}
 </div>
 
 <style lang="scss">
@@ -20,11 +25,7 @@
 		isolation: isolate;
 		display: grid;
 		place-items: center;
-		font-size: 5vh;
-		font-weight: bold;
-		color: rgba(0, 0, 0, 0.04);
 		background: linear-gradient(to top, $bg-2, $bg-1 20%, $bg-1 90%, $highlight);
-		// background: $bg-1;
 
 		&::before {
 			content: '';
@@ -53,7 +54,7 @@
 			mask-size: 200% 200%;
 			mask-mode: luminance;
 			background: rgba(44, 44, 44, 0.4);
-			animation: move 0.75s steps(3) infinite;
+			animation: move 0.85s steps(3) infinite;
 
 			@keyframes move {
 				0% {
@@ -113,5 +114,19 @@
 				animation-play-state: paused;
 			}
 		}
+	}
+
+	.logo {
+		width: 9vh;
+		opacity: 0.15;
+	}
+
+	.logo-text {
+		font-size: 5vh;
+		font-weight: bold;
+		color: black;
+		z-index: 1;
+		opacity: 0.035;
+		scale: 1.3 1;
 	}
 </style>

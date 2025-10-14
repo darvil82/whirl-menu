@@ -9,10 +9,12 @@
 
 	const {
 		page,
-		hide
+		hide,
+		...extraOptions
 	}: {
 		page: number;
 		hide?: 'all' | 'left' | 'right';
+		scrolling: boolean;
 	} = $props();
 
 	function getChannelPosition(i: number): 'left' | 'right' | 'center' {
@@ -36,7 +38,8 @@
 				position={RuntimeChannel.getPosAbs(i, page)}
 				channel={channels.getAtAbs(i, page)}
 				bubblePosition={getChannelPosition(i)}
-			></Channel>
+				{...extraOptions}
+			/>
 		{:else}
 			<div></div>
 		{/if}
