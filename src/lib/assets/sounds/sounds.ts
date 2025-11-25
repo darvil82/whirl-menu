@@ -64,88 +64,90 @@ export class SimpleSound {
 	}
 }
 
-class AdvancedSound {
-	private ctx: AudioContext;
+export class AdvancedSound {
+	private ctx = new AudioContext();
 	private sound: Sound;
-	private gainNode: GainNode;
-	private source: AudioBufferSourceNode | undefined;
+	private gainNode = this.ctx.createGain();
+	private buffer?: AudioBuffer;
+	private source?: AudioBufferSourceNode;
 	private volume: number;
+	private startTime = 0; // when playback started
+	private pauseTime = 0; // where it was paused (in seconds)
+	private loop?: { start: number; end: number };
 
-	private ns = makeNamespace('advanced_sound', () => this.sound.fileName);
-
-	public constructor(options: {
-		sound: Sound;
-		volume?: number;
-		loop?: { start: number; end: number };
-	}) {
-		this.ctx = new AudioContext();
-		this.gainNode = this.ctx.createGain();
+	constructor(options: { sound: Sound; volume?: number; loop?: { start: number; end: number } }) {
+		this.sound = options.sound;
 		this.volume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
 		this.gainNode.gain.value = this.volume;
-		this.sound = options.sound;
+		this.gainNode.connect(this.ctx.destination);
+		this.loop = options.loop;
 
+		// load and decode the sound
 		fetch(this.sound.fileName)
-			.then((response) => response.arrayBuffer())
+			.then((res) => res.arrayBuffer())
 			.then((data) => this.ctx.decodeAudioData(data))
-			.then((buffer) => {
-				this.source = this.ctx.createBufferSource();
-				this.source.buffer = buffer;
-
-				if (options.loop) {
-					this.source.loop = true;
-					this.source.loopStart = options.loop.start;
-					this.source.loopEnd = options.loop.end;
-				}
-
-				this.source.connect(this.gainNode).connect(this.ctx.destination);
-			})
-			.catch((e) => {
-				throw this.ns.throwable(`Failed to load sound: ${options.sound.fileName}, Error: ${e}`);
-			});
+			.then((buffer) => (this.buffer = buffer));
 	}
 
-	start() {
-		this.source?.start();
-		this.ns.log('Started playing');
+	private createSource(startOffset: number = 0) {
+		if (!this.buffer) return;
+		const src = this.ctx.createBufferSource();
+		src.buffer = this.buffer;
+		if (this.loop) {
+			src.loop = true;
+			src.loopStart = this.loop.start;
+			src.loopEnd = this.loop.end;
+		}
+		src.connect(this.gainNode);
+		src.start(0, startOffset);
+		this.startTime = this.ctx.currentTime - startOffset;
+		this.source = src;
 	}
 
-	stop() {
-		this.source?.stop();
-		this.ns.log('Stopped playing');
-	}
-
-	fadeOut(duration: number = 0.25) {
-		if (!this.source) return;
-		this.ns.log('Fading out');
-		const currentTime = this.ctx.currentTime;
-		this.gainNode.gain.cancelScheduledValues(currentTime);
-
-		this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, currentTime);
-		this.gainNode.gain.linearRampToValueAtTime(0, currentTime + duration);
-	}
-
-	fadeIn(duration: number = 0.25) {
-		if (!this.source) return;
-		this.ns.log('Fading in');
-		const currentTime = this.ctx.currentTime;
-		this.gainNode.gain.cancelScheduledValues(currentTime);
-
-		this.gainNode.gain.setValueAtTime(0, currentTime);
-		this.gainNode.gain.linearRampToValueAtTime(this.volume, currentTime + duration);
+	play() {
+		if (!this.buffer) return;
+		if (this.source) this.stop(); // just in case
+		this.createSource(this.pauseTime);
 	}
 
 	pause() {
-		this.ctx.suspend();
+		if (!this.source) return;
+		this.pauseTime = this.ctx.currentTime - this.startTime;
+		this.source.stop();
+		this.source = undefined;
 	}
 
-	resume() {
-		this.ctx.resume();
+	stop() {
+		if (this.source) {
+			this.source.stop();
+			this.source = undefined;
+		}
+		this.pauseTime = 0;
+	}
+
+	fadeOut(duration = 0.25) {
+		const now = this.ctx.currentTime;
+		this.gainNode.gain.cancelScheduledValues(now);
+		this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now);
+		this.gainNode.gain.linearRampToValueAtTime(0, now + duration);
+	}
+
+	fadeIn(duration = 0.25) {
+		const now = this.ctx.currentTime;
+		this.gainNode.gain.cancelScheduledValues(now);
+		this.gainNode.gain.setValueAtTime(0, now);
+		this.gainNode.gain.linearRampToValueAtTime(this.volume, now + duration);
+	}
+
+	setVolume(volume: number) {
+		this.volume = volume * VOLUME_MULTIPLIER;
+		this.gainNode.gain.value = this.volume;
 	}
 }
 
 export const systemMenuMusic = new AdvancedSound({
 	sound: SOUNDS.MUSIC.main,
-	volume: 0,
+	volume: 1,
 	loop: { start: 27.716, end: 34.968 + 1 * 60 }
 });
 

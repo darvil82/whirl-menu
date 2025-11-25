@@ -1,3 +1,4 @@
+import SOUNDS, { AdvancedSound } from '$lib/assets/sounds/sounds';
 import { debounce, getRandomId, makeNamespace, mouse } from './utils.svelte';
 
 export class DragContext<T> {
@@ -53,13 +54,18 @@ interface Droppable<T> {
 	onDrop: (ctx: DragContext<T>) => void;
 }
 
+export const draggingSound = new AdvancedSound({
+	sound: SOUNDS.CHANNEL.drag,
+	loop: { start: 0, end: 1 },
+	volume: 0
+});
+
 export class DraggableEnvironment<T> {
 	private onMouseDownDebounced = debounce((e: MouseEvent) => this.onMouseDown(e), 50);
 	private draggers: WithId<Dragger<T>>[] = [];
 	private droppables: WithId<Droppable<T>>[] = [];
 	private dragging: DragContext<T> | undefined = $state();
 	private defaultOnDropOutside: ((ctx: DragContext<T>) => void) | undefined;
-
 	private ns = makeNamespace('draggable_environment', () => this.name);
 
 	public constructor(private name: string) {
@@ -168,8 +174,18 @@ export class DraggableEnvironment<T> {
 		return this.droppables.find((d) => d.element === element);
 	}
 
+	private static onStartDrag() {
+		draggingSound.play();
+	}
+
+	private static onStopDrag() {
+		draggingSound.pause();
+	}
+
 	private setDraggingState(ctx: DragContext<T> | undefined) {
 		this.dragging = ctx;
 		mouse._isDragging = ctx !== undefined;
+
+		(this.dragging ? DraggableEnvironment.onStartDrag : DraggableEnvironment.onStopDrag)();
 	}
 }

@@ -9,6 +9,9 @@ export function ellipsize(str: string, maxSize: number): string {
 
 class Mouse {
 	private pos: [number, number] | undefined = $state();
+	private vel: [number, number] | undefined = $state();
+	private stopMovingTimeout: number = -1;
+	private lastPosCheck: number | undefined;
 	private inView = $state(true);
 	_isDragging = $state(false);
 
@@ -33,11 +36,35 @@ class Mouse {
 	};
 
 	private onMove = (e: MouseEvent) => {
-		this.pos = [e.x, e.y];
+		const newPos: typeof this.pos = [e.x, e.y];
+		clearTimeout(this.stopMovingTimeout);
+
+		if (this.pos) {
+			const distance = [this.pos[0] - newPos[0], this.pos[1] - newPos[1]];
+			const now = Date.now();
+
+			if (this.lastPosCheck) {
+				const diff = Math.max(1, now - this.lastPosCheck);
+				this.vel = [distance[0] / diff, distance[1] / diff];
+			}
+
+			this.lastPosCheck = now;
+		}
+
+		this.pos = newPos;
+
+		// rectify it to 0 if no events are fired
+		this.stopMovingTimeout = setTimeout(() => {
+			this.vel = [0, 0];
+		}, 150);
 	};
 
 	get position() {
 		return this.pos ?? [0, 0];
+	}
+
+	get velocity() {
+		return this.vel ?? [0, 0];
 	}
 
 	get isVisible() {

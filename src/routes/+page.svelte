@@ -28,7 +28,7 @@
 		document.oncontextmenu = () => false;
 
 		setTimeout(() => {
-			systemMenuMusic.start();
+			systemMenuMusic.play();
 		}, 500);
 
 		return () => {
