@@ -21,7 +21,7 @@
 
 		setTimeout(() => {
 			showArrows = true;
-		}, 750);
+		}, 500);
 	});
 
 	onMount(() => {

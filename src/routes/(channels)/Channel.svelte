@@ -62,7 +62,7 @@
 	}
 
 	function onDrop(ctx: DragContext<RuntimeChannel>) {
-		if (channel) {
+		if (channel || crtAnimation) {
 			ctx.deny();
 			return;
 		}
