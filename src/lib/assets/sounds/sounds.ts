@@ -147,7 +147,7 @@ export class AdvancedSound {
 
 export const systemMenuMusic = new AdvancedSound({
 	sound: SOUNDS.MUSIC.main,
-	volume: 1,
+	volume: 0,
 	loop: { start: 27.716, end: 34.968 + 1 * 60 }
 });
 

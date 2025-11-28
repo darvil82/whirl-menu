@@ -9,7 +9,7 @@ export function ellipsize(str: string, maxSize: number): string {
 
 class Mouse {
 	private pos: [number, number] | undefined = $state();
-	private vel: [number, number] | undefined = $state();
+	private vel: [number, number] = $state([0, 0]);
 	private stopMovingTimeout: number = -1;
 	private lastPosCheck: number | undefined;
 	private inView = $state(true);
