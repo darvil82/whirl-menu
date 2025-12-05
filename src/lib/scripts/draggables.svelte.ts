@@ -57,7 +57,7 @@ interface Droppable<T> {
 export const draggingSound = new AdvancedSound({
 	sound: SOUNDS.CHANNEL.drag,
 	loop: { start: 0, end: 1 },
-	volume: 1
+	volume: 0
 });
 
 let draggingSoundVolInterval: number;
@@ -179,10 +179,12 @@ export class DraggableEnvironment<T> {
 	private static onStartDrag() {
 		draggingSound.play();
 		draggingSoundVolInterval = setInterval(() => {
-			const velScalar = Math.abs(mouse.velocity[0] + mouse.velocity[1]);
-			draggingSound.setVolume(Math.min(velScalar, 1));
-			console.log(velScalar);
-		}, 5);
+			const velScalar = Math.hypot(mouse.velocity[0], mouse.velocity[1]) / 2;
+			draggingSound.setMasterVolume(Math.min(velScalar, 1));
+
+			const rightProximity = mouse.position[0] / window.innerWidth;
+			draggingSound.setStereoVolume(1 - rightProximity, rightProximity);
+		}, 25);
 	}
 
 	private static onStopDrag() {

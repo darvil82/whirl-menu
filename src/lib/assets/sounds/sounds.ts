@@ -39,7 +39,7 @@ export const SOUNDS = {
 		main: { fileName: music }
 	},
 	MISC: {
-		error: { fileName: error, volume: 0.5 },
+		error: { fileName: error, volume: 0.25 },
 		balloon: { fileName: balloon }
 	}
 } satisfies { [category: string]: { [soundName: string]: Sound } };
@@ -67,46 +67,75 @@ export class SimpleSound {
 export class AdvancedSound {
 	private ctx = new AudioContext();
 	private sound: Sound;
-	private gainNode = this.ctx.createGain();
+
 	private buffer?: AudioBuffer;
 	private source?: AudioBufferSourceNode;
-	private volume: number;
-	private startTime = 0; // when playback started
-	private pauseTime = 0; // where it was paused (in seconds)
+
+	private splitter = this.ctx.createChannelSplitter(2);
+	private merger = this.ctx.createChannelMerger(2);
+
+	private gainL = this.ctx.createGain();
+	private gainR = this.ctx.createGain();
+
+	private masterGain = this.ctx.createGain();
+
+	private startTime = 0;
+	private pauseTime = 0;
 	private loop?: { start: number; end: number };
 
 	constructor(options: { sound: Sound; volume?: number; loop?: { start: number; end: number } }) {
+		const baseVolume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
 		this.sound = options.sound;
-		this.volume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
-		this.gainNode.gain.value = this.volume;
-		this.gainNode.connect(this.ctx.destination);
 		this.loop = options.loop;
 
-		// load and decode the sound
+		// initialize per-channel values
+		this.gainL.gain.value = 1;
+		this.gainR.gain.value = 1;
+
+		// master gain defaults to 1 (you can treat this as a multiplier)
+		this.masterGain.gain.value = baseVolume;
+
+		// Connections:
+		// splitter → gains → merger → master → output
+		this.splitter.connect(this.gainL, 0);
+		this.splitter.connect(this.gainR, 1);
+
+		this.gainL.connect(this.merger, 0, 0);
+		this.gainR.connect(this.merger, 0, 1);
+
+		this.merger.connect(this.masterGain);
+		this.masterGain.connect(this.ctx.destination);
+
+		// load audio buffer asynchronously
 		fetch(this.sound.fileName)
 			.then((res) => res.arrayBuffer())
 			.then((data) => this.ctx.decodeAudioData(data))
 			.then((buffer) => (this.buffer = buffer));
 	}
 
-	private createSource(startOffset: number = 0) {
+	private createSource(offset: number = 0) {
 		if (!this.buffer) return;
+
 		const src = this.ctx.createBufferSource();
 		src.buffer = this.buffer;
+
 		if (this.loop) {
 			src.loop = true;
 			src.loopStart = this.loop.start;
 			src.loopEnd = this.loop.end;
 		}
-		src.connect(this.gainNode);
-		src.start(0, startOffset);
-		this.startTime = this.ctx.currentTime - startOffset;
+
+		// connect fresh source to splitter
+		src.connect(this.splitter);
+
+		src.start(0, offset);
+		this.startTime = this.ctx.currentTime - offset;
 		this.source = src;
 	}
 
 	play() {
 		if (!this.buffer) return;
-		if (this.source) this.stop(); // just in case
+		if (this.source) this.stop();
 		this.createSource(this.pauseTime);
 	}
 
@@ -125,23 +154,28 @@ export class AdvancedSound {
 		this.pauseTime = 0;
 	}
 
+	setMasterVolume(vol: number) {
+		this.masterGain.gain.setValueAtTime(vol * VOLUME_MULTIPLIER, this.ctx.currentTime);
+	}
+
 	fadeOut(duration = 0.25) {
 		const now = this.ctx.currentTime;
-		this.gainNode.gain.cancelScheduledValues(now);
-		this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now);
-		this.gainNode.gain.linearRampToValueAtTime(0, now + duration);
+		this.masterGain.gain.cancelScheduledValues(now);
+		this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
+		this.masterGain.gain.linearRampToValueAtTime(0, now + duration);
 	}
 
 	fadeIn(duration = 0.25) {
 		const now = this.ctx.currentTime;
-		this.gainNode.gain.cancelScheduledValues(now);
-		this.gainNode.gain.setValueAtTime(0, now);
-		this.gainNode.gain.linearRampToValueAtTime(this.volume, now + duration);
+		this.masterGain.gain.cancelScheduledValues(now);
+		this.masterGain.gain.setValueAtTime(0, now);
+		this.masterGain.gain.linearRampToValueAtTime(1, now + duration);
 	}
 
-	setVolume(volume: number) {
-		this.volume = volume * VOLUME_MULTIPLIER;
-		this.gainNode.gain.value = this.volume;
+	setStereoVolume(left: number, right: number) {
+		const now = this.ctx.currentTime;
+		this.gainL.gain.setValueAtTime(left, now);
+		this.gainR.gain.setValueAtTime(right, now);
 	}
 }
 
