@@ -64,6 +64,29 @@ export class SimpleSound {
 	}
 }
 
+/*
+Uses the web audio api to create a playing sound instance that can be controlled much more tightly.
+Constructs the next nodes in the order specified:
+
+	  Sound Buffer
+		   |
+		   |
+	    Splitter
+		 /     \
+	    /	    \
+	Gain (L)  Gain (R)
+		\		/
+		 \	   /
+		  Merger
+		    |
+			|
+	   Gain (Master)
+			|
+			|
+		   Out
+
+The usage of the l and r gain nodes is completely optional
+*/
 export class AdvancedSound {
 	private ctx = new AudioContext();
 	private sound: Sound;
@@ -76,7 +99,6 @@ export class AdvancedSound {
 
 	private gainL = this.ctx.createGain();
 	private gainR = this.ctx.createGain();
-
 	private masterGain = this.ctx.createGain();
 
 	private startTime = 0;
@@ -95,8 +117,7 @@ export class AdvancedSound {
 		// master gain defaults to 1 (you can treat this as a multiplier)
 		this.masterGain.gain.value = baseVolume;
 
-		// Connections:
-		// splitter → gains → merger → master → output
+		// splitter -> gains -> merger -> master -> output
 		this.splitter.connect(this.gainL, 0);
 		this.splitter.connect(this.gainR, 1);
 
