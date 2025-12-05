@@ -83,12 +83,12 @@ export class DraggableEnvironment<T> {
 	private registerThing<T>(to: WithId<T>[], thing: T, kind: string): () => void {
 		const thisId = getRandomId();
 		to.push({ id: thisId, ...thing });
-		this.ns.log(`registered ${kind}`, thing);
+		this.ns.log(`registered ${kind}`, thisId);
 
 		return () => {
 			const index = to.findIndex((a) => thisId === a.id);
 			to.splice(index, 1);
-			this.ns.log(`unregistered ${kind}`, thing);
+			this.ns.log(`unregistered ${kind}`, thisId);
 		};
 	}
 
