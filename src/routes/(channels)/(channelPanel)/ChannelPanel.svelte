@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
-	import { mouse } from '$lib/scripts/utils.svelte';
+	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { untrack } from 'svelte';
 	import { movingChannels, selectedChannel } from '../../../lib/channels/channels_status.svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
@@ -173,10 +173,10 @@
 			content: '';
 			background: linear-gradient(
 				to bottom,
-				white -30%,
+				white -20%,
 				$color-highlight-blue 40%,
 				$color-highlight-blue 60%,
-				white 130%
+				white 120%
 			);
 			position: absolute;
 			inset: 0;

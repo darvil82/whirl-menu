@@ -1,5 +1,6 @@
 import SOUNDS, { AdvancedSound } from '$lib/assets/sounds/sounds';
-import { debounce, getRandomId, makeNamespace, mouse } from './utils.svelte';
+import { mouse } from './mouse.svelte';
+import { debounce, getRandomId, makeNamespace } from './utils.svelte';
 
 export class DragContext<T> {
 	private _isAccepted: boolean = false;
