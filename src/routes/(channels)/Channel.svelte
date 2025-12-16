@@ -35,7 +35,7 @@
 	}
 
 	function onClick(e: MouseEvent) {
-		if (moving || !channel || crtAnimation) return;
+		if (moving || !channel || crtAnimation || scrolling) return;
 
 		SimpleSound.play(SOUNDS.BUTTON.click2);
 		Channels.refreshDOMRects();
