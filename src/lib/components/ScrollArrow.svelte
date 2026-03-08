@@ -2,6 +2,7 @@
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import { onMount } from 'svelte';
 	import { movingChannels } from '../channels/channels_status.svelte';
+	import CircleButton from './CircleButton.svelte';
 
 	const {
 		show = true,
@@ -78,7 +79,9 @@
 >
 	<div class="arrow"></div>
 	<div class="move-indicator">
-		<span>{label}</span>
+		<CircleButton>
+			<span>{label}</span>
+		</CircleButton>
 	</div>
 </button>
 
@@ -108,27 +111,18 @@
 
 		.move-indicator {
 			position: absolute;
-			color: #777;
-			font-weight: bold;
 			right: 3vh;
 			top: -3vh;
-			width: 17vh;
-			height: 17vh;
-			background:
-				radial-gradient(at var(--highlight-pos, 25%) 25%, white 20%, transparent 45%),
-				radial-gradient(at 50% 50%, $color-light 40%, $color-gray);
-			border-radius: 50%;
-			border: highlight-border(0.4rem);
+			scale: 0.7;
 			visibility: hidden;
-			transform-origin: right center;
-			scale: 0.4;
+			transform-origin: 100%;
 			transition:
 				scale 0.05s linear,
 				visibility 0.05s linear;
 
 			span {
-				font-size: 17vh;
-				line-height: 0.7;
+				font-size: 15vh;
+				translate: 0 -1.5vh;
 			}
 		}
 

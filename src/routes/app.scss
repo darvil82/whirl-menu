@@ -1,5 +1,11 @@
 @use '$lib/utils.scss' as *;
 
+button {
+	all: unset;
+	display: block;
+	box-sizing: border-box;
+}
+
 *,
 ::after,
 ::before {
@@ -21,13 +27,6 @@ body {
 	user-select: none;
 	font-size: min(2rem, 1.4vw);
 	overflow: hidden;
-}
-
-button {
-	background: none;
-	border: none;
-	font-family: inherit;
-	line-height: inherit;
 }
 
 @font-face {
