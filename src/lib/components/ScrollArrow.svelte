@@ -131,6 +131,19 @@
 				font-size: 15vh;
 				translate: 0 -1.5vh;
 			}
+
+			.wrapper {
+				position: relative;
+
+				&::after {
+					content: '';
+					position: absolute;
+					inset: 0;
+					background-color: white;
+					opacity: 0;
+					border-radius: 50%;
+				}
+			}
 		}
 
 		.arrow {
@@ -243,18 +256,18 @@
 			}
 		}
 
-		&.clicked .move-indicator .wrapper {
+		&.clicked .move-indicator .wrapper::after {
 			animation: clicked 0.5s forwards;
 
 			@keyframes clicked {
 				20% {
-					filter: brightness(2.1);
+					opacity: 0.9;
 				}
-				30% {
-					filter: brightness(1.85);
+				40% {
+					opacity: 1;
 				}
 				100% {
-					filter: brightness(1);
+					opacity: 0;
 				}
 			}
 		}
