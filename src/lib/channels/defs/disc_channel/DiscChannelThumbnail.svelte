@@ -20,8 +20,8 @@
 	.disc {
 		position: relative;
 		height: 14.5vh;
+		aspect-ratio: 1;
 		translate: 0 -0.4vh;
-		width: 14.5vh;
 		$base: rgb(190, 190, 190);
 		$shine: rgb(230, 230, 230);
 		animation: disc-rotate 7s linear infinite;
@@ -87,7 +87,7 @@
 			content: '';
 			height: inherit;
 			background: $shine;
-			border: 0.25em solid $base;
+			border: 0.3vh solid $base;
 			border-radius: 50%;
 			opacity: 0.25;
 		}

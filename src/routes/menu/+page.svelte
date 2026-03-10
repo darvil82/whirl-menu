@@ -1,12 +1,13 @@
 <script lang="typescript">
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES } from '$lib/channels/channels';
+	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
+	import Cursor from '$lib/components/Cursor.svelte';
+	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { onMount } from 'svelte';
-	import { movingChannels, selectedChannel } from '../lib/channels/channels_status.svelte';
-	import Cursor from '../lib/components/Cursor.svelte';
-	import ScrollArrow from '../lib/components/ScrollArrow.svelte';
 	import Banner from './(banner)/Banner.svelte';
+	import Date from './(bottom)/Date.svelte';
 	import ChannelPanel from './(channels)/(channelPanel)/ChannelPanel.svelte';
 
 	let currentPage: number = $state(0);
@@ -45,6 +46,11 @@
 	class:zoom={selectedChannel.isSelected}
 >
 	<ChannelPanel bind:this={channelPanel} bind:currentPage></ChannelPanel>
+	<div class="bottom-menu">
+		<div class="left-buttons">test</div>
+		<Date></Date>
+		<div class="right-buttons">test</div>
+	</div>
 </div>
 <Banner></Banner>
 <ScrollArrow
@@ -62,9 +68,12 @@
 
 <style lang="scss">
 	.menu {
+		display: flex;
+		flex-direction: column;
 		$duration-in: 0.4s;
 		$duration-out: 0.6s;
 		will-change: contents;
+		height: 100%;
 
 		scale: 1;
 		transition:
@@ -78,5 +87,12 @@
 				all #{$duration-in + 0.07s} cubic-bezier(0.55, 0.055, 0.865, 0.115),
 				transform-origin 0s;
 		}
+	}
+
+	.bottom-menu {
+		display: flex;
+		margin-top: auto;
+		justify-content: space-between;
+		height: 15vh;
 	}
 </style>

@@ -1,11 +1,11 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
+	import { selectedChannel } from '$lib/channels/channels_status.svelte';
 	import MenuButton from '$lib/components/MenuButton.svelte';
+	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { throttle } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';
-	import { selectedChannel } from '../../lib/channels/channels_status.svelte';
-	import ScrollArrow from '../../lib/components/ScrollArrow.svelte';
 
 	let zoom = $state(false);
 
@@ -92,7 +92,7 @@
 		height: 100vh;
 
 		$duration-in: 0.4s;
-		$duration-out: 0.6s;
+		$duration-out: 0.5s;
 		$tfunction-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		$tfunction-out: cubic-bezier(0.215, 0.61, 0.355, 1);
 

@@ -79,9 +79,12 @@
 >
 	<div class="arrow"></div>
 	<div class="move-indicator">
-		<CircleButton>
-			<span>{label}</span>
-		</CircleButton>
+		<!-- this is a hacky way of being able to easily apply two animations to the same thing -->
+		<div class="wrapper">
+			<CircleButton>
+				<span>{label}</span>
+			</CircleButton>
+		</div>
 	</div>
 </button>
 
@@ -113,12 +116,16 @@
 			position: absolute;
 			right: 3vh;
 			top: -3vh;
-			scale: 0.7;
 			visibility: hidden;
 			transform-origin: 100%;
-			transition:
-				scale 0.05s linear,
-				visibility 0.05s linear;
+			transition: visibility 0.05s linear;
+			animation: hide-move-indicator 0.1s forwards;
+
+			@keyframes hide-move-indicator {
+				to {
+					scale: 0.5;
+				}
+			}
 
 			span {
 				font-size: 15vh;
@@ -182,10 +189,11 @@
 
 		&.left {
 			left: var(--pos);
-			transform: scaleX(-1);
+			transform: scaleX(-1); // invert the whole thing
 
 			.move-indicator {
 				--highlight-pos: 75%;
+				transform: scaleX(-1) translateX(100%); // invert it again so it looks normal
 			}
 
 			&:not(.show) {
@@ -205,11 +213,25 @@
 		&.show:hover,
 		&.show.clicked {
 			.move-indicator {
-				scale: 1;
 				visibility: visible;
-				transition:
-					scale 0.05s 0.1s linear,
-					visibility 0.05s 0.1s linear;
+				transition: visibility 0.05s 0.1s linear;
+				animation: show-move-indicator 0.12s 0.1s forwards;
+
+				@keyframes show-move-indicator {
+					0% {
+						scale: 0.5;
+					}
+
+					60% {
+						scale: 1;
+					}
+					80% {
+						scale: 0.95;
+					}
+					100% {
+						scale: 1;
+					}
+				}
 			}
 
 			.arrow {
@@ -221,15 +243,15 @@
 			}
 		}
 
-		&.clicked .move-indicator {
+		&.clicked .move-indicator .wrapper {
 			animation: clicked 0.5s forwards;
 
 			@keyframes clicked {
 				20% {
-					filter: brightness(2.25);
+					filter: brightness(2.1);
 				}
 				30% {
-					filter: brightness(2.1);
+					filter: brightness(1.85);
 				}
 				100% {
 					filter: brightness(1);

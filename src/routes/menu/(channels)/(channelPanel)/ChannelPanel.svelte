@@ -1,9 +1,9 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
+	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { untrack } from 'svelte';
-	import { movingChannels, selectedChannel } from '../../../lib/channels/channels_status.svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
 	import Time from './Time.svelte';
 
@@ -96,6 +96,8 @@
 	$border-thickness: 0.3rem;
 
 	.channel-panel {
+		position: absolute;
+		inset-inline: 0;
 		display: flex;
 		flex-direction: column;
 		filter: drop-shadow(0px 0px 2.75rem rgba(0, 0, 0, 0.5));

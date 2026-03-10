@@ -1,32 +1,20 @@
 <script lang="typescript">
+	import { time } from '$lib/scripts/time.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	const switchDuration = 150;
 	let paddedTimeHack = $state(false); // pushes the time to the right to account for missing digit
-	let currentTime: string[] = $state(getTime());
 	let showWiiMenuText = $state(true);
 
-	function getTime(): string[] {
-		const date = new Date();
-
-		if (date.getHours() < 10) paddedTimeHack = true;
-
-		return [date.getHours().toString(), date.getMinutes().toString().padStart(2, '0')];
-	}
+	$effect(() => {
+		if (time.date.getHours() < 10) paddedTimeHack = true;
+	});
 
 	onMount(() => {
-		const timer = setInterval(() => {
-			currentTime = getTime();
-		}, 5000);
-
 		setTimeout(() => {
 			showWiiMenuText = false;
 		}, 3000);
-
-		return () => {
-			clearInterval(timer);
-		};
 	});
 </script>
 
@@ -39,8 +27,8 @@
 			class:padded={paddedTimeHack}
 			in:fade={{ duration: switchDuration, delay: switchDuration * 2 }}
 		>
-			{currentTime[0]} <span class="colon">:</span>
-			{currentTime[1]}
+			{time.timeFormatted[0]} <span class="colon">:</span>
+			{time.timeFormatted[1]}
 		</div>
 	{/if}
 </div>

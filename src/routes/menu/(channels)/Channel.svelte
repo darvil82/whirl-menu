@@ -1,17 +1,17 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { balloon } from '$lib/scripts/balloon';
-	import type { DragContext } from '$lib/scripts/draggables.svelte';
-	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
-	import { onMount } from 'svelte';
 	import {
 		channels,
 		Channels,
 		type ChannelThumbnailData,
 		type RuntimeChannel
-	} from '../../lib/channels/channels';
-	import { movingChannels, selectedChannel } from '../../lib/channels/channels_status.svelte';
-	import DefaultThumbnail from '../../lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
+	} from '$lib/channels/channels';
+	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
+	import DefaultThumbnail from '$lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
+	import { balloon } from '$lib/scripts/balloon';
+	import type { DragContext } from '$lib/scripts/draggables.svelte';
+	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
+	import { onMount } from 'svelte';
 
 	let {
 		channel,
