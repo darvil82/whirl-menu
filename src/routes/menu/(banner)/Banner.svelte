@@ -2,7 +2,7 @@
 	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import { selectedChannel } from '$lib/channels/channels_status.svelte';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$lib/components/button/Button.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { throttle } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';

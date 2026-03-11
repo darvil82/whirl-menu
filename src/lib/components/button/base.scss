@@ -1,0 +1,41 @@
+@property --button-effect-opacity {
+	syntax: '<number>';
+	inherits: true;
+	initial-value: 0;
+}
+
+@keyframes btn-clicked-animation {
+	5% {
+		transform: scale(1);
+	}
+	20% {
+		transform: scale(1.1);
+		--button-effect-opacity: 1;
+	}
+	30% {
+		transform: scale(1);
+		--button-effect-opacity: 1;
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+button {
+	transition: all 0.15s;
+	transform-origin: center;
+
+	&.disabled {
+		filter: grayscale(1) brightness(1.1) contrast(0.5);
+	}
+
+	&.clicked {
+		animation: btn-clicked-animation 1s forwards;
+	}
+
+	&:not(.disabled):not(.clicked) {
+		&:hover {
+			scale: 1.1;
+		}
+	}
+}

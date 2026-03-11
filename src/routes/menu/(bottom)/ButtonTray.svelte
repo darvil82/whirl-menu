@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CircleButton from '$lib/components/CircleButton.svelte';
+	import CircleButton from '$lib/components/button/CircleButton.svelte';
 
 	const props: { position: 'left' | 'right' } = $props();
 </script>

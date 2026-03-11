@@ -1,16 +1,23 @@
 <script lang="typescript">
-	import type { Snippet } from 'svelte';
+	import { ButtonBehavior, type ButtonProps } from './base.svelte';
 
-	const { children, onclick: _onclick }: { onclick?: (e: MouseEvent) => void; children: Snippet } =
-		$props();
+	const props: ButtonProps = $props();
+	const behavior = new ButtonBehavior(() => props);
 </script>
 
-<button class="circle-button">
-	{@render children()}
+<button
+	bind:this={behavior.element}
+	class:clicked={behavior.isClicked}
+	class:no-border={behavior.props.noBorder}
+	class:disabled={behavior.props.disabled}
+>
+	{@render behavior.props.children()}
 </button>
 
 <style lang="scss">
-	.circle-button {
+	@use './base.scss';
+
+	button {
 		position: relative;
 		display: grid;
 		place-items: center;
@@ -24,7 +31,6 @@
 			radial-gradient(at 50% 50%, $color-light-dark 45%, $color-gray 75%);
 		border-radius: 50%;
 		border: highlight-border(0.35rem);
-		transform-origin: right center;
 
 		&::after {
 			$side-offset: 1.25vh;
@@ -37,6 +43,15 @@
 			top: $side-offset;
 			left: $side-offset;
 			mask: radial-gradient(circle at 0 0, white 60%, transparent 60%);
+		}
+
+		&::before {
+			position: absolute;
+			content: '';
+			inset: 0;
+			background: white;
+			border-radius: inherit;
+			opacity: var(--button-effect-opacity);
 		}
 	}
 </style>
