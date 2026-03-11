@@ -156,9 +156,8 @@
 						100% -100%,
 						100% 52%,
 						0 52%
-					); // 53 seems to work fine at the edge of the bottom
+					); // 52 seems to work fine at the edge of the bottom
 					background: $gradient, #cecec4;
-					// background: black;
 					border-top-left-radius: 50%;
 					border-top-right-radius: 50%;
 					box-shadow: 0 -#{$border} 0 0 black;

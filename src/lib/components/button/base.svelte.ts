@@ -61,12 +61,12 @@ export class ButtonBehavior {
 	}
 
 	public detach = () => {
-		this._element?.removeEventListener('click', this.onclick);
+		this._element?.removeEventListener('mousedown', this.onclick);
 		this._element?.removeEventListener('mouseover', this.hover);
 	};
 
 	public attach = () => {
-		this._element?.addEventListener('click', this.onclick);
+		this._element?.addEventListener('mousedown', this.onclick);
 		this._element?.addEventListener('mouseover', this.hover);
 	};
 }

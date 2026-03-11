@@ -50,7 +50,7 @@
 	<div class="bottom-menu">
 		<ButtonTray position="left"></ButtonTray>
 		<Date></Date>
-		<div class="right-buttons">test</div>
+		<ButtonTray position="right"></ButtonTray>
 	</div>
 </div>
 <Banner></Banner>
