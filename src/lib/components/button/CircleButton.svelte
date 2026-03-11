@@ -23,7 +23,7 @@
 		place-items: center;
 		color: #777;
 		font-weight: bold;
-		width: 15vh;
+		height: 15vh;
 		aspect-ratio: 1;
 
 		background:

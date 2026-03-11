@@ -19,8 +19,9 @@
 	@use './base.scss';
 
 	button {
-		font-size: 1.6em;
-		padding: 0.7em 2.1em;
+		font-size: 5.5vh;
+		height: 15vh;
+		padding-inline: 10vh;
 		border-radius: 50em;
 		color: #464646;
 		background: #e3e8ef;

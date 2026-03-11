@@ -136,8 +136,8 @@
 			.options {
 				$gradient: radial-gradient(40vw at 50% -75%, rgba(255, 255, 255, 1), transparent);
 				position: relative;
-				display: flex;
-				justify-content: center;
+				display: grid;
+				grid-template-columns: 0.5fr 1fr 1fr 0.5fr;
 				gap: 3em;
 				padding: 2.5em;
 				padding-top: 0.75em;
@@ -162,6 +162,16 @@
 					border-top-left-radius: 50%;
 					border-top-right-radius: 50%;
 					box-shadow: 0 -#{$border} 0 0 black;
+				}
+
+				:global(button) {
+					&:first-of-type {
+						grid-column: 2;
+					}
+
+					&:last-of-type {
+						grid-column: 3;
+					}
 				}
 			}
 		}

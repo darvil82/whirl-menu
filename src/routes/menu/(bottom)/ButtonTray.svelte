@@ -11,6 +11,8 @@
 <style lang="scss">
 	.tray {
 		--translation: -4vw;
+		display: flex;
+		gap: 1rem;
 		padding: 1vh;
 		padding-left: 10vw;
 		border-top-right-radius: 10vh;

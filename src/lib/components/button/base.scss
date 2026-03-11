@@ -26,6 +26,8 @@
 button {
 	transition: scale 0.15s;
 	transform-origin: center;
+	text-align: center;
+	text-wrap: nowrap;
 
 	&:not(.no-border) {
 		border: utils.highlight-border();

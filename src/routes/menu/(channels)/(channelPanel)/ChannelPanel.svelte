@@ -101,6 +101,7 @@
 		display: flex;
 		flex-direction: column;
 		filter: drop-shadow(0px 0px 2.75rem rgba(0, 0, 0, 0.5));
+		pointer-events: none;
 
 		&.scrolling {
 			pointer-events: none;
@@ -113,6 +114,7 @@
 		align-self: stretch;
 		justify-content: start;
 		background: $background-repeating-gradient;
+		pointer-events: all;
 
 		outline: highlight-border($border-thickness);
 	}
