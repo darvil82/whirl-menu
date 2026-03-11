@@ -30,7 +30,6 @@
 			radial-gradient(at var(--highlight-pos, 25%) 25%, $color-light-dark 20%, transparent 45%),
 			radial-gradient(at 50% 50%, $color-light-dark 45%, $color-gray 75%);
 		border-radius: 50%;
-		border: highlight-border(0.35rem);
 
 		&::after {
 			$side-offset: 1.25vh;

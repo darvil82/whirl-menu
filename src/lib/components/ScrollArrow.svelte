@@ -2,7 +2,7 @@
 	import { PAGE_SCROLL_DELAY } from '$lib/channels/channels';
 	import { onMount } from 'svelte';
 	import { movingChannels } from '../channels/channels_status.svelte';
-	import CircleButton from './CircleButton.svelte';
+	import CircleButton from './button/CircleButton.svelte';
 
 	const {
 		show = true,

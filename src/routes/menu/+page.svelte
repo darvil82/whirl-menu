@@ -96,7 +96,7 @@
 		margin-top: auto;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 6vh;
+		margin-bottom: 5vh;
 		z-index: -1;
 	}
 </style>

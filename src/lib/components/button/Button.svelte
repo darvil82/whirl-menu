@@ -28,10 +28,6 @@
 		position: relative;
 		isolation: isolate;
 
-		&:not(.no-border) {
-			border: highlight-border();
-		}
-
 		&::before {
 			content: '';
 			position: absolute;

@@ -34,7 +34,7 @@
 </div>
 
 <style lang="scss">
-	$border-thickness: 0.3rem;
+	$border-thickness: 0.2rem;
 
 	.time {
 		flex-shrink: 0;
