@@ -90,7 +90,7 @@
 		height: 100vh;
 
 		$duration-in: 0.4s;
-		$duration-out: 0.5s;
+		$duration-out: 0.6s;
 		$tfunction-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
 		$tfunction-out: cubic-bezier(0.215, 0.61, 0.355, 1);
 

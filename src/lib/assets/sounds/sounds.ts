@@ -93,6 +93,7 @@ export class AdvancedSound {
 
 	private buffer?: AudioBuffer;
 	private source?: AudioBufferSourceNode;
+	private baseVolume: number = 0;
 
 	private splitter = this.ctx.createChannelSplitter(2);
 	private merger = this.ctx.createChannelMerger(2);
@@ -106,7 +107,7 @@ export class AdvancedSound {
 	private loop?: { start: number; end: number };
 
 	constructor(options: { sound: Sound; volume?: number; loop?: { start: number; end: number } }) {
-		const baseVolume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
+		this.baseVolume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
 		this.sound = options.sound;
 		this.loop = options.loop;
 
@@ -115,7 +116,7 @@ export class AdvancedSound {
 		this.gainR.gain.value = 1;
 
 		// master gain defaults to 1 (you can treat this as a multiplier)
-		this.masterGain.gain.value = baseVolume;
+		this.masterGain.gain.value = this.baseVolume;
 
 		// splitter -> gains -> merger -> master -> output
 		this.splitter.connect(this.gainL, 0);
@@ -190,7 +191,7 @@ export class AdvancedSound {
 		const now = this.ctx.currentTime;
 		this.masterGain.gain.cancelScheduledValues(now);
 		this.masterGain.gain.setValueAtTime(0, now);
-		this.masterGain.gain.linearRampToValueAtTime(1, now + duration);
+		this.masterGain.gain.linearRampToValueAtTime(this.baseVolume, now + duration);
 	}
 
 	setStereoVolume(left: number, right: number) {
