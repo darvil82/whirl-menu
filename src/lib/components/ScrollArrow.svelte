@@ -115,7 +115,8 @@
 		.move-indicator {
 			position: absolute;
 			right: 3vh;
-			top: -3vh;
+			top: -2vh;
+			transform: scale(1.15);
 			visibility: hidden;
 			transform-origin: 100%;
 			transition: visibility 0.05s linear;
@@ -128,7 +129,7 @@
 			}
 
 			span {
-				font-size: 15vh;
+				font-size: 14vh;
 				translate: 0 -1.5vh;
 			}
 
@@ -206,7 +207,7 @@
 
 			.move-indicator {
 				--highlight-pos: 75%;
-				transform: scaleX(-1) translateX(100%); // invert it again so it looks normal
+				transform: scale(-1.15, 1.15) translateX(100%); // invert it again so it looks normal
 			}
 
 			&:not(.show) {

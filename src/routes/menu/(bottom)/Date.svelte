@@ -6,6 +6,10 @@
 
 <style lang="scss">
 	.date {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		translate: -50% calc(-50% + 50%);
 		color: $color-dark;
 		font-size: 5vh;
 		font-weight: bold;

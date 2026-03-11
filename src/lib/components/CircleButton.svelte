@@ -1,11 +1,11 @@
 <script lang="typescript">
 	import type { Snippet } from 'svelte';
-	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	const { children, ...extra }: HTMLButtonAttributes & { children: Snippet } = $props();
+	const { children, onclick: _onclick }: { onclick?: (e: MouseEvent) => void; children: Snippet } =
+		$props();
 </script>
 
-<button class="circle-button" {...extra}>
+<button class="circle-button">
 	{@render children()}
 </button>
 
@@ -16,8 +16,8 @@
 		place-items: center;
 		color: #777;
 		font-weight: bold;
+		width: 15vh;
 		aspect-ratio: 1;
-		width: 17vh;
 
 		background:
 			radial-gradient(at var(--highlight-pos, 25%) 25%, $color-light-dark 20%, transparent 45%),
@@ -27,12 +27,12 @@
 		transform-origin: right center;
 
 		&::after {
-			$side-offset: 0.5em;
+			$side-offset: 1.25vh;
 			position: absolute;
 			content: '';
 			background: rgba(255, 255, 255, 0.4);
 			border-radius: 50%;
-			width: 4.5em;
+			width: 10.5vh;
 			aspect-ratio: 1;
 			top: $side-offset;
 			left: $side-offset;

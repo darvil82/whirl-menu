@@ -7,6 +7,7 @@
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { onMount } from 'svelte';
 	import Banner from './(banner)/Banner.svelte';
+	import ButtonTray from './(bottom)/ButtonTray.svelte';
 	import Date from './(bottom)/Date.svelte';
 	import ChannelPanel from './(channels)/(channelPanel)/ChannelPanel.svelte';
 
@@ -47,7 +48,7 @@
 >
 	<ChannelPanel bind:this={channelPanel} bind:currentPage></ChannelPanel>
 	<div class="bottom-menu">
-		<div class="left-buttons">test</div>
+		<ButtonTray position="left"></ButtonTray>
 		<Date></Date>
 		<div class="right-buttons">test</div>
 	</div>
@@ -90,9 +91,12 @@
 	}
 
 	.bottom-menu {
+		position: relative;
 		display: flex;
 		margin-top: auto;
 		justify-content: space-between;
-		height: 15vh;
+		align-items: center;
+		margin-bottom: 6vh;
+		z-index: -1;
 	}
 </style>
