@@ -2,10 +2,12 @@
 	import { menuTraysHandler } from './tray.svelte';
 
 	const props: { position: 'left' | 'right' } = $props();
+
+	let snippet = $derived(menuTraysHandler.getData(props.position)?.content);
 </script>
 
-<div class={`tray ${props.position}`}>
-	{@render menuTraysHandler.getData(props.position)?.content()}
+<div class={`tray ${props.position}`} class:hidden={snippet === undefined}>
+	{@render snippet?.()}
 </div>
 
 <style lang="scss">
@@ -21,6 +23,10 @@
 		filter: drop-shadow(0.5rem 0.5rem rgba(0, 0, 0, 0.24));
 		translate: var(--translation);
 		transform-origin: calc(var(--origin-offset) + var(--translation) / 2) center;
+
+		&.hidden {
+			visibility: hidden;
+		}
 
 		&.left {
 			justify-content: end;
