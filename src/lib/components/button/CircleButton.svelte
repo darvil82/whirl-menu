@@ -1,8 +1,11 @@
 <script lang="typescript">
+	import { onMount } from 'svelte';
 	import { ButtonBehavior, type ButtonProps } from './base.svelte';
 
 	const props: ButtonProps = $props();
 	const behavior = new ButtonBehavior(() => props);
+
+	onMount(() => behavior.detach);
 </script>
 
 <button

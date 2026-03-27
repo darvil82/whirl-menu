@@ -1,11 +1,11 @@
 <script lang="ts">
-	import CircleButton from '$lib/components/button/CircleButton.svelte';
+	import { menuTraysHandler } from './tray.svelte';
 
 	const props: { position: 'left' | 'right' } = $props();
 </script>
 
 <div class={`tray ${props.position}`}>
-	<CircleButton>?</CircleButton>
+	{@render menuTraysHandler.getData(props.position)?.content()}
 </div>
 
 <style lang="scss">

@@ -5,9 +5,7 @@ class Time {
 	private updateInterval: number = -1;
 
 	constructor() {
-		this.updateInterval = setInterval(() => {
-			this.update();
-		}, 5000);
+		this.updateInterval = setInterval(this.update, 5000);
 	}
 
 	private update = () => {

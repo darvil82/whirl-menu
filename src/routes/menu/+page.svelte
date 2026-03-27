@@ -2,6 +2,8 @@
 	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES } from '$lib/channels/channels';
 	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
+	import Button from '$lib/components/button/Button.svelte';
+	import CircleButton from '$lib/components/button/CircleButton.svelte';
 	import Cursor from '$lib/components/Cursor.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { mouse } from '$lib/scripts/mouse.svelte';
@@ -9,6 +11,7 @@
 	import Banner from './(banner)/Banner.svelte';
 	import ButtonTray from './(bottom)/ButtonTray.svelte';
 	import Date from './(bottom)/Date.svelte';
+	import { menuTraysHandler } from './(bottom)/tray.svelte';
 	import ChannelPanel from './(channels)/(channelPanel)/ChannelPanel.svelte';
 
 	let currentPage: number = $state(0);
@@ -26,8 +29,20 @@
 		}, 500);
 	});
 
+	function a() {
+		menuTraysHandler.setLeftData({ animation: 'rotate', content: b });
+		menuTraysHandler.setRightData({ animation: 'rotate', content: b });
+	}
+
+	function no() {
+		menuTraysHandler.setLeftData({ animation: 'rotate', content: test });
+		menuTraysHandler.setRightData({ animation: 'rotate', content: test });
+	}
+
 	onMount(() => {
 		document.oncontextmenu = () => false;
+		menuTraysHandler.setLeftData({ animation: 'rotate', content: test });
+		menuTraysHandler.setRightData({ animation: 'rotate', content: test });
 
 		setTimeout(() => {
 			systemMenuMusic.play();
@@ -38,6 +53,14 @@
 		};
 	});
 </script>
+
+{#snippet test()}
+	<CircleButton onclick={a}>?</CircleButton>
+{/snippet}
+
+{#snippet b()}
+	<Button onclick={no}>No</Button>
+{/snippet}
 
 <Cursor />
 
