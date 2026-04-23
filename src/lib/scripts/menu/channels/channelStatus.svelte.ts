@@ -1,4 +1,4 @@
-import { menu } from '../menu';
+import { Menu } from '$lib/scripts/menu/menu';
 import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './runtimeChannel';
 
 export class ZoomedChannel {
@@ -27,7 +27,8 @@ export class ZoomedChannel {
 
 	transformOrigin = (middleOffset: boolean = false): string | undefined => {
 		if (!this.channel) return undefined;
-		const { width: channelWidth, height: channelHeight } = menu.channels.storage.getChanneDOMRect();
+		const { width: channelWidth, height: channelHeight } =
+			Menu.instance().channels.storage.getChanneDOMRect();
 
 		if (!middleOffset) {
 			const [x, y] = this.channel.getCSSPos();

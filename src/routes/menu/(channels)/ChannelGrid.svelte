@@ -4,7 +4,7 @@
 		PAGE_NUM_COLUMNS,
 		RuntimeChannel
 	} from '$lib/scripts/menu/channels/runtimeChannel';
-	import { menu } from '$lib/scripts/menu/menu';
+	import { Menu } from '$lib/scripts/menu/menu';
 	import Channel from './Channel.svelte';
 
 	const {
@@ -36,7 +36,7 @@
 		{#if getChannelVisibility(i)}
 			<Channel
 				position={RuntimeChannel.getPosAbs(i, page)}
-				channel={menu.channels.storage.getAtAbs(i, page)}
+				channel={Menu.instance().channels.storage.getAtAbs(i, page)}
 				bubblePosition={getChannelPosition(i)}
 				{...extraOptions}
 			/>

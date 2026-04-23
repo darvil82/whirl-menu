@@ -80,7 +80,6 @@ export class ChannelStorage {
 
 		ChannelStorage.ns.log('Loading from storage...');
 		const parsedChannels = JSON.parse(storedChannels) as SimpleChannelDef[];
-		debugger;
 		return parsedChannels.map<RuntimeChannel>(
 			(c) =>
 				new RuntimeChannel({

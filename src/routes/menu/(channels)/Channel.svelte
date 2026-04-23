@@ -7,7 +7,7 @@
 		ChannelThumbnailData,
 		RuntimeChannel
 	} from '$lib/scripts/menu/channels/runtimeChannel';
-	import { menu } from '$lib/scripts/menu/menu';
+	import { Menu } from '$lib/scripts/menu/menu';
 	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 
@@ -28,7 +28,8 @@
 	let channelElement: HTMLButtonElement;
 
 	function hover() {
-		if ((channel !== undefined) != !menu.channels.draggableEnvironment.isDragging) return;
+		if ((channel !== undefined) != !Menu.instance().channels.draggableEnvironment.isDragging)
+			return;
 		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 
@@ -36,8 +37,8 @@
 		if (moving || !channel || crtAnimation || scrolling) return;
 
 		SimpleSound.play(SOUNDS.BUTTON.click2);
-		menu.channels.storage.refreshDOMRects();
-		menu.channels.zoomed.set(channel);
+		Menu.instance().channels.storage.refreshDOMRects();
+		Menu.instance().channels.zoomed.set(channel);
 	}
 
 	function onDrag(ctx: DragContext<RuntimeChannel>) {
@@ -78,7 +79,7 @@
 		}, 750);
 
 		moving = false;
-		menu.channels.storage.updateAndSave(newChannel, (c) => {
+		Menu.instance().channels.storage.updateAndSave(newChannel, (c) => {
 			c.position = position;
 		});
 		ctx.accept();
@@ -86,18 +87,18 @@
 
 	function getChannelThumbnailData(): ChannelThumbnailData {
 		return {
-			optimized: menu.channels.zoomed.bannerShown || scrolling
+			optimized: Menu.instance().channels.zoomed.bannerShown || scrolling
 		};
 	}
 
 	onMount(() => {
-		const unsubDragger = menu.channels.draggableEnvironment.registerDragger({
+		const unsubDragger = Menu.instance().channels.draggableEnvironment.registerDragger({
 			element: channelElement,
 			onClick,
 			onDrag,
 			onDropOutside
 		});
-		const unsubDropper = menu.channels.draggableEnvironment.registerDroppable({
+		const unsubDropper = Menu.instance().channels.draggableEnvironment.registerDroppable({
 			element: channelElement,
 			onDrop
 		});
@@ -114,14 +115,14 @@
 	bind:this={channelElement}
 	{@attach balloon(
 		channel?.name ?? '',
-		channel !== undefined && !menu.channels.draggableEnvironment.isDragging,
+		channel !== undefined && !Menu.instance().channels.draggableEnvironment.isDragging,
 		{
 			anchor: bubblePosition
 		}
 	)}
 	class="channel-wrapper"
-	class:active={(channel != undefined) != menu.channels.draggableEnvironment.isDragging}
-	class:other-moving={menu.channels.draggableEnvironment.isDragging && channel}
+	class:active={(channel != undefined) != Menu.instance().channels.draggableEnvironment.isDragging}
+	class:other-moving={Menu.instance().channels.draggableEnvironment.isDragging && channel}
 	onmouseover={hover}
 >
 	<div class="content" class:crt-animation={crtAnimation}>

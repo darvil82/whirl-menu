@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { menu } from '$lib/scripts/menu/menu';
+	import { Menu } from '$lib/scripts/menu/menu';
 	import type { TrayAnimation } from '$lib/scripts/menu/tray.svelte';
 	import type { Snippet } from 'svelte';
 
@@ -10,7 +10,7 @@
 		slide: ['slide-out', 'slide-in']
 	};
 
-	let data = $derived(menu.trays.getData(props.position));
+	let data = $derived(Menu.instance().trays.getData(props.position));
 	let element: HTMLDivElement = $state()!;
 	let snippet: Snippet | undefined = $state(undefined);
 	let animating = false;

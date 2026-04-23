@@ -1,5 +1,5 @@
+import { Menu } from '$lib/scripts/menu/menu';
 import { type Component } from 'svelte';
-import { menu } from '../menu';
 
 export const MAX_PAGES = 4;
 export const PAGE_SCROLL_DELAY = 500;
@@ -52,7 +52,8 @@ export class RuntimeChannel implements ChannelDef {
 	}
 
 	public getCSSPos(atCenter: boolean = false): [number, number] {
-		const { width: gridWidth, height: gridHeight } = menu.channels.storage.getGridDOMRect();
+		const { width: gridWidth, height: gridHeight } =
+			Menu.instance().channels.storage.getGridDOMRect();
 
 		const [x, y] = this.getPosLocalGrid();
 		const [incX, incY] = [gridWidth / PAGE_NUM_COLUMNS, gridHeight / PAGE_NUM_ROWS + 5];

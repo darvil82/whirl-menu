@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { menu } from '$lib/scripts/menu/menu';
+	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { untrack } from 'svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
@@ -60,12 +60,12 @@
 	}
 
 	$effect(() => {
-		if (menu.channels.zoomed.isSelected)
-			untrack(() => gotoPage(menu.channels.zoomed.channel!.getPage()));
+		if (Menu.instance().channels.zoomed.isSelected)
+			untrack(() => gotoPage(Menu.instance().channels.zoomed.channel!.getPage()));
 	});
 </script>
 
-{#if menu.channels.draggableEnvironment.isDragging}
+{#if Menu.instance().channels.draggableEnvironment.isDragging}
 	<div
 		class="moving-channel-indicator"
 		style:left={mouse.position[0] + 'px'}
@@ -74,7 +74,7 @@
 {/if}
 <div class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
 	<div class="channels">
-		{#if !menu.channels.zoomed.fullyFocused}
+		{#if !Menu.instance().channels.zoomed.fullyFocused}
 			<div class="channels-wrapper">
 				{#each new Array(MAX_PAGES) as _, page}
 					<ChannelGrid {page} {scrolling} hide={getHideGridValue(page)} />

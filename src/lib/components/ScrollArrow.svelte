@@ -1,6 +1,6 @@
 <script lang="typescript">
 	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { menu } from '$lib/scripts/menu/menu';
+	import { Menu } from '$lib/scripts/menu/menu';
 	import { onMount } from 'svelte';
 	import CircleButton from './button/CircleButton.svelte';
 
@@ -37,7 +37,7 @@
 	}
 
 	function hoverAutoClick(e: MouseEvent) {
-		if (isHovering && menu.channels.draggableEnvironment.isDragging) {
+		if (isHovering && Menu.instance().channels.draggableEnvironment.isDragging) {
 			onclick(e);
 		}
 	}

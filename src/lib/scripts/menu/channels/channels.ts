@@ -1,6 +1,6 @@
 import { DraggableEnvironment } from '$lib/scripts/draggables.svelte';
 import { ChannelStorage } from './channelManager';
-import { ZoomedChannel } from './channelStatus';
+import { ZoomedChannel } from './channelStatus.svelte';
 import type { RuntimeChannel } from './runtimeChannel';
 
 export class ChannelManager {

@@ -2,7 +2,7 @@ import SOUNDS, { AdvancedSound } from '$lib/assets/sounds/sounds';
 import { ChannelManager } from './channels/channels';
 import { MenuTraysHandler } from './tray.svelte';
 
-class Menu {
+export class Menu {
 	private traysHandler = new MenuTraysHandler();
 	private channelManager = new ChannelManager();
 	private bgMusic = new AdvancedSound({
@@ -22,6 +22,11 @@ class Menu {
 	public get music(): AdvancedSound {
 		return this.bgMusic;
 	}
-}
 
-export const menu = new Menu();
+	private static singleton: Menu;
+
+	public static instance() {
+		if (!Menu.singleton) Menu.singleton = new Menu();
+		return Menu.singleton;
+	}
+}
