@@ -7,7 +7,7 @@ interface TrayData {
 	animation: TrayAnimation;
 }
 
-class MenuTraysHandler {
+export class MenuTraysHandler {
 	private leftData: TrayData | undefined = $state();
 	private rightData: TrayData | undefined = $state();
 
@@ -23,5 +23,3 @@ class MenuTraysHandler {
 		return side === 'left' ? this.leftData : this.rightData;
 	};
 }
-
-export const menuTraysHandler = new MenuTraysHandler();

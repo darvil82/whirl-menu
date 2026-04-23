@@ -1,15 +1,11 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import {
-		channels,
-		Channels,
-		type ChannelThumbnailData,
-		type RuntimeChannel
-	} from '$lib/channels/channels';
-	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
-	import DefaultThumbnail from '$lib/channels/defs/default_thumbnail/DefaultThumbnail.svelte';
-	import { balloon } from '$lib/scripts/balloon';
+	import DefaultThumbnail from '$lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
+	import { balloon } from '$lib/scripts/menu/balloon';
+	import type { ChannelThumbnailData, RuntimeChannel } from '$lib/scripts/menu/channels/channel';
+	import { ChannelManager, channels } from '$lib/scripts/menu/channels/channelManager';
+	import { movingChannels, selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
 	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 
@@ -38,7 +34,7 @@
 		if (moving || !channel || crtAnimation || scrolling) return;
 
 		SimpleSound.play(SOUNDS.BUTTON.click2);
-		Channels.refreshDOMRects();
+		ChannelManager.refreshDOMRects();
 		selectedChannel.set(channel);
 	}
 

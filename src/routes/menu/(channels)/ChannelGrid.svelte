@@ -1,10 +1,10 @@
 <script lang="typescript">
 	import {
-		channels,
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS,
 		RuntimeChannel
-	} from '$lib/channels/channels';
+	} from '$lib/scripts/menu/channels/channel';
+	import { channels } from '$lib/scripts/menu/channels/channelManager';
 	import Channel from './Channel.svelte';
 
 	const {

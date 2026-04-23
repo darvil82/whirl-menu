@@ -1,9 +1,10 @@
 <script lang="typescript">
-	import SOUNDS, { SimpleSound, systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { channels, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
-	import { selectedChannel } from '$lib/channels/channels_status.svelte';
+	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import Button from '$lib/components/button/Button.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
+	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/channel';
+	import { channels } from '$lib/scripts/menu/channels/channelManager';
+	import { selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
 	import { throttle } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';
 

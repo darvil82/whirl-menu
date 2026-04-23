@@ -55,7 +55,7 @@ interface Droppable<T> {
 	onDrop: (ctx: DragContext<T>) => void;
 }
 
-export const draggingSound = new AdvancedSound({
+const draggingSound = new AdvancedSound({
 	sound: SOUNDS.CHANNEL.drag,
 	loop: { start: 0, end: 1 },
 	volume: 0

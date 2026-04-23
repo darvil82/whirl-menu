@@ -1,77 +1,14 @@
+import defined_channels from '$lib/custom/channels/defs/channelsDefinition';
 import { makeNamespace } from '$lib/scripts/utils.svelte';
-import { type Component } from 'svelte';
-import defined_channels from './defs/defined_channels';
+import {
+	MAX_PAGES,
+	PAGE_NUM_CHANNELS,
+	RuntimeChannel,
+	type ChannelDef,
+	type SimpleChannelDef
+} from './channel';
 
-export const MAX_PAGES = 4;
-export const PAGE_SCROLL_DELAY = 500;
-export const PAGE_NUM_ROWS = 3;
-export const PAGE_NUM_COLUMNS = 4;
-export const PAGE_NUM_CHANNELS = PAGE_NUM_COLUMNS * PAGE_NUM_ROWS;
-
-export interface SimpleChannelDef {
-	id: string;
-	position: [number, number];
-}
-
-export interface ChannelDef extends SimpleChannelDef {
-	thumbnail: Component<ChannelThumbnailData>;
-	banner: Component;
-	name: string;
-	locked?: boolean;
-}
-
-export interface ChannelThumbnailData {
-	optimized: boolean;
-}
-
-export class RuntimeChannel implements ChannelDef {
-	public thumbnail: ChannelDef['thumbnail'];
-	public banner: ChannelDef['banner'];
-	public name: ChannelDef['name'];
-	public id: ChannelDef['id'];
-	public position: ChannelDef['position'];
-	public locked: ChannelDef['locked'];
-
-	constructor(def: ChannelDef) {
-		this.thumbnail = def.thumbnail;
-		this.banner = def.banner;
-		this.name = def.name;
-		this.id = def.id;
-		this.position = def.position;
-		this.locked = def.locked ?? false;
-	}
-
-	public getPage() {
-		return Math.floor(this.position[0] / PAGE_NUM_COLUMNS);
-	}
-
-	public getPosLocalGrid(): [number, number] {
-		return [
-			this.position[0] % PAGE_NUM_COLUMNS,
-			this.position[1] % PAGE_NUM_ROWS // shouldnt be needed but
-		];
-	}
-
-	public getCSSPos(atCenter: boolean = false): [number, number] {
-		const { width: gridWidth, height: gridHeight } = Channels.getGridDOMRect();
-
-		const [x, y] = this.getPosLocalGrid();
-		const [incX, incY] = [gridWidth / PAGE_NUM_COLUMNS, gridHeight / PAGE_NUM_ROWS + 5];
-
-		if (atCenter) {
-			const [offsetX, offsetY] = [gridWidth / PAGE_NUM_COLUMNS / 2, gridHeight / PAGE_NUM_ROWS / 2];
-			return [incX * x + offsetX, incY * y + offsetY];
-		}
-
-		return [incX * x, incY * y];
-	}
-
-	public static getPosAbs(i: number, page: number): [number, number] {
-		return [(i % PAGE_NUM_COLUMNS) + page * PAGE_NUM_COLUMNS, Math.floor(i / PAGE_NUM_COLUMNS)];
-	}
-}
-
-export class Channels {
+export class ChannelManager {
 	private modified = false;
 	private defs: RuntimeChannel[];
 	private ordered: RuntimeChannel[] | undefined = undefined;
@@ -80,7 +17,7 @@ export class Channels {
 	private static cachedRects: { grid: DOMRect; channel: DOMRect } | undefined;
 
 	public constructor() {
-		this.defs = Channels.load();
+		this.defs = ChannelManager.load();
 		this.updateOrdered();
 	}
 
@@ -112,7 +49,7 @@ export class Channels {
 				}))
 			)
 		);
-		Channels.ns.log('Updated storage data.');
+		ChannelManager.ns.log('Updated storage data.');
 		return true;
 	}
 
@@ -137,16 +74,17 @@ export class Channels {
 		const storedChannels = localStorage.getItem('channels');
 
 		if (!storedChannels) {
-			Channels.ns.log('No storage definition found. Loading defaults.');
+			ChannelManager.ns.log('No storage definition found. Loading defaults.');
 			return [...defined_channels].map((c) => new RuntimeChannel(c));
 		}
 
-		Channels.ns.log('Loading from storage...');
+		ChannelManager.ns.log('Loading from storage...');
 		const parsedChannels = JSON.parse(storedChannels) as SimpleChannelDef[];
+		debugger;
 		return parsedChannels.map<RuntimeChannel>(
 			(c) =>
 				new RuntimeChannel({
-					...Channels.getDefined(c.id)!,
+					...ChannelManager.getDefined(c.id)!,
 					position: c.position
 				})
 		);
@@ -169,20 +107,18 @@ export class Channels {
 	}
 
 	public static getChanneDOMRect(): DOMRect {
-		return Channels.cachedRects!.channel;
+		return ChannelManager.cachedRects!.channel;
 	}
 
 	public static getGridDOMRect(): DOMRect {
-		return Channels.cachedRects!.grid;
+		return ChannelManager.cachedRects!.grid;
 	}
 
 	public static refreshDOMRects() {
-		Channels.ns.log('Refreshing cached DOM rects...');
-		Channels.cachedRects = {
+		ChannelManager.ns.log('Refreshing cached DOM rects...');
+		ChannelManager.cachedRects = {
 			grid: document.querySelector('.channel-grid')!.getBoundingClientRect(),
 			channel: document.querySelector('.channel-wrapper')!.getBoundingClientRect()
 		};
 	}
 }
-
-export const channels = new Channels();

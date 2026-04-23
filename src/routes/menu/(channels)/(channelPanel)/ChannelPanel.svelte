@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/channels/channels';
-	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/channel';
+	import { movingChannels, selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { untrack } from 'svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';

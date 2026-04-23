@@ -1,9 +1,8 @@
 <script lang="typescript">
-	import { systemMenuMusic } from '$lib/assets/sounds/sounds';
-	import { MAX_PAGES } from '$lib/channels/channels';
-	import { movingChannels, selectedChannel } from '$lib/channels/channels_status.svelte';
 	import Cursor from '$lib/components/Cursor.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
+	import { MAX_PAGES } from '$lib/scripts/menu/channels/channel';
+	import { movingChannels, selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { onMount } from 'svelte';
 	import Banner from './(banner)/Banner.svelte';

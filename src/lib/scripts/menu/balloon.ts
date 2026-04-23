@@ -1,6 +1,6 @@
 import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
+import { ellipsize, type AnchorPosition } from '$lib/scripts/utils.svelte';
 import type { Attachment } from 'svelte/attachments';
-import { ellipsize, type AnchorPosition } from './utils.svelte';
 
 interface BalloonOptions {
 	anchor?: AnchorPosition;

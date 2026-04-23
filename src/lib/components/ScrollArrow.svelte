@@ -1,7 +1,7 @@
 <script lang="typescript">
-	import { PAGE_SCROLL_DELAY } from '$lib/channels/channels';
+	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/channel';
+	import { movingChannels } from '$lib/scripts/menu/channels/channelStatus';
 	import { onMount } from 'svelte';
-	import { movingChannels } from '../channels/channels_status.svelte';
 	import CircleButton from './button/CircleButton.svelte';
 
 	const {
