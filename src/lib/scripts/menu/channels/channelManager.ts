@@ -6,18 +6,18 @@ import {
 	RuntimeChannel,
 	type ChannelDef,
 	type SimpleChannelDef
-} from './channel';
+} from './runtimeChannel';
 
-export class ChannelManager {
+export class ChannelStorage {
 	private modified = false;
 	private defs: RuntimeChannel[];
 	private ordered: RuntimeChannel[] | undefined = undefined;
 	private static ns = makeNamespace('channels');
 
-	private static cachedRects: { grid: DOMRect; channel: DOMRect } | undefined;
+	private cachedRects: { grid: DOMRect; channel: DOMRect } | undefined;
 
 	public constructor() {
-		this.defs = ChannelManager.load();
+		this.defs = ChannelStorage.load();
 		this.updateOrdered();
 	}
 
@@ -49,7 +49,7 @@ export class ChannelManager {
 				}))
 			)
 		);
-		ChannelManager.ns.log('Updated storage data.');
+		ChannelStorage.ns.log('Updated storage data.');
 		return true;
 	}
 
@@ -74,17 +74,17 @@ export class ChannelManager {
 		const storedChannels = localStorage.getItem('channels');
 
 		if (!storedChannels) {
-			ChannelManager.ns.log('No storage definition found. Loading defaults.');
+			ChannelStorage.ns.log('No storage definition found. Loading defaults.');
 			return [...defined_channels].map((c) => new RuntimeChannel(c));
 		}
 
-		ChannelManager.ns.log('Loading from storage...');
+		ChannelStorage.ns.log('Loading from storage...');
 		const parsedChannels = JSON.parse(storedChannels) as SimpleChannelDef[];
 		debugger;
 		return parsedChannels.map<RuntimeChannel>(
 			(c) =>
 				new RuntimeChannel({
-					...ChannelManager.getDefined(c.id)!,
+					...ChannelStorage.getDefined(c.id)!,
 					position: c.position
 				})
 		);
@@ -106,17 +106,17 @@ export class ChannelManager {
 		return defined_channels.find((c) => c.id == id);
 	}
 
-	public static getChanneDOMRect(): DOMRect {
-		return ChannelManager.cachedRects!.channel;
+	public getChanneDOMRect(): DOMRect {
+		return this.cachedRects!.channel;
 	}
 
-	public static getGridDOMRect(): DOMRect {
-		return ChannelManager.cachedRects!.grid;
+	public getGridDOMRect(): DOMRect {
+		return this.cachedRects!.grid;
 	}
 
-	public static refreshDOMRects() {
-		ChannelManager.ns.log('Refreshing cached DOM rects...');
-		ChannelManager.cachedRects = {
+	public refreshDOMRects() {
+		ChannelStorage.ns.log('Refreshing cached DOM rects...');
+		this.cachedRects = {
 			grid: document.querySelector('.channel-grid')!.getBoundingClientRect(),
 			channel: document.querySelector('.channel-wrapper')!.getBoundingClientRect()
 		};

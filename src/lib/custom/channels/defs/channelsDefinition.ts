@@ -1,4 +1,4 @@
-import type { ChannelDef } from '$lib/scripts/menu/channels/channel';
+import type { ChannelDef } from '$lib/scripts/menu/channels/runtimeChannel';
 import DiscChannelThumbnail from './discChannel/DiscChannelThumbnail.svelte';
 import Test from './Test.svelte';
 import Test2 from './Test2.svelte';

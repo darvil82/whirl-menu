@@ -3,9 +3,11 @@
 	import DefaultThumbnail from '$lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
 	import { balloon } from '$lib/scripts/menu/balloon';
-	import type { ChannelThumbnailData, RuntimeChannel } from '$lib/scripts/menu/channels/channel';
-	import { ChannelManager, channels } from '$lib/scripts/menu/channels/channelManager';
-	import { movingChannels, selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
+	import type {
+		ChannelThumbnailData,
+		RuntimeChannel
+	} from '$lib/scripts/menu/channels/runtimeChannel';
+	import { menu } from '$lib/scripts/menu/menu';
 	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 
@@ -26,7 +28,7 @@
 	let channelElement: HTMLButtonElement;
 
 	function hover() {
-		if ((channel !== undefined) != !movingChannels.isDragging) return;
+		if ((channel !== undefined) != !menu.channels.draggableEnvironment.isDragging) return;
 		SimpleSound.play(SOUNDS.BUTTON.hover);
 	}
 
@@ -34,8 +36,8 @@
 		if (moving || !channel || crtAnimation || scrolling) return;
 
 		SimpleSound.play(SOUNDS.BUTTON.click2);
-		ChannelManager.refreshDOMRects();
-		selectedChannel.set(channel);
+		menu.channels.storage.refreshDOMRects();
+		menu.channels.zoomed.set(channel);
 	}
 
 	function onDrag(ctx: DragContext<RuntimeChannel>) {
@@ -76,7 +78,7 @@
 		}, 750);
 
 		moving = false;
-		channels.updateAndSave(newChannel, (c) => {
+		menu.channels.storage.updateAndSave(newChannel, (c) => {
 			c.position = position;
 		});
 		ctx.accept();
@@ -84,18 +86,21 @@
 
 	function getChannelThumbnailData(): ChannelThumbnailData {
 		return {
-			optimized: selectedChannel.bannerShown || scrolling
+			optimized: menu.channels.zoomed.bannerShown || scrolling
 		};
 	}
 
 	onMount(() => {
-		const unsubDragger = movingChannels.registerDragger({
+		const unsubDragger = menu.channels.draggableEnvironment.registerDragger({
 			element: channelElement,
 			onClick,
 			onDrag,
 			onDropOutside
 		});
-		const unsubDropper = movingChannels.registerDroppable({ element: channelElement, onDrop });
+		const unsubDropper = menu.channels.draggableEnvironment.registerDroppable({
+			element: channelElement,
+			onDrop
+		});
 
 		return () => {
 			unsubDragger();
@@ -107,12 +112,16 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={channelElement}
-	{@attach balloon(channel?.name ?? '', channel !== undefined && !movingChannels.isDragging, {
-		anchor: bubblePosition
-	})}
+	{@attach balloon(
+		channel?.name ?? '',
+		channel !== undefined && !menu.channels.draggableEnvironment.isDragging,
+		{
+			anchor: bubblePosition
+		}
+	)}
 	class="channel-wrapper"
-	class:active={(channel != undefined) != movingChannels.isDragging}
-	class:other-moving={movingChannels.isDragging && channel}
+	class:active={(channel != undefined) != menu.channels.draggableEnvironment.isDragging}
+	class:other-moving={menu.channels.draggableEnvironment.isDragging && channel}
 	onmouseover={hover}
 >
 	<div class="content" class:crt-animation={crtAnimation}>

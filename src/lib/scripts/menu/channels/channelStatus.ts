@@ -1,7 +1,7 @@
-import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './channel';
-import { ChannelManager } from './channelManager';
+import { menu } from '../menu';
+import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './runtimeChannel';
 
-export class SelectedChannel {
+export class ZoomedChannel {
 	private selectedChannel: { channel: RuntimeChannel | undefined; isSelected: boolean } = $state({
 		channel: undefined,
 		isSelected: false
@@ -27,7 +27,7 @@ export class SelectedChannel {
 
 	transformOrigin = (middleOffset: boolean = false): string | undefined => {
 		if (!this.channel) return undefined;
-		const { width: channelWidth, height: channelHeight } = ChannelManager.getChanneDOMRect();
+		const { width: channelWidth, height: channelHeight } = menu.channels.storage.getChanneDOMRect();
 
 		if (!middleOffset) {
 			const [x, y] = this.channel.getCSSPos();

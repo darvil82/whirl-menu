@@ -2,19 +2,18 @@
 	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
 	import Button from '$lib/components/button/Button.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
-	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/channel';
-	import { channels } from '$lib/scripts/menu/channels/channelManager';
-	import { selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
+	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
+	import { menu } from '$lib/scripts/menu/menu';
 	import { throttle } from '$lib/scripts/utils.svelte';
 	import { untrack } from 'svelte';
 
 	let zoom = $state(false);
 
 	function zoomIn() {
-		if (selectedChannel._isBannerShown) return;
-		selectedChannel._isBannerShown = true;
-		channels.updateOrdered();
-		systemMenuMusic.fadeOut();
+		if (menu.channels.zoomed._isBannerShown) return;
+		menu.channels.zoomed._isBannerShown = true;
+		menu.channels.storage.updateOrdered();
+		menu.music.fadeOut();
 
 		setTimeout(() => {
 			zoom = true;
@@ -22,59 +21,63 @@
 		}, 100);
 
 		setTimeout(() => {
-			selectedChannel._isFullyFocused = true;
+			menu.channels.zoomed._isFullyFocused = true;
 		}, 750);
 	}
 
 	function zoomOut() {
-		if (!selectedChannel._isBannerShown) return;
+		if (!menu.channels.zoomed._isBannerShown) return;
 		zoom = false;
-		selectedChannel._isFullyFocused = false;
+		menu.channels.zoomed._isFullyFocused = false;
 		SimpleSound.play(SOUNDS.CHANNEL.zoomOut);
-		systemMenuMusic.fadeIn(3);
+		menu.music.fadeIn(3);
 
 		setTimeout(() => {
-			selectedChannel._isBannerShown = false;
+			menu.channels.zoomed._isBannerShown = false;
 		}, 500);
 	}
 
 	const changeChannel = throttle((direction: 'left' | 'right') => {
-		selectedChannel.set(channels.getNext(selectedChannel.channel!, direction));
+		menu.channels.zoomed.set(
+			menu.channels.storage.getNext(menu.channels.zoomed.channel!, direction)
+		);
 		SimpleSound.play(SOUNDS.CHANNEL.scroll_page);
 	}, PAGE_SCROLL_DELAY);
 
 	$effect(() => {
-		const func = selectedChannel.isSelected ? zoomIn : zoomOut;
+		const func = menu.channels.zoomed.isSelected ? zoomIn : zoomOut;
 		untrack(func);
 	});
 </script>
 
-{#if selectedChannel._isBannerShown}
+{#if menu.channels.zoomed._isBannerShown}
 	<ScrollArrow
 		position={'left'}
-		show={selectedChannel.fullyFocused}
+		show={menu.channels.zoomed.fullyFocused}
 		onclick={() => changeChannel('left')}
 	/>
 	<ScrollArrow
 		position={'right'}
-		show={selectedChannel.fullyFocused}
+		show={menu.channels.zoomed.fullyFocused}
 		onclick={() => changeChannel('right')}
 	/>
 	<div class="banner-wrapper" class:zoom>
 		<div
 			class="content"
-			style:transform-origin={selectedChannel.transformOrigin()}
-			class:interactable={selectedChannel.fullyFocused}
+			style:transform-origin={menu.channels.zoomed.transformOrigin()}
+			class:interactable={menu.channels.zoomed.fullyFocused}
 		>
 			<div class="banner">
 				<div class="sandbox">
-					{#if selectedChannel.channel}
-						<selectedChannel.channel.banner />
+					{#if menu.channels.zoomed.channel}
+						<menu.channels.zoomed.channel.banner />
 					{/if}
 				</div>
 			</div>
 			<div class="options">
-				<Button clickSound={SOUNDS.BUTTON.click2} onclick={selectedChannel.unset}>Wii Menu</Button>
+				<Button clickSound={SOUNDS.BUTTON.click2} onclick={menu.channels.zoomed.unset}
+					>Wii Menu</Button
+				>
 				<Button>Start</Button>
 			</div>
 		</div>

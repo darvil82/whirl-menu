@@ -1,8 +1,8 @@
 <script lang="typescript">
 	import Cursor from '$lib/components/Cursor.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
-	import { MAX_PAGES } from '$lib/scripts/menu/channels/channel';
-	import { movingChannels, selectedChannel } from '$lib/scripts/menu/channels/channelStatus';
+	import { MAX_PAGES } from '$lib/scripts/menu/channels/runtimeChannel';
+	import { menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { onMount } from 'svelte';
 	import Banner from './(banner)/Banner.svelte';
@@ -15,7 +15,7 @@
 	let showArrows = $state(true);
 
 	$effect(() => {
-		if (selectedChannel.isSelected) {
+		if (menu.channels.zoomed.isSelected) {
 			showArrows = false;
 			return;
 		}
@@ -29,7 +29,7 @@
 		document.oncontextmenu = () => false;
 
 		setTimeout(() => {
-			systemMenuMusic.play();
+			menu.music.play();
 		}, 500);
 
 		return () => {
@@ -42,8 +42,8 @@
 
 <div
 	class="menu"
-	style:transform-origin={selectedChannel.transformOrigin(true)}
-	class:zoom={selectedChannel.isSelected}
+	style:transform-origin={menu.channels.zoomed.transformOrigin(true)}
+	class:zoom={menu.channels.zoomed.isSelected}
 >
 	<ChannelPanel bind:this={channelPanel} bind:currentPage></ChannelPanel>
 	<div class="bottom-menu">
@@ -57,13 +57,13 @@
 	position={'left'}
 	show={currentPage > 0 && showArrows}
 	onclick={() => channelPanel.scrollChannels('left')}
-	onKeyDownPredicate={() => !movingChannels.isDragging}
+	onKeyDownPredicate={() => !menu.channels.draggableEnvironment.isDragging}
 />
 <ScrollArrow
 	position={'right'}
 	show={currentPage < MAX_PAGES - 1 && showArrows}
 	onclick={() => channelPanel.scrollChannels('right')}
-	onKeyDownPredicate={() => !movingChannels.isDragging}
+	onKeyDownPredicate={() => !menu.channels.draggableEnvironment.isDragging}
 />
 
 <style lang="scss">
