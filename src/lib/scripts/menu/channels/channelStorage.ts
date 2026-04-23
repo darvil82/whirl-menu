@@ -70,7 +70,7 @@ export class ChannelStorage {
 		return this.ordered![newIndex < 0 ? this.ordered!.length - 1 : newIndex];
 	}
 
-	static load() {
+	private static load() {
 		const storedChannels = localStorage.getItem('channels');
 
 		if (!storedChannels) {
