@@ -54,3 +54,8 @@ export function getRandomId() {
 		(Math.random() * 10).toString().replace('.', '')
 	);
 }
+
+export function exposeToWindow(name: string, fn: () => void) {
+	(window as any)[name] = fn;
+	console.warn(`exposed '${name}' to window`);
+}

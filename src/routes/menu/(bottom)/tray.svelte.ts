@@ -1,6 +1,6 @@
 import type { Snippet } from 'svelte';
 
-type TrayAnimation = 'slide' | 'rotate';
+export type TrayAnimation = 'slide' | 'rotate' | 'none';
 
 interface TrayData {
 	content: Snippet;
@@ -11,12 +11,12 @@ class MenuTraysHandler {
 	private leftData: TrayData | undefined = $state();
 	private rightData: TrayData | undefined = $state();
 
-	public setLeftData = (data: TrayData) => {
-		this.leftData = data;
+	public setLeftData = (content: Snippet, animation?: TrayAnimation) => {
+		this.leftData = { content, animation: animation ?? 'none' };
 	};
 
-	public setRightData = (data: TrayData) => {
-		this.rightData = data;
+	public setRightData = (content: Snippet, animation?: TrayAnimation) => {
+		this.rightData = { content, animation: animation ?? 'none' };
 	};
 
 	public getData = (side: 'left' | 'right') => {
