@@ -1,6 +1,6 @@
-# Revol
+# Whirl menu
 
-A web recreation from scratch of the famous console system menu that aims to look and behave
+A web recreation from scratch of the famous game console system menu that aims to look and behave
 as similarly as possible to the real thing, for fun! Still **heavily unfinished** and in development.
 
 The project aims to partly be a showcase of many CSS tricks and features I have learned over the
