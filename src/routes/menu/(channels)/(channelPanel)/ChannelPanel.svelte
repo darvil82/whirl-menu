@@ -108,13 +108,14 @@
 		flex-direction: column;
 		filter: drop-shadow(0px 0px 2.75rem rgba(0, 0, 0, 0.5));
 		pointer-events: none;
-		transition: translate 0.25s ease-out;
+		transition: translate 0.25s 0.3s ease-out;
 
 		&.scrolling {
 			pointer-events: none;
 		}
 
 		&.lifted {
+			transition: translate 0.25s ease-out;
 			translate: 0 -110%;
 		}
 	}

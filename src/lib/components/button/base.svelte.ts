@@ -7,7 +7,10 @@ export interface ButtonProps {
 	noBorder?: boolean;
 	clickSound?: Sound;
 	onclick?: (e: MouseEvent) => void;
+	delayedClick?: boolean;
 }
+
+const BUTTON_DELAYED_CLICK_TIME = 300;
 
 export class ButtonBehavior {
 	private clicked: boolean = $state(false);
@@ -19,6 +22,7 @@ export class ButtonBehavior {
 			disabled: false,
 			noBorder: false,
 			clickSound: SOUNDS.BUTTON.click1,
+			delayedClick: true,
 			onclick: () => {},
 			...props()
 		};
@@ -35,7 +39,8 @@ export class ButtonBehavior {
 
 		this.clicked = true;
 		SimpleSound.play(this.props.clickSound);
-		this.props.onclick?.(event);
+		this.click(event);
+
 		this._element.addEventListener(
 			'animationend',
 			() => {
@@ -48,6 +53,17 @@ export class ButtonBehavior {
 	public hover = () => {
 		if (this.props.disabled || this.clicked) return;
 		SimpleSound.play(SOUNDS.BUTTON.hover);
+	};
+
+	public click = (e: MouseEvent) => {
+		const fn = () => this.props.onclick(e);
+
+		if (this.props.delayedClick) {
+			setTimeout(fn, BUTTON_DELAYED_CLICK_TIME);
+			return;
+		}
+
+		fn();
 	};
 
 	public get isClicked() {

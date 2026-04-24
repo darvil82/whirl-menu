@@ -74,8 +74,10 @@
 				</div>
 			</div>
 			<div class="options">
-				<Button clickSound={SOUNDS.BUTTON.click2} onclick={Menu.instance().channels.zoomed.unset}
-					>Wii Menu</Button
+				<Button
+					clickSound={SOUNDS.BUTTON.click2}
+					onclick={Menu.instance().channels.zoomed.unset}
+					delayedClick={false}>Wii Menu</Button
 				>
 				<Button>Start</Button>
 			</div>
