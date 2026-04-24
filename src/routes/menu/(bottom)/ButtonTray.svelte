@@ -81,6 +81,7 @@
 	.tray {
 		--unit-scalar: 1;
 		--side-inset: 5rem;
+		--offset: 10vw;
 		display: flex;
 		gap: 1rem;
 		padding: 1vh;
@@ -98,20 +99,21 @@
 		}
 
 		&.left {
-			--test: 10vw;
-			transform-origin: calc(-1 * var(--test)) center;
+			transform-origin: calc(-1 * var(--offset)) center;
 			transform: translate(calc(-1 * var(--side-inset)));
 		}
 
 		&.right {
-			--test: 10vw;
 			scale: -1 1;
-			transform-origin: calc(100% + var(--test)) center;
-			transform: translate(calc(100% + var(--test) * 2 - var(--side-inset)));
+			/* honestly just a bunch of calcs that seem to work, i barely understand this. with the scale applied, things behave funny.
+			seems like multiplying the translation by 2 does exactly what i want. */
+			transform-origin: calc(100% + var(--offset)) center;
+			transform: translate(calc(100% + var(--offset) * 2 - var(--side-inset)));
 
 			--unit-scalar: -1;
 
 			.content {
+				// keep the content fine since we inverted the whole thing hozriontally
 				scale: -1 1;
 			}
 		}
