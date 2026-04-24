@@ -1,6 +1,6 @@
 import type { Snippet } from 'svelte';
 
-export type TrayAnimation = 'slide' | 'rotate' | 'none';
+export type TrayAnimation = 'slide' | 'rotate' | 'rotate-reversed' | 'none';
 
 interface TrayData {
 	content: Snippet;

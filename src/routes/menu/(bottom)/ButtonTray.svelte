@@ -1,47 +1,13 @@
 <script lang="ts">
 	import { Menu } from '$lib/scripts/menu/menu';
-	import type { TrayAnimation } from '$lib/scripts/menu/tray.svelte';
-	import type { Snippet } from 'svelte';
+	import { type Snippet } from 'svelte';
 
 	const props: { position: 'left' | 'right' } = $props();
-
-	const ANIMATIONS: { [anim in Exclude<TrayAnimation, 'none'>]: [string, string] } = {
-		rotate: ['rotate-1', 'rotate-2'],
-		slide: ['slide-out', 'slide-in']
-	};
 
 	let data = $derived(Menu.instance().trays.getData(props.position));
 	let element: HTMLDivElement = $state()!;
 	let snippet: Snippet | undefined = $state(undefined);
-	let animating = false;
-
-	function animateStartEnd(start: string, end: string) {
-		animating = true;
-		element.classList.add(start);
-		element.addEventListener(
-			'animationend',
-			() => {
-				snippet = data?.content;
-
-				element.classList.remove(start);
-				element.classList.add(end);
-				element.addEventListener(
-					'animationend',
-					() => {
-						element.classList.remove(end);
-						animating = false;
-					},
-					{ once: true }
-				);
-			},
-			{ once: true }
-		);
-	}
-
-	function animate(anim: keyof typeof ANIMATIONS) {
-		const [start, end] = ANIMATIONS[anim];
-		animateStartEnd(start, end);
-	}
+	let animating = $state(false);
 
 	$effect(() => {
 		if (data === undefined) return;
@@ -50,8 +16,6 @@
 			snippet = data?.content;
 			return;
 		}
-
-		animate(data.animation);
 	});
 </script>
 
@@ -59,6 +23,7 @@
 	bind:this={element}
 	class={`tray ${props.position}`}
 	class:hidden={data?.content === undefined}
+	class:animating
 >
 	{@render snippet?.()}
 </div>
@@ -100,73 +65,8 @@
 			border-bottom-left-radius: 10vh;
 		}
 
-		&.rotate-1 {
-			animation: rotate-q2 0.33s forwards linear;
-
-			&.right {
-				animation-name: rotate-q1;
-			}
-		}
-
-		&.rotate-2 {
-			animation: rotate-q1 0.33s forwards linear;
-
-			&.right {
-				animation-name: rotate-q2;
-			}
-		}
-
-		&.slide-out {
-			animation: slide-out 0.33s forwards linear;
-
-			&.right {
-				animation-name: slide-in;
-			}
-		}
-
-		&.slide-in {
-			animation: slide-in 0.33s forwards linear;
-
-			&.right {
-				animation-name: slide-out;
-			}
-		}
-
-		&.right {
-			animation-direction: reverse;
-		}
-
-		@keyframes slide-out {
-			to {
-				transform: translateX(var(--slide-percentage));
-			}
-		}
-
-		@keyframes slide-in {
-			from {
-				transform: translateX(var(--slide-percentage));
-			}
-			to {
-				transform: translateX(0%);
-			}
-		}
-
-		@keyframes rotate-q1 {
-			from {
-				rotate: -90deg;
-			}
-			to {
-				rotate: 0deg;
-			}
-		}
-
-		@keyframes rotate-q2 {
-			from {
-				rotate: 0deg;
-			}
-			to {
-				rotate: 90deg;
-			}
+		&.animating {
+			pointer-events: none;
 		}
 	}
 </style>

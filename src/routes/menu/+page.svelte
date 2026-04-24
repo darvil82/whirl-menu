@@ -1,4 +1,5 @@
 <script lang="typescript">
+	import CircleButton from '$lib/components/button/CircleButton.svelte';
 	import Cursor from '$lib/components/Cursor.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { MAX_PAGES } from '$lib/scripts/menu/channels/runtimeChannel';
@@ -26,17 +27,32 @@
 	});
 
 	onMount(() => {
-		document.oncontextmenu = () => false;
-
 		setTimeout(() => {
 			Menu.instance().music.play();
 		}, 500);
+
+		Menu.instance().trays.setLeftData(tray1);
+		Menu.instance().trays.setRightData(tray1);
 
 		return () => {
 			mouse.detach();
 		};
 	});
+
+	function switchTray(test: boolean) {
+		channelPanel.lift(test);
+		Menu.instance().trays.setLeftData(test ? tray2 : tray1, test ? 'rotate' : 'rotate-reversed');
+		Menu.instance().trays.setRightData(test ? tray2 : tray1, test ? 'rotate' : 'rotate-reversed');
+	}
 </script>
+
+{#snippet tray1()}
+	<CircleButton onclick={() => switchTray(true)}>A</CircleButton>
+{/snippet}
+
+{#snippet tray2()}
+	<CircleButton onclick={() => switchTray(false)}>B</CircleButton>
+{/snippet}
 
 <Cursor />
 

@@ -29,7 +29,7 @@ export class Menu {
 		return Menu.singleton;
 	}
 
-	public static initialize() {
+	public static _initialize() {
 		Menu.singleton = new Menu();
 	}
 }

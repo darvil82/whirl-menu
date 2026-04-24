@@ -3,14 +3,20 @@
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
+	import { untrack } from 'svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
 	import Time from './Time.svelte';
 
-	let { currentPage = $bindable(0) } = $props();
+	let { currentPage = $bindable(0) }: { currentPage: number } = $props();
 
 	let appsOffset: string = $state('0px');
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
 	let scrolling = $state(false);
+	let lifted = $state(false);
+
+	export function lift(up: boolean) {
+		lifted = up;
+	}
 
 	export function scrollChannels(direction: 'left' | 'right') {
 		if (scrolling) return;
@@ -57,6 +63,11 @@
 
 		return 'all';
 	}
+
+	$effect(() => {
+		if (Menu.instance().channels.zoomed.isSelected)
+			untrack(() => gotoPage(Menu.instance().channels.zoomed.channel!.getPage()));
+	});
 </script>
 
 {#if Menu.instance().channels.draggableEnvironment.isDragging}
@@ -66,7 +77,7 @@
 		style:top={mouse.position[1] + 'px'}
 	></div>
 {/if}
-<div class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
+<div class:lifted class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
 	<div class="channels">
 		{#if !Menu.instance().channels.zoomed.fullyFocused}
 			<div class="channels-wrapper">
@@ -97,9 +108,14 @@
 		flex-direction: column;
 		filter: drop-shadow(0px 0px 2.75rem rgba(0, 0, 0, 0.5));
 		pointer-events: none;
+		transition: translate 0.25s ease-out;
 
 		&.scrolling {
 			pointer-events: none;
+		}
+
+		&.lifted {
+			translate: 0 -110%;
 		}
 	}
 

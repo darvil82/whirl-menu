@@ -5,13 +5,12 @@
 	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { throttle } from '$lib/scripts/utils.svelte';
-	import { untrack } from 'svelte';
 
 	let zoom = $state(false);
 	let zoomedChannel = $derived(Menu.instance().channels.zoomed.channel);
 
 	function zoomIn() {
-		if (Menu.instance().channels.zoomed._isBannerShown) return;
+		if (Menu.instance().channels.zoomed.bannerShown) return;
 		Menu.instance().channels.zoomed._isBannerShown = true;
 		Menu.instance().channels.storage.updateOrdered();
 		Menu.instance().music.fadeOut();
@@ -27,7 +26,7 @@
 	}
 
 	function zoomOut() {
-		if (!Menu.instance().channels.zoomed._isBannerShown) return;
+		if (!Menu.instance().channels.zoomed.bannerShown) return;
 		zoom = false;
 		Menu.instance().channels.zoomed._isFullyFocused = false;
 		SimpleSound.play(SOUNDS.CHANNEL.zoomOut);
@@ -46,12 +45,11 @@
 	}, PAGE_SCROLL_DELAY);
 
 	$effect(() => {
-		const func = Menu.instance().channels.zoomed.isSelected ? zoomIn : zoomOut;
-		untrack(func);
+		(Menu.instance().channels.zoomed.isSelected ? zoomIn : zoomOut)();
 	});
 </script>
 
-{#if Menu.instance().channels.zoomed._isBannerShown}
+{#if Menu.instance().channels.zoomed.bannerShown}
 	<ScrollArrow
 		position={'left'}
 		show={Menu.instance().channels.zoomed.fullyFocused}
