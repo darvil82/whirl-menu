@@ -6,10 +6,10 @@
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { onMount } from 'svelte';
-	import Banner from './(banner)/Banner.svelte';
 	import ButtonTray from './(bottom)/ButtonTray.svelte';
 	import Date from './(bottom)/Date.svelte';
 	import ChannelPanel from './(channels)/(channelPanel)/ChannelPanel.svelte';
+	import Banner from './(channels)/Banner.svelte';
 
 	let currentPage: number = $state(0);
 	let channelPanel: ChannelPanel;
