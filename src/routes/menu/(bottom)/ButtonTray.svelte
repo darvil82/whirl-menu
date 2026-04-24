@@ -79,14 +79,14 @@
 
 <style lang="scss">
 	.tray {
-		--shadow-distance-x: 0.5rem;
+		--unit-scalar: 1;
 		--side-inset: 5rem;
 		display: flex;
 		gap: 1rem;
 		padding: 1vh;
 
 		border: 0.5rem solid rgba(240, 240, 240, 0.466);
-		filter: drop-shadow(var(--shadow-distance-x) 0.5rem rgba(0, 0, 0, 0.24));
+		filter: drop-shadow(calc(0.5rem * var(--unit-scalar)) 0.5rem rgba(0, 0, 0, 0.24));
 		justify-content: end;
 		padding-left: 10vw;
 		border-top-right-radius: 10vh;
@@ -109,7 +109,7 @@
 			transform-origin: calc(100% + var(--test)) center;
 			transform: translate(calc(100% + var(--test) * 2 - var(--side-inset)));
 
-			--shadow-distance-x: -0.5rem;
+			--unit-scalar: -1;
 
 			.content {
 				scale: -1 1;
@@ -132,6 +132,14 @@
 			animation: rotate-1 0.2s reverse ease-in;
 		}
 
+		&.slide-in {
+			animation: slide-in 0.2s linear;
+		}
+
+		&.slide-out {
+			animation: slide-out 0.2s linear;
+		}
+
 		@keyframes rotate-1 {
 			from {
 				rotate: 0deg;
@@ -147,6 +155,24 @@
 			}
 			to {
 				rotate: 0deg;
+			}
+		}
+
+		@keyframes slide-out {
+			from {
+				translate: 0%;
+			}
+			to {
+				translate: calc(var(--unit-scalar) * -100%);
+			}
+		}
+
+		@keyframes slide-in {
+			from {
+				translate: calc(var(--unit-scalar) * -100%);
+			}
+			to {
+				translate: 0%;
 			}
 		}
 
