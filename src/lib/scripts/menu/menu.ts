@@ -26,7 +26,10 @@ export class Menu {
 	private static singleton: Menu;
 
 	public static instance() {
-		if (!Menu.singleton) Menu.singleton = new Menu();
 		return Menu.singleton;
+	}
+
+	public static initialize() {
+		Menu.singleton = new Menu();
 	}
 }

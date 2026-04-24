@@ -3,7 +3,6 @@
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
-	import { untrack } from 'svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
 	import Time from './Time.svelte';
 
@@ -58,11 +57,6 @@
 
 		return 'all';
 	}
-
-	$effect(() => {
-		if (Menu.instance().channels.zoomed.isSelected)
-			untrack(() => gotoPage(Menu.instance().channels.zoomed.channel!.getPage()));
-	});
 </script>
 
 {#if Menu.instance().channels.draggableEnvironment.isDragging}

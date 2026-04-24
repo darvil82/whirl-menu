@@ -8,6 +8,7 @@
 	import { untrack } from 'svelte';
 
 	let zoom = $state(false);
+	let zoomedChannel = $derived(Menu.instance().channels.zoomed.channel);
 
 	function zoomIn() {
 		if (Menu.instance().channels.zoomed._isBannerShown) return;
@@ -51,7 +52,6 @@
 </script>
 
 {#if Menu.instance().channels.zoomed._isBannerShown}
-	{@const banner = Menu.instance().channels.zoomed.channel?.banner}
 	<ScrollArrow
 		position={'left'}
 		show={Menu.instance().channels.zoomed.fullyFocused}
@@ -70,8 +70,8 @@
 		>
 			<div class="banner">
 				<div class="sandbox">
-					{#if banner}
-						<banner></banner>
+					{#if zoomedChannel?.banner}
+						<zoomedChannel.banner></zoomedChannel.banner>
 					{/if}
 				</div>
 			</div>
