@@ -5,7 +5,7 @@
 </script>
 
 <div class="c">
-	<h2>Test channel</h2>
+	<span>Test channel</span>
 </div>
 
 <style lang="scss">
@@ -16,7 +16,7 @@
 		place-items: center;
 		background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
 
-		h2 {
+		span {
 			animation: dance 3s infinite;
 
 			@keyframes dance {

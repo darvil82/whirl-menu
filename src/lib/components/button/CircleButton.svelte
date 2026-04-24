@@ -25,7 +25,6 @@
 		display: grid;
 		place-items: center;
 		color: #777;
-		font-weight: bold;
 		height: 15vh;
 		aspect-ratio: 1;
 

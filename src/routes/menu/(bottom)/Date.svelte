@@ -12,6 +12,6 @@
 		translate: -50% calc(-50% + 50%);
 		color: $color-dark;
 		font-size: 5vh;
-		font-weight: bold;
+		font-weight: 500;
 	}
 </style>

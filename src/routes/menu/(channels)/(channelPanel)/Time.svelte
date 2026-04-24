@@ -90,7 +90,6 @@
 		.text-wii-menu {
 			font-size: 3.5vh;
 			color: $color-highlight-blue;
-			font-weight: bold;
 			letter-spacing: 0.15rem;
 			position: absolute;
 			text-wrap: nowrap;

@@ -1,5 +1,5 @@
 <div class="c">
-	<h2>TEST</h2>
+	<span>TEST</span>
 </div>
 
 <style lang="scss">
@@ -11,7 +11,7 @@
 		place-items: center;
 		background: linear-gradient(135deg, #6593f6 0%, #ff683e 100%);
 
-		h2 {
+		span {
 			animation: dance 3s infinite;
 
 			@keyframes dance {

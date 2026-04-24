@@ -113,7 +113,7 @@
 
 	.logo-text {
 		font-size: 5vh;
-		font-weight: bold;
+		font-weight: 500;
 		color: rgba(170, 170, 170, 0.116);
 		z-index: 1;
 		scale: 1.3 1;

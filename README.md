@@ -7,8 +7,7 @@ The project aims to partly be a showcase of many CSS tricks and features I have 
 last years. Everything in the image below is made with CSS only. Only imagery used is the cursor pointer
 and the masks for constructing the channel shapes.
 
-![test](https://github.com/user-attachments/assets/2988496d-cb67-4723-967f-8197e33a0d84)
-
+![Image showcase](https://github.com/user-attachments/assets/2988496d-cb67-4723-967f-8197e33a0d84)
 
 ### Extra credits:
 
