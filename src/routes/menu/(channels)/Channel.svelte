@@ -2,7 +2,6 @@
 	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 	import DefaultThumbnail from '$lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
-	import { balloon } from '$lib/scripts/menu/balloon';
 	import type {
 		ChannelThumbnailData,
 		RuntimeChannel
@@ -114,13 +113,6 @@
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	bind:this={channelElement}
-	{@attach balloon(
-		channel?.name ?? '',
-		channel !== undefined && !Menu.instance().channels.draggableEnvironment.isDragging,
-		{
-			anchor: bubblePosition
-		}
-	)}
 	class="channel-wrapper"
 	class:active={(channel != undefined) != Menu.instance().channels.draggableEnvironment.isDragging}
 	class:other-moving={Menu.instance().channels.draggableEnvironment.isDragging && channel}
