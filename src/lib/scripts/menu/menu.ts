@@ -1,4 +1,5 @@
-import SOUNDS, { AdvancedSound } from '$lib/assets/sounds/sounds';
+import SOUNDS from '$lib/assets/sounds/soundsDefinition';
+import { AdvancedSound } from '../sound';
 import { ChannelManager } from './channels/channels';
 import { MenuTraysHandler } from './tray.svelte';
 

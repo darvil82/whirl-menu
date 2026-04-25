@@ -1,8 +1,9 @@
 <script lang="typescript">
-	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
+	import { SimpleSound } from '$lib/scripts/sound';
 	import { untrack } from 'svelte';
 	import ChannelGrid from '../ChannelGrid.svelte';
 	import Time from './Time.svelte';

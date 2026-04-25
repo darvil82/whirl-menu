@@ -1,5 +1,6 @@
-import SOUNDS, { AdvancedSound } from '$lib/assets/sounds/sounds';
+import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 import { mouse } from './mouse.svelte';
+import { AdvancedSound } from './sound';
 import { debounce, getRandomId, makeNamespace } from './utils.svelte';
 
 export class DragContext<T> {

@@ -1,9 +1,10 @@
 <script lang="typescript">
-	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 	import Button from '$lib/components/button/Button.svelte';
 	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
+	import { SimpleSound } from '$lib/scripts/sound';
 	import { throttle } from '$lib/scripts/utils.svelte';
 
 	let zoom = $state(false);

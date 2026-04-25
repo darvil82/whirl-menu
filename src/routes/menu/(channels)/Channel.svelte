@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import SOUNDS, { SimpleSound } from '$lib/assets/sounds/sounds';
+	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 	import DefaultThumbnail from '$lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
 	import type { DragContext } from '$lib/scripts/draggables.svelte';
 	import { balloon } from '$lib/scripts/menu/balloon';
@@ -8,6 +8,7 @@
 		RuntimeChannel
 	} from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
+	import { SimpleSound } from '$lib/scripts/sound';
 	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
 	import { onMount } from 'svelte';
 
