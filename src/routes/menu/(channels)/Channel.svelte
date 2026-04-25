@@ -16,15 +16,15 @@
 		channel,
 		bubblePosition,
 		position,
-		scrolling
+		moving
 	}: {
 		channel?: RuntimeChannel;
 		bubblePosition: AnchorPosition;
 		position: [number, number];
-		scrolling: boolean;
+		moving: boolean;
 	} = $props();
 
-	let moving = $state(false);
+	let dragging = $state(false);
 	let crtAnimation = $state(false);
 	let channelElement: HTMLButtonElement;
 
@@ -35,7 +35,7 @@
 	}
 
 	function onClick(e: MouseEvent) {
-		if (moving || !channel || crtAnimation || scrolling) return;
+		if (dragging || !channel || crtAnimation || moving) return;
 
 		SimpleSound.play(SOUNDS.BUTTON.click2);
 		Menu.instance().channels.storage.refreshDOMRects();
@@ -48,7 +48,7 @@
 			return;
 		}
 
-		moving = true;
+		dragging = true;
 		SimpleSound.play(SOUNDS.CHANNEL.hold);
 		ctx.accept(channel);
 		channel = undefined;
@@ -56,7 +56,7 @@
 
 	function onDropOutside(ctx: DragContext<RuntimeChannel>) {
 		channel = ctx.extraData!;
-		moving = false;
+		dragging = false;
 		channel.position = position;
 		SimpleSound.play(SOUNDS.MISC.error);
 	}
@@ -79,7 +79,7 @@
 			crtAnimation = false;
 		}, 750);
 
-		moving = false;
+		dragging = false;
 		Menu.instance().channels.storage.updateAndSave(newChannel, (c) => {
 			c.position = position;
 		});
@@ -88,7 +88,7 @@
 
 	function getChannelThumbnailData(): ChannelThumbnailData {
 		return {
-			optimized: Menu.instance().channels.zoomed.bannerShown || scrolling
+			optimized: Menu.instance().channels.zoomed.bannerShown || moving
 		};
 	}
 
@@ -127,7 +127,7 @@
 	onmouseover={hover}
 >
 	<div class="content" class:crt-animation={crtAnimation}>
-		{#if channel && !moving}
+		{#if channel && !dragging}
 			<channel.thumbnail {...getChannelThumbnailData()} />
 		{:else}
 			<DefaultThumbnail {...getChannelThumbnailData()} />

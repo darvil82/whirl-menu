@@ -11,7 +11,7 @@ export interface ButtonProps {
 	delayedClick?: boolean;
 }
 
-const BUTTON_DELAYED_CLICK_TIME = 300;
+const BUTTON_DELAYED_CLICK_TIME = 150;
 
 export class ButtonBehavior {
 	private clicked: boolean = $state(false);

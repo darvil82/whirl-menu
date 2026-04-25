@@ -4,7 +4,9 @@
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
 	import { SimpleSound } from '$lib/scripts/sound';
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
+	import { sineInOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
 	import ChannelGrid from '../ChannelGrid.svelte';
 	import Time from './Time.svelte';
 
@@ -14,6 +16,7 @@
 	let lastMoveDir: undefined | 'left' | 'right' = $state();
 	let scrolling = $state(false);
 	let lifted = $state(false);
+	let showTimeWiiMenuText = $state(true);
 
 	export function lift(up: boolean) {
 		lifted = up;
@@ -69,6 +72,12 @@
 		if (Menu.instance().channels.zoomed.isSelected)
 			untrack(() => gotoPage(Menu.instance().channels.zoomed.channel!.getPage()));
 	});
+
+	onMount(() => {
+		setTimeout(() => {
+			showTimeWiiMenuText = false;
+		}, 3000);
+	});
 </script>
 
 {#if Menu.instance().channels.draggableEnvironment.isDragging}
@@ -78,26 +87,36 @@
 		style:top={mouse.position[1] + 'px'}
 	></div>
 {/if}
-<div class:lifted class="channel-panel" class:scrolling style:--grid-translate={appsOffset}>
-	<div class="channels">
-		{#if !Menu.instance().channels.zoomed.fullyFocused}
-			<div class="channels-wrapper">
-				{#each new Array(MAX_PAGES) as _, page}
-					<ChannelGrid {page} {scrolling} hide={getHideGridValue(page)} />
-				{/each}
-			</div>
-		{/if}
-	</div>
-
+{#if !lifted}
+	{@const flyTransition = { duration: 250, y: '-125%', opacity: 1, easing: sineInOut }}
 	<div
-		class="time-wrapper"
-		class:right={scrolling && lastMoveDir == 'right'}
-		class:left={scrolling && lastMoveDir == 'left'}
+		class:lifted
+		class="channel-panel"
+		class:scrolling
+		style:--grid-translate={appsOffset}
+		out:fly={{ ...flyTransition }}
+		in:fly={{ ...flyTransition, delay: 150 }}
 	>
-		<Time />
-		<Time />
+		<div class="channels">
+			{#if !Menu.instance().channels.zoomed.fullyFocused}
+				<div class="channels-wrapper">
+					{#each new Array(MAX_PAGES) as _, page}
+						<ChannelGrid {page} moving={scrolling || lifted} hide={getHideGridValue(page)} />
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+		<div
+			class="time-wrapper"
+			class:right={scrolling && lastMoveDir == 'right'}
+			class:left={scrolling && lastMoveDir == 'left'}
+		>
+			<Time showWiiMenuText={showTimeWiiMenuText} />
+			<Time showWiiMenuText={showTimeWiiMenuText} />
+		</div>
 	</div>
-</div>
+{/if}
 
 <style lang="scss">
 	$border-thickness: 0.3rem;
@@ -113,11 +132,6 @@
 
 		&.scrolling {
 			pointer-events: none;
-		}
-
-		&.lifted {
-			transition: translate 0.25s ease-out;
-			translate: 0 -110%;
 		}
 	}
 

@@ -14,7 +14,7 @@
 	}: {
 		page: number;
 		hide?: 'all' | 'left' | 'right';
-		scrolling: boolean;
+		moving: boolean;
 	} = $props();
 
 	function getChannelPosition(i: number): 'left' | 'right' | 'center' {

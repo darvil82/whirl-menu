@@ -27,10 +27,14 @@
 	function animate(animation: string): Promise<void> {
 		return new Promise((resolve) => {
 			element.classList.add(animation);
-			element.addEventListener('animationend', () => {
-				element.classList.remove(animation);
-				resolve();
-			});
+			element.addEventListener(
+				'animationend',
+				() => {
+					element.classList.remove(animation);
+					resolve();
+				},
+				{ once: true }
+			);
 		});
 	}
 
