@@ -84,8 +84,8 @@
 <style lang="scss">
 	.tray {
 		--unit-scalar: 1;
-		--side-inset: 5rem;
-		--offset: 10vw;
+		$side-inset: 5rem;
+		$offset: 10vw;
 		display: flex;
 		gap: 1rem;
 		padding: 1vh;
@@ -103,16 +103,16 @@
 		}
 
 		&.left {
-			transform-origin: calc(-1 * var(--offset)) center;
-			transform: translate(calc(-1 * var(--side-inset)));
+			transform-origin: calc(-1 * $offset) center;
+			transform: translate(calc(-1 * $side-inset));
 		}
 
 		&.right {
 			scale: -1 1;
 			/* honestly just a bunch of calcs that seem to work, i barely understand this. with the scale applied, things behave funny.
 			seems like multiplying the translation by 2 does exactly what i want. */
-			transform-origin: calc(100% + var(--offset)) center;
-			transform: translate(calc(100% + var(--offset) * 2 - var(--side-inset)));
+			transform-origin: calc(100% + $offset) center;
+			transform: translate(calc(100% + $offset * 2 - $side-inset));
 
 			--unit-scalar: -1;
 

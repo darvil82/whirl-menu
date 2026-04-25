@@ -1,4 +1,4 @@
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class Time {
 	private _date = $state(new Date());
@@ -25,7 +25,7 @@ class Time {
 	}
 
 	public get dayFormatted() {
-		return DAYS[this._date.getDay() - 1];
+		return DAYS[this._date.getDay()];
 	}
 
 	public get date() {
