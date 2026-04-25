@@ -11,4 +11,4 @@ and the masks for constructing the channel shapes.
 
 ### Extra credits:
 
-- @November-N - 7 Segment display font
+- @November-N - 7 Segment display font and mouse cursor images.
