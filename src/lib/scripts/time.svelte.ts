@@ -21,7 +21,7 @@ class Time {
 	}
 
 	public get dateFormatted() {
-		return `${this.dayFormatted.slice(0, 3)}. ${this._date.getDate().toString().padStart(2, '0')}-${(this._date.getMonth() + 1).toString().padStart(2, '0')}`;
+		return `${this.dayFormatted.slice(0, 3)} ${this._date.getDate().toString().padStart(2, '0')}-${(this._date.getMonth() + 1).toString().padStart(2, '0')}`;
 	}
 
 	public get dayFormatted() {

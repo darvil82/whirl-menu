@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import './app.scss';
+	import '$lib/app.scss';
 
 	const { children } = $props();
 </script>
