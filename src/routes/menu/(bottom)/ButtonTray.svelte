@@ -84,8 +84,8 @@
 <style lang="scss">
 	.tray {
 		--unit-scalar: 1;
-		$side-inset: 5rem;
-		$offset: 10vw;
+		$side-inset: 15vw;
+		$offset: 1vw;
 		display: flex;
 		gap: 1rem;
 		padding: 1vh;
@@ -93,10 +93,8 @@
 		border: 0.5rem solid rgba(240, 240, 240, 0.466);
 		filter: drop-shadow(calc(0.5rem * var(--unit-scalar)) 0.5rem rgba(0, 0, 0, 0.24));
 		justify-content: end;
-		padding-left: 10vw;
-		border-top-right-radius: 10vh;
-		border-bottom-right-radius: 10vh;
-		border-left: none;
+		padding-left: calc($side-inset + 5vw);
+		border-radius: 10vh;
 
 		&.hidden {
 			visibility: hidden;
