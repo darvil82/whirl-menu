@@ -20,7 +20,7 @@ export class SimpleSound {
 			return;
 		}
 
-		audio.volume = soundProps.volume * VOLUME_MULTIPLIER;
+		audio.volume = sanitizeVolume(soundProps.volume);
 
 		SimpleSound.ns.log('Playing:', soundProps);
 		audio.play();
@@ -51,6 +51,7 @@ Constructs the next nodes in the order specified:
 The usage of the l and r gain nodes is completely optional
 */
 export class AdvancedSound {
+	private ns = makeNamespace('advanced_sound', () => this.sound.fileName);
 	private ctx = new AudioContext();
 	private sound: Sound;
 
@@ -70,7 +71,7 @@ export class AdvancedSound {
 	private loop?: { start: number; end: number };
 
 	constructor(options: { sound: Sound; volume?: number; loop?: { start: number; end: number } }) {
-		this.baseVolume = (options.volume ?? options.sound.volume ?? 1) * VOLUME_MULTIPLIER;
+		this.baseVolume = sanitizeVolume(options.volume ?? options.sound.volume ?? 1);
 		this.sound = options.sound;
 		this.loop = options.loop;
 
@@ -122,6 +123,7 @@ export class AdvancedSound {
 		if (!this.buffer) return;
 		if (this.source) this.stop();
 		this.createSource(this.pauseTime);
+		this.ns.log('playing');
 	}
 
 	pause() {
@@ -129,6 +131,7 @@ export class AdvancedSound {
 		this.pauseTime = this.ctx.currentTime - this.startTime;
 		this.source.stop();
 		this.source = undefined;
+		this.ns.log('paused');
 	}
 
 	stop() {
@@ -137,10 +140,12 @@ export class AdvancedSound {
 			this.source = undefined;
 		}
 		this.pauseTime = 0;
+		this.ns.log('stopped');
 	}
 
 	setMasterVolume(vol: number) {
-		this.masterGain.gain.setValueAtTime(vol * VOLUME_MULTIPLIER, this.ctx.currentTime);
+		this.baseVolume = sanitizeVolume(vol);
+		this.masterGain.gain.setValueAtTime(this.baseVolume, this.ctx.currentTime);
 	}
 
 	fadeOut(duration = 0.25) {
@@ -148,6 +153,7 @@ export class AdvancedSound {
 		this.masterGain.gain.cancelScheduledValues(now);
 		this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
 		this.masterGain.gain.linearRampToValueAtTime(0, now + duration);
+		this.ns.log('applying fadeOut');
 	}
 
 	fadeIn(duration = 0.25) {
@@ -155,11 +161,16 @@ export class AdvancedSound {
 		this.masterGain.gain.cancelScheduledValues(now);
 		this.masterGain.gain.setValueAtTime(0, now);
 		this.masterGain.gain.linearRampToValueAtTime(this.baseVolume, now + duration);
+		this.ns.log('applying fadeIn');
 	}
 
 	setStereoVolume(left: number, right: number) {
 		const now = this.ctx.currentTime;
-		this.gainL.gain.setValueAtTime(left, now);
-		this.gainR.gain.setValueAtTime(right, now);
+		this.gainL.gain.setValueAtTime(sanitizeVolume(left, false), now);
+		this.gainR.gain.setValueAtTime(sanitizeVolume(right, false), now);
 	}
+}
+
+function sanitizeVolume(raw: number, withMult: boolean = true): number {
+	return Math.max(raw * (withMult ? VOLUME_MULTIPLIER : 1), 0);
 }

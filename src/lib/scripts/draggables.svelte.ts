@@ -182,10 +182,10 @@ export class DraggableEnvironment<T> {
 		draggingSound.play();
 		draggingSoundVolInterval = setInterval(() => {
 			const velScalar = Math.hypot(mouse.velocity[0], mouse.velocity[1]) / 2;
-			draggingSound.setMasterVolume(Math.min(velScalar, 1));
+			draggingSound.setMasterVolume(Math.min(velScalar, 0.5));
 
 			const rightProximity = mouse.position[0] / window.innerWidth;
-			draggingSound.setStereoVolume(1 - rightProximity, rightProximity);
+			draggingSound.setStereoVolume(Math.min(1 - rightProximity, 1), Math.min(rightProximity, 1));
 		}, 25);
 	}
 
