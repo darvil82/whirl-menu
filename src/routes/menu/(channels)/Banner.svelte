@@ -1,7 +1,6 @@
 <script lang="typescript">
 	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 	import Button from '$lib/components/button/Button.svelte';
-	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
 	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { SimpleSound } from '$lib/scripts/sound';
@@ -51,16 +50,6 @@
 </script>
 
 {#if Menu.instance().channels.zoomed.bannerShown}
-	<ScrollArrow
-		position={'left'}
-		show={Menu.instance().channels.zoomed.fullyFocused}
-		onclick={() => changeChannel('left')}
-	/>
-	<ScrollArrow
-		position={'right'}
-		show={Menu.instance().channels.zoomed.fullyFocused}
-		onclick={() => changeChannel('right')}
-	/>
 	<div class="banner-wrapper" class:zoom>
 		<div
 			class="content"

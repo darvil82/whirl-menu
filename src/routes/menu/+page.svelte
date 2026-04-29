@@ -1,7 +1,7 @@
 <script lang="typescript">
 	import CircleButton from '$lib/components/button/CircleButton.svelte';
 	import Cursor from '$lib/components/Cursor.svelte';
-	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
+	import ScrollArrows from '$lib/components/ScrollArrows.svelte';
 	import { MAX_PAGES } from '$lib/scripts/menu/channels/runtimeChannel';
 	import { Menu } from '$lib/scripts/menu/menu';
 	import { mouse } from '$lib/scripts/mouse.svelte';
@@ -33,6 +33,17 @@
 
 		Menu.instance().trays.setLeftData(tray1);
 		Menu.instance().trays.setRightData(tray1);
+		Menu.instance().scrollArrows.set({
+			keydownPredicates: () => !Menu.instance().channels.draggableEnvironment.isDragging,
+			onClick: {
+				left: () => channelPanel.scrollChannels('left'),
+				right: () => channelPanel.scrollChannels('right')
+			},
+			showPredicates: {
+				left: () => currentPage > 0 && showArrows,
+				right: () => currentPage < MAX_PAGES - 1 && showArrows
+			}
+		});
 
 		return () => {
 			mouse.detach();
@@ -44,6 +55,22 @@
 		Menu.instance().trays.setLeftData(test ? tray2 : tray1, test ? 'rotate' : 'rotate-reversed');
 		Menu.instance().trays.setRightData(test ? tray2 : tray1, test ? 'rotate' : 'rotate-reversed');
 	}
+
+	/*
+<ScrollArrow
+	position={'left'}
+	show={currentPage > 0 && showArrows}
+	onclick={() => channelPanel.scrollChannels('left')}
+	onKeyDownPredicate={() => !Menu.instance().channels.draggableEnvironment.isDragging}
+/>
+<ScrollArrow
+	position={'right'}
+	show={currentPage < MAX_PAGES - 1 && showArrows}
+	onclick={() => channelPanel.scrollChannels('right')}
+	onKeyDownPredicate={() => !Menu.instance().channels.draggableEnvironment.isDragging}
+/>
+/>
+	 */
 </script>
 
 {#snippet tray1()}
@@ -69,18 +96,7 @@
 	</div>
 </div>
 <Banner></Banner>
-<ScrollArrow
-	position={'left'}
-	show={currentPage > 0 && showArrows}
-	onclick={() => channelPanel.scrollChannels('left')}
-	onKeyDownPredicate={() => !Menu.instance().channels.draggableEnvironment.isDragging}
-/>
-<ScrollArrow
-	position={'right'}
-	show={currentPage < MAX_PAGES - 1 && showArrows}
-	onclick={() => channelPanel.scrollChannels('right')}
-	onKeyDownPredicate={() => !Menu.instance().channels.draggableEnvironment.isDragging}
-/>
+<ScrollArrows></ScrollArrows>
 
 <style lang="scss">
 	.menu {

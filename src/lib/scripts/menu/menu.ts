@@ -1,11 +1,13 @@
 import SOUNDS from '$lib/assets/sounds/soundsDefinition';
 import { AdvancedSound } from '../sound';
 import { ChannelManager } from './channels/channels';
+import { ScrollArrowManager } from './scrollArrows.svelte';
 import { MenuTraysHandler } from './tray.svelte';
 
 export class Menu {
 	private traysHandler = new MenuTraysHandler();
 	private channelManager = new ChannelManager();
+	private arrows = new ScrollArrowManager();
 	private bgMusic = new AdvancedSound({
 		sound: SOUNDS.MUSIC.main,
 		volume: 0,
@@ -22,6 +24,10 @@ export class Menu {
 
 	public get music(): AdvancedSound {
 		return this.bgMusic;
+	}
+
+	public get scrollArrows(): ScrollArrowManager {
+		return this.arrows;
 	}
 
 	private static singleton: Menu;

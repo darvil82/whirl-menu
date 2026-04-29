@@ -1,25 +1,20 @@
 <script lang="typescript">
 	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
-	import { onMount } from 'svelte';
+	import type { ArrowPosition } from '$lib/scripts/menu/scrollArrows.svelte';
 	import CircleButton from './button/CircleButton.svelte';
 
 	const {
 		show = true,
 		onclick: _onclick,
-		position,
-		onKeyDownPredicate
+		position
 	}: {
 		show?: boolean;
 		onclick: (e?: MouseEvent) => void;
-		position: 'left' | 'right';
-		onKeyDownPredicate?: () => boolean;
+		position: ArrowPosition;
 	} = $props();
 
 	let active = $state(false);
 	let clicked = $state(false);
-	let isHovering = false;
-	let hoverInterval: number | undefined;
 	let label: '+' | '-' = $derived(position === 'left' ? '-' : '+');
 
 	function onclick(event?: MouseEvent | undefined) {
@@ -35,44 +30,12 @@
 			clicked = false;
 		}, PAGE_SCROLL_DELAY);
 	}
-
-	function hoverAutoClick(e: MouseEvent) {
-		if (isHovering && Menu.instance().channels.draggableEnvironment.isDragging) {
-			onclick(e);
-		}
-	}
-
-	function onmouseover(e: MouseEvent) {
-		if (isHovering) return;
-
-		isHovering = true;
-		hoverInterval = setInterval(() => hoverAutoClick(e), PAGE_SCROLL_DELAY + 25); // 25ms to ensure it doesn't trigger too early
-	}
-
-	function onmouseleave() {
-		isHovering = false;
-		clearInterval(hoverInterval);
-	}
-
-	function handleKeydown(e: KeyboardEvent) {
-		if (e.key == label && (!onKeyDownPredicate || onKeyDownPredicate?.())) onclick();
-	}
-
-	onMount(() => {
-		document.addEventListener('keydown', handleKeydown);
-
-		return () => {
-			document.removeEventListener('keydown', handleKeydown);
-		};
-	});
 </script>
 
 <!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
 	class={`arrow-wrapper ${position}`}
 	onmousedown={onclick}
-	{onmouseover}
-	{onmouseleave}
 	class:show
 	class:clicked
 	aria-label={`move ${position}`}
