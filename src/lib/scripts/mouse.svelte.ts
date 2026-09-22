@@ -1,15 +1,16 @@
+import { debounce } from './utils.svelte';
+
+const VEL_SMOOTHING = 0.15;
+const VEL_DECAY = 0.15;
+const VEL_STOP_DELAY = 150;
+
 class Mouse {
 	private pos: [number, number] | undefined = $state();
 	private vel: [number, number] = $state([0, 0]);
-	private stopMovingTimeout: number = -1;
 	private lastPosCheck: number | undefined;
 	private inView = $state(true);
 	_isDragging = $state(false);
 	private stoppedMoving = false;
-
-	private readonly VEL_SMOOTHING = 0.15;
-	private readonly VEL_DECAY = 0.15;
-	private readonly VEL_STOP_DELAY = 150;
 
 	public constructor() {
 		document.addEventListener('mousemove', this.onMove);
@@ -33,7 +34,6 @@ class Mouse {
 
 	private onMove = (e: MouseEvent) => {
 		const newPos: typeof this.pos = [e.x, e.y];
-		clearTimeout(this.stopMovingTimeout);
 		this.stoppedMoving = false;
 
 		const now = Date.now();
@@ -48,8 +48,8 @@ class Mouse {
 				const targetVel: [number, number] = [dx / diff, dy / diff];
 
 				this.vel = [
-					this.vel[0] + (targetVel[0] - this.vel[0]) * this.VEL_SMOOTHING,
-					this.vel[1] + (targetVel[1] - this.vel[1]) * this.VEL_SMOOTHING
+					this.vel[0] + (targetVel[0] - this.vel[0]) * VEL_SMOOTHING,
+					this.vel[1] + (targetVel[1] - this.vel[1]) * VEL_SMOOTHING
 				];
 			}
 		}
@@ -58,17 +58,19 @@ class Mouse {
 		this.lastPosCheck = now;
 
 		// Schedule the smooth stop
-		this.stopMovingTimeout = setTimeout(() => {
-			this.stoppedMoving = true;
-			this.smoothStop();
-		}, this.VEL_STOP_DELAY);
+		this.scheduleSmoothStop();
 	};
+
+	private scheduleSmoothStop = debounce(() => {
+		this.stoppedMoving = true;
+		this.smoothStop();
+	}, VEL_STOP_DELAY);
 
 	private smoothStop = () => {
 		if (!this.stoppedMoving) return; // movement resumed
 
-		// exponential decay
-		this.vel = [this.vel[0] * (1 - this.VEL_DECAY), this.vel[1] * (1 - this.VEL_DECAY)];
+		// decay
+		this.vel = [this.vel[0] * (1 - VEL_DECAY), this.vel[1] * (1 - VEL_DECAY)];
 
 		// Stop completely when very close
 		if (Math.abs(this.vel[0]) < 0.001 && Math.abs(this.vel[1]) < 0.001) {
