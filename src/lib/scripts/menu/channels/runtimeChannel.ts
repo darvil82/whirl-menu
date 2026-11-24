@@ -1,4 +1,4 @@
-import { Menu } from '$lib/scripts/menu/menu';
+import { Menu } from '#lib/scripts/menu/menu.ts';
 import { type Component } from 'svelte';
 
 export const MAX_PAGES = 4;

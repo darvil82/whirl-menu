@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { time } from '$lib/scripts/time.svelte';
+	import { time } from '#lib/scripts/time.svelte.ts';
 </script>
 
 <span class="date"> {time.dateFormatted} </span>

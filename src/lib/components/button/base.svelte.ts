@@ -1,5 +1,5 @@
-import SOUNDS from '$lib/assets/sounds/soundsDefinition';
-import { SimpleSound, type Sound } from '$lib/scripts/sound';
+import SOUNDS from '#lib/assets/sounds/soundsDefinition.ts';
+import { SimpleSound, type Sound } from '#lib/scripts/sound.ts';
 import type { Snippet } from 'svelte';
 
 export interface ButtonProps {

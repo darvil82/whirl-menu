@@ -1,4 +1,4 @@
-import type { Sound } from '$lib/scripts/sound';
+import type { Sound } from '#lib/scripts/sound.ts';
 import balloon from './balloon.wav';
 import cancel from './button/cancel.wav';
 import click1 from './button/click1.wav';

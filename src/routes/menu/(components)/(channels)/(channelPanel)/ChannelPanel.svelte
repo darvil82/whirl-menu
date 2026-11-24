@@ -1,9 +1,9 @@
 <script lang="typescript">
-	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
-	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
-	import { mouse } from '$lib/scripts/mouse.svelte';
-	import { SimpleSound } from '$lib/scripts/sound';
+	import SOUNDS from '#lib/assets/sounds/soundsDefinition.ts';
+	import { MAX_PAGES, PAGE_SCROLL_DELAY } from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
+	import { mouse } from '#lib/scripts/mouse.svelte.ts';
+	import { SimpleSound } from '#lib/scripts/sound.ts';
 	import { onMount, untrack } from 'svelte';
 	import { sineInOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -195,7 +195,7 @@
 			content: '';
 			position: absolute;
 			inset: -0.2rem;
-			mask: url('$lib/assets/images/channels/channel_hover_mask_lr.png');
+			mask: url('../../../../../lib/assets/images/channels/channel_hover_mask_lr.png');
 			mask-size: 100% 100%;
 			background: white;
 		}
@@ -211,7 +211,7 @@
 			);
 			position: absolute;
 			inset: 0;
-			mask: url('$lib/assets/images/channels/channel_mask_lr.png');
+			mask: url('../../../../../lib/assets/images/channels/channel_mask_lr.png');
 			opacity: 0.8;
 			mask-size: 100% 100%;
 		}

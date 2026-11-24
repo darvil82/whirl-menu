@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import type { ChannelThumbnailData } from '$lib/scripts/menu/channels/runtimeChannel';
+	import type { ChannelThumbnailData } from '#lib/scripts/menu/channels/runtimeChannel.ts';
 
 	const props: ChannelThumbnailData = $props();
 </script>

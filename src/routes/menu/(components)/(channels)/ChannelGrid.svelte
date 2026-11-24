@@ -3,8 +3,8 @@
 		PAGE_NUM_CHANNELS,
 		PAGE_NUM_COLUMNS,
 		RuntimeChannel
-	} from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
+	} from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
 	import Channel from './Channel.svelte';
 
 	const {

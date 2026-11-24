@@ -1,10 +1,10 @@
 <script lang="typescript">
-	import CircleButton from '$lib/components/button/CircleButton.svelte';
-	import Cursor from '$lib/components/Cursor.svelte';
-	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
-	import { MAX_PAGES } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
-	import { mouse } from '$lib/scripts/mouse.svelte';
+	import CircleButton from '#lib/components/button/CircleButton.svelte';
+	import Cursor from '#lib/components/Cursor.svelte';
+	import ScrollArrow from '#lib/components/ScrollArrow.svelte';
+	import { MAX_PAGES } from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
+	import { mouse } from '#lib/scripts/mouse.svelte.ts';
 	import { onMount } from 'svelte';
 	import ButtonTray from './(components)/(bottom)/ButtonTray.svelte';
 	import Date from './(components)/(bottom)/Date.svelte';

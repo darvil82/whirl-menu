@@ -1,5 +1,5 @@
-import defined_channels from '$lib/custom/channels/defs/channelsDefinition';
-import { makeNamespace } from '$lib/scripts/utils.svelte';
+import defined_channels from '#lib/custom/channels/defs/channelsDefinition.ts';
+import { makeNamespace } from '#lib/scripts/utils.svelte.ts';
 import {
 	MAX_PAGES,
 	PAGE_NUM_CHANNELS,

@@ -1,6 +1,6 @@
 <script lang="typescript">
-	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
+	import { PAGE_SCROLL_DELAY } from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
 	import { onMount } from 'svelte';
 	import CircleButton from './button/CircleButton.svelte';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Menu } from '$lib/scripts/menu/menu';
-	import type { TrayAnimation } from '$lib/scripts/menu/tray.svelte';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
+	import type { TrayAnimation } from '#lib/scripts/menu/tray.svelte.ts';
 	import { type Snippet } from 'svelte';
 
 	const props: { position: 'left' | 'right' } = $props();

@@ -1,4 +1,4 @@
-import SOUNDS from '$lib/assets/sounds/soundsDefinition';
+import SOUNDS from '#lib/assets/sounds/soundsDefinition.ts';
 import { mouse } from './mouse.svelte';
 import { AdvancedSound } from './sound';
 import { debounce, getRandomId, makeNamespace } from './utils.svelte';

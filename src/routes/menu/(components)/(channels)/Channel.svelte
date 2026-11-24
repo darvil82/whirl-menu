@@ -1,14 +1,14 @@
 <script lang="typescript">
-	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
-	import DefaultThumbnail from '$lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
-	import type { DragContext } from '$lib/scripts/draggables.svelte';
+	import SOUNDS from '#lib/assets/sounds/soundsDefinition.ts';
+	import DefaultThumbnail from '#lib/custom/channels/defs/defaultThumbnail/DefaultThumbnail.svelte';
+	import type { DragContext } from '#lib/scripts/draggables.svelte.ts';
 	import type {
 		ChannelThumbnailData,
 		RuntimeChannel
-	} from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
-	import { SimpleSound } from '$lib/scripts/sound';
-	import { type AnchorPosition } from '$lib/scripts/utils.svelte';
+	} from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
+	import { SimpleSound } from '#lib/scripts/sound.ts';
+	import { type AnchorPosition } from '#lib/scripts/utils.svelte.ts';
 	import { onMount } from 'svelte';
 
 	let {
@@ -135,7 +135,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			mask: url('$lib/assets/images/channels/channel_hover_mask_lr.png');
+			mask: url('../../../../lib/assets/images/channels/channel_hover_mask_lr.png');
 			mask-size: 100% 100%;
 			background: $color-highlight-blue;
 			opacity: 0;
@@ -147,7 +147,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			background: url('$lib/assets/images/channels/channel_mask_lr.png');
+			background: url('../../../../lib/assets/images/channels/channel_mask_lr.png');
 			background-size: 100% 100%;
 			filter: brightness(0.72);
 		}
@@ -174,7 +174,7 @@
 		position: absolute;
 		inset: 0.4vh;
 		background: white;
-		mask: url('$lib/assets/images/channels/channel_mask_lr.png');
+		mask: url('../../../../lib/assets/images/channels/channel_mask_lr.png');
 		mask-size: 100% 100%;
 		transition: filter 0.25s;
 

@@ -1,7 +1,7 @@
 <script lang="typescript">
-	import cursor_default from '$lib/assets/images/cursor_default.png';
-	import cursor_fist from '$lib/assets/images/cursor_fist.png';
-	import { mouse } from '$lib/scripts/mouse.svelte';
+	import cursor_default from '#lib/assets/images/cursor_default.png';
+	import cursor_fist from '#lib/assets/images/cursor_fist.png';
+	import { mouse } from '#lib/scripts/mouse.svelte.ts';
 	import { fade } from 'svelte/transition';
 </script>
 

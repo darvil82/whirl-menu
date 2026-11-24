@@ -1,4 +1,4 @@
-import { DraggableEnvironment } from '$lib/scripts/draggables.svelte';
+import { DraggableEnvironment } from '#lib/scripts/draggables.svelte.ts';
 import { ZoomedChannel } from './channelStatus.svelte';
 import { ChannelStorage } from './channelStorage';
 import type { RuntimeChannel } from './runtimeChannel';

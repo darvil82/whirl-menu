@@ -1,4 +1,4 @@
-@use '$lib/utils.scss' as *;
+@use "utils.scss" as *;
 
 button {
 	all: unset;
@@ -31,7 +31,7 @@ body {
 
 @font-face {
 	font-family: 'Segments';
-	src: url('$lib/assets/fonts/segment-clock.ttf');
+	src: url('./assets/fonts/segment-clock.ttf');
 }
 
 img {

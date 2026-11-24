@@ -1,11 +1,11 @@
 <script lang="typescript">
-	import SOUNDS from '$lib/assets/sounds/soundsDefinition';
-	import Button from '$lib/components/button/Button.svelte';
-	import ScrollArrow from '$lib/components/ScrollArrow.svelte';
-	import { PAGE_SCROLL_DELAY } from '$lib/scripts/menu/channels/runtimeChannel';
-	import { Menu } from '$lib/scripts/menu/menu';
-	import { SimpleSound } from '$lib/scripts/sound';
-	import { throttle } from '$lib/scripts/utils.svelte';
+	import SOUNDS from '#lib/assets/sounds/soundsDefinition.ts';
+	import Button from '#lib/components/button/Button.svelte';
+	import ScrollArrow from '#lib/components/ScrollArrow.svelte';
+	import { PAGE_SCROLL_DELAY } from '#lib/scripts/menu/channels/runtimeChannel.ts';
+	import { Menu } from '#lib/scripts/menu/menu.ts';
+	import { SimpleSound } from '#lib/scripts/sound.ts';
+	import { throttle } from '#lib/scripts/utils.svelte.ts';
 
 	let zoom = $state(false);
 	let zoomedChannel = $derived(Menu.instance().channels.zoomed.channel);
@@ -78,8 +78,10 @@
 				<Button
 					clickSound={SOUNDS.BUTTON.click2}
 					onclick={Menu.instance().channels.zoomed.unset}
-					delayedClick={false}>Wii Menu</Button
+					delayedClick={false}
 				>
+					Wii Menu
+				</Button>
 				<Button>Start</Button>
 			</div>
 		</div>
@@ -115,7 +117,7 @@
 			display: flex;
 			flex-direction: column;
 			margin: 0em;
-			mask: url('$lib/assets/images/channels/channel_mask_hr.png');
+			mask: url('../../../../lib/assets/images/channels/channel_mask_hr.png');
 			mask-size: 100% 100%;
 			scale: 0.16;
 			translate: 0.6em -0.6em;
@@ -123,7 +125,7 @@
 			opacity: 0;
 
 			&:not(.interactable) {
-				mask: url('$lib/assets/images/channels/channel_mask_lr.png'); // switch to high res mask when finally zommed in
+				mask: url('../../../../lib/assets/images/channels/channel_mask_lr.png'); // switch to high res mask when finally zommed in
 				mask-size: 100% 100%;
 				pointer-events: none;
 			}

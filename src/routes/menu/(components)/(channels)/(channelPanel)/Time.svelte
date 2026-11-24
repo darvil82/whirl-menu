@@ -1,5 +1,5 @@
 <script lang="typescript">
-	import { time } from '$lib/scripts/time.svelte';
+	import { time } from '#lib/scripts/time.svelte.ts';
 	import { fade } from 'svelte/transition';
 
 	const { showWiiMenuText = false } = $props();
@@ -51,7 +51,7 @@
 			position: absolute;
 			inset-block: 0;
 			background: $background-repeating-gradient;
-			clip-path: url('$lib/assets/images/channels/channel_panel_mask.svg#mask');
+			clip-path: url('../../../../../lib/assets/images/channels/channel_panel_mask.svg#mask');
 			z-index: -1;
 		}
 

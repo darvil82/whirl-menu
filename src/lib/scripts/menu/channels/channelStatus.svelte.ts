@@ -1,4 +1,4 @@
-import { Menu } from '$lib/scripts/menu/menu';
+import { Menu } from '#lib/scripts/menu/menu.ts';
 import { PAGE_NUM_COLUMNS, PAGE_NUM_ROWS, RuntimeChannel } from './runtimeChannel';
 
 export class ZoomedChannel {
