@@ -33,9 +33,9 @@ class Mouse {
 	};
 
 	private onMove = (e: MouseEvent) => {
-		const newPos: typeof this.pos = [e.x, e.y];
 		this.stoppedMoving = false;
 
+		const newPos: typeof this.pos = [e.x, e.y];
 		const now = Date.now();
 
 		if (this.pos) {
